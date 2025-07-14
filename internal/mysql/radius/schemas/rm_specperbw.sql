@@ -1,0 +1,25 @@
+CREATE TABLE
+    `rm_specperbw` (
+        `id` int (11) NOT NULL AUTO_INCREMENT,
+        `srvid` int (11) NOT NULL,
+        `starttime` time NOT NULL,
+        `endtime` time NOT NULL,
+        `dlrate` int (11) NOT NULL,
+        `ulrate` int (11) NOT NULL,
+        `dlburstlimit` int (11) NOT NULL,
+        `ulburstlimit` int (11) NOT NULL,
+        `dlburstthreshold` int (11) NOT NULL,
+        `ulburstthreshold` int (11) NOT NULL,
+        `dlbursttime` int (11) NOT NULL,
+        `ulbursttime` int (11) NOT NULL,
+        `enableburst` tinyint (1) NOT NULL,
+        `priority` int (11) NOT NULL,
+        `mon` tinyint (1) NOT NULL,
+        `tue` tinyint (1) NOT NULL,
+        `wed` tinyint (1) NOT NULL,
+        `thu` tinyint (1) NOT NULL,
+        `fri` tinyint (1) NOT NULL,
+        `sat` tinyint (1) NOT NULL,
+        `sun` tinyint (1) NOT NULL,
+        PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
