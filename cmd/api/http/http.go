@@ -8,6 +8,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pois"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -154,5 +155,11 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 			},
 		},
 		Paths: paths,
+		Components: &openapi3.Components{
+			Schemas: openapi3.Schemas{
+				"User":         schemas.UserSchema,
+				"LoginRequest": schemas.LoginRequestSchema,
+			},
+		},
 	}
 }

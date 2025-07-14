@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
@@ -10,7 +11,31 @@ import (
 func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessObjectResponse)
+	responses.Set("200", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+					"message": openapi3.NewStringSchema().WithDefault(constants.Success),
+					"details": openapi3.NewStringSchema().WithDefault(constants.SuccessDetails),
+					"data":    schemas.UserSchema.Value,
+				}),
+			).
+			WithDescription(constants.SuccessDetails).
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"message": constants.Success,
+						"details": constants.SuccessDetails,
+						"data":    map[string]any{},
+					},
+					Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+						"message": openapi3.NewStringSchema().WithDefault(constants.Success),
+						"details": openapi3.NewStringSchema().WithDefault(constants.SuccessDetails),
+						"data":    schemas.UserSchema.Value,
+					}).NewRef(),
+				},
+			}),
+	})
 	responses.Set("401", &constants.UnauthorizedResponse)
 
 	return system.Route{

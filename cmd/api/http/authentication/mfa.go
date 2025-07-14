@@ -84,6 +84,7 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 					MfaSecret:   currentUser.MfaSecret,
 					MfaEnabled:  currentUser.MfaEnabled,
 					MfaVerified: currentUser.MfaVerified,
+					Role:        currentUser.Role,
 				})
 
 				if err != nil {
@@ -230,6 +231,7 @@ func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 					Bool:  true,
 					Valid: true,
 				},
+				Role: currentUser.Role,
 			}); err != nil {
 				log.Errorf("🔥 Error updating user: %s", err.Error())
 
@@ -325,6 +327,7 @@ func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 					Bool:  false,
 					Valid: true,
 				},
+				Role: currentUser.Role,
 			}); err != nil {
 				log.Errorf("🔥 Error updating user: %s", err.Error())
 

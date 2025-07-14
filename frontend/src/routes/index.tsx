@@ -1,7 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import AuthenticationGuard from '@/components/guards/authentication-guard';
+
 export const Route = createFileRoute('/')({
-  component: App,
+  component: () => (
+    <AuthenticationGuard>
+      <App />
+    </AuthenticationGuard>
+  ),
 });
 
 function App() {

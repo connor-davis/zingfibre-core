@@ -13,6 +13,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackc/pgx/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -72,6 +73,12 @@ func main() {
 		JSONEncoder:  json.Marshal,
 		JSONDecoder:  json.Unmarshal,
 	})
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:3000,https://reports.core.zingfibre.co.za",
+		AllowMethods:     "GET,POST,PATCH,PUT,DELETE",
+		AllowCredentials: true,
+	}))
 
 	app.Use(logger.New(logger.Config{
 		Format: "${time} ${status} - ${latency} ${method} ${url}\n",

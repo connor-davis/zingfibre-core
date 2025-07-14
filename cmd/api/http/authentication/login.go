@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -28,10 +29,7 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
 	requestBody := openapi3.NewRequestBody().WithJSONSchema(
-		openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-			"email":    openapi3.NewStringSchema(),
-			"password": openapi3.NewStringSchema().WithMinLength(8),
-		}),
+		schemas.LoginRequestSchema.Value,
 	)
 
 	return system.Route{
