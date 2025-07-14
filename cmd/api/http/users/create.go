@@ -13,8 +13,9 @@ import (
 )
 
 type CreateUserRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string            `json:"email"`
+	Password string            `json:"password"`
+	Role     postgres.RoleType `json:"role"`
 }
 
 func (r *UsersRouter) CreateUserRoute() system.Route {
@@ -39,6 +40,11 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 						"password": {
 							Type:      &openapi3.Types{"string"},
 							MinLength: 8,
+						},
+						"role": {
+							Type:    &openapi3.Types{"string"},
+							Enum:    []interface{}{"admin", "staff", "user"},
+							Default: "user",
 						},
 					}).NewRef(),
 				},
@@ -106,6 +112,7 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 			_, err = r.Postgres.CreateUser(c.Context(), postgres.CreateUserParams{
 				Email:    createUserRequest.Email,
 				Password: string(hashedPassword),
+				Role:     createUserRequest.Role,
 			})
 
 			if err != nil {
