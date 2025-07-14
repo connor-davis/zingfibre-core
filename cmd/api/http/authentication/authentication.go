@@ -18,13 +18,23 @@ func NewAuthenticationRouter(postgres *postgres.Queries, middleware *middleware.
 	}
 }
 func (r *AuthenticationRouter) RegisterRoutes() []system.Route {
+	// Register the authentication routes
+	// This includes the check, login, register, enable MFA, verify MFA, and disable MFA routes
 	checkRoute := r.CheckAuthenticationRoute()
 	loginRoute := r.LoginRoute()
 	registerRoute := r.RegisterRoute()
+
+	// Add the MFA routes
+	enableMfaRoute := r.EnableMFARoute()
+	verifyMfaRoute := r.VerifyMFARoute()
+	disableMfaRoute := r.DisableMFARoute()
 
 	return []system.Route{
 		checkRoute,
 		loginRoute,
 		registerRoute,
+		enableMfaRoute,
+		verifyMfaRoute,
+		disableMfaRoute,
 	}
 }

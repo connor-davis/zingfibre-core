@@ -47,7 +47,7 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 			RequestBody: nil,
 			Responses:   responses,
 		},
-		Method: system.PostMethod,
+		Method: system.GetMethod,
 		Path:   "/authentication/mfa/enable",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
