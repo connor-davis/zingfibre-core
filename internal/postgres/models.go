@@ -24,6 +24,7 @@ type User struct {
 	MfaSecret   pgtype.Text
 	MfaEnabled  pgtype.Bool
 	MfaVerified pgtype.Bool
+	Role        interface{}
 	CreatedAt   pgtype.Timestamptz
 	UpdatedAt   pgtype.Timestamptz
 }

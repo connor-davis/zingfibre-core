@@ -6,6 +6,7 @@ CREATE TABLE
         mfa_secret TEXT,
         mfa_enabled BOOLEAN DEFAULT FALSE,
         mfa_verified BOOLEAN DEFAULT FALSE,
+        role role_type NOT NULL DEFAULT 'user',
         created_at TIMESTAMPTZ DEFAULT now (),
         updated_at TIMESTAMPTZ DEFAULT now ()
     );

@@ -22,7 +22,7 @@ INSERT INTO
         mfa_verified
     )
 VALUES
-    ($1, $2, $3, $4, $5) RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
+    ($1, $2, $3, $4, $5) RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 `
 
 type CreateUserParams struct {
@@ -49,6 +49,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.MfaSecret,
 		&i.MfaEnabled,
 		&i.MfaVerified,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -58,7 +59,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE
-    id = $1 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
+    id = $1 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (User, error) {
@@ -71,6 +72,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.MfaSecret,
 		&i.MfaEnabled,
 		&i.MfaVerified,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -79,7 +81,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) (User, error) {
 
 const getUser = `-- name: GetUser :one
 SELECT
-    id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
+    id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 FROM
     users
 WHERE
@@ -98,6 +100,7 @@ func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.MfaSecret,
 		&i.MfaEnabled,
 		&i.MfaVerified,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -106,7 +109,7 @@ func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
 
 const getUserByEmail = `-- name: GetUserByEmail :one
 SELECT
-    id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
+    id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 FROM
     users
 WHERE
@@ -125,6 +128,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.MfaSecret,
 		&i.MfaEnabled,
 		&i.MfaVerified,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -133,7 +137,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 
 const getUsers = `-- name: GetUsers :many
 SELECT
-    id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
+    id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 FROM
     users
 LIMIT $1
@@ -161,6 +165,7 @@ func (q *Queries) GetUsers(ctx context.Context, arg GetUsersParams) ([]User, err
 			&i.MfaSecret,
 			&i.MfaEnabled,
 			&i.MfaVerified,
+			&i.Role,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -184,7 +189,7 @@ SET
     mfa_verified = $5,
     updated_at = NOW()
 WHERE
-    id = $6 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
+    id = $6 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 `
 
 type UpdateUserParams struct {
@@ -213,6 +218,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.MfaSecret,
 		&i.MfaEnabled,
 		&i.MfaVerified,
+		&i.Role,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
