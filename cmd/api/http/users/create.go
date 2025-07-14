@@ -8,6 +8,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CreateUserRequest struct {
@@ -77,16 +78,25 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 				})
 			}
 
-			if err != nil && strings.Contains(err.Error(), "no rows in result set") {
+			if err == nil {
 				return c.Status(fiber.StatusConflict).JSON(&fiber.Map{
 					"error":   constants.ConflictError,
 					"details": constants.ConflictErrorDetails,
 				})
 			}
 
+			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), bcrypt.DefaultCost)
+
+			if err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
 			_, err = r.Postgres.CreateUser(c.Context(), postgres.CreateUserParams{
 				Email:    createUserRequest.Email,
-				Password: createUserRequest.Password,
+				Password: string(hashedPassword),
 			})
 
 			if err != nil {

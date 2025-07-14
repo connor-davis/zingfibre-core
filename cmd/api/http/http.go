@@ -97,7 +97,22 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 
 		path := fmt.Sprintf("/api%s", route.Path)
 
-		paths.Set(path, pathItem)
+		existingPathItem := paths.Find(path)
+
+		if existingPathItem != nil {
+			switch route.Method {
+			case system.GetMethod:
+				existingPathItem.Get = pathItem.Get
+			case system.PostMethod:
+				existingPathItem.Post = pathItem.Post
+			case system.PutMethod:
+				existingPathItem.Put = pathItem.Put
+			case system.DeleteMethod:
+				existingPathItem.Delete = pathItem.Delete
+			}
+		} else {
+			paths.Set(path, pathItem)
+		}
 	}
 
 	return &openapi3.T{
@@ -120,6 +135,10 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 			{
 				Name:        "Authentication",
 				Description: "Authentication related endpoints",
+			},
+			{
+				Name:        "Users",
+				Description: "User related endpoints",
 			},
 		},
 		Paths: paths,

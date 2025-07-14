@@ -6,8 +6,10 @@ import (
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
+	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -92,6 +94,25 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			currentSession.SetExpiry(5 * time.Minute)
 
 			if err := currentSession.Save(); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			_, err = r.Postgres.UpdateUser(c.Context(), postgres.UpdateUserParams{
+				ID:         user.ID,
+				Email:      user.Email,
+				Password:   user.Password,
+				MfaSecret:  user.MfaSecret,
+				MfaEnabled: user.MfaEnabled,
+				MfaVerified: pgtype.Bool{
+					Bool:  false,
+					Valid: true,
+				},
+			})
+
+			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

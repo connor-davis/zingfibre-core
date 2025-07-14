@@ -12,8 +12,7 @@ import (
 )
 
 type UpdateUserRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email string `json:"email"`
 }
 
 func (r *UsersRouter) UpdateUserRoute() system.Route {
@@ -50,7 +49,7 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 			Responses:   responses,
 		},
 		Method: system.PutMethod,
-		Path:   "/users/{user_id}",
+		Path:   "/users/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
 		},
@@ -66,7 +65,7 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 
 			id := c.Params("id")
 
-			_, err := r.Postgres.GetUser(c.Context(), uuid.MustParse(id))
+			user, err := r.Postgres.GetUser(c.Context(), uuid.MustParse(id))
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
@@ -83,8 +82,12 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 			}
 
 			_, err = r.Postgres.UpdateUser(c.Context(), postgres.UpdateUserParams{
-				Email:    updateUserRequest.Email,
-				Password: updateUserRequest.Password,
+				ID:          user.ID,
+				Email:       updateUserRequest.Email,
+				Password:    user.Password,
+				MfaSecret:   user.MfaSecret,
+				MfaEnabled:  user.MfaEnabled,
+				MfaVerified: user.MfaVerified,
 			})
 
 			if err != nil {

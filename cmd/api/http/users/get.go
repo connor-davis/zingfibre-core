@@ -113,7 +113,7 @@ func (r *UsersRouter) GetUserRoute() system.Route {
 			Responses:   responses,
 		},
 		Method: system.GetMethod,
-		Path:   "/users/:id",
+		Path:   "/users/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
 		},
