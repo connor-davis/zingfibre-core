@@ -17,6 +17,11 @@ func NewAuthenticationRouter(postgres *postgres.Queries) *AuthenticationRouter {
 func (r *AuthenticationRouter) RegisterRoutes() []system.Route {
 	checkRoute := r.CheckAuthenticationRoute()
 	loginRoute := r.LoginRoute()
+	registerRoute := r.RegisterRoute()
 
-	return []system.Route{checkRoute, loginRoute}
+	return []system.Route{
+		checkRoute,
+		loginRoute,
+		registerRoute,
+	}
 }
