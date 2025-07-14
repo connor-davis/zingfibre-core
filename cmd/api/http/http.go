@@ -5,6 +5,7 @@ import (
 
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -21,9 +22,13 @@ func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware
 	authentication := authentication.NewAuthenticationRouter(postgres, middleware)
 	authenticationRoutes := authentication.RegisterRoutes()
 
+	users := users.NewUsersRouter(postgres, middleware)
+	usersRoutes := users.RegisterRoutes()
+
 	routes := []system.Route{}
 
 	routes = append(routes, authenticationRoutes...)
+	routes = append(routes, usersRoutes...)
 
 	return &HttpRouter{
 		Routes:     routes,
