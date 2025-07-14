@@ -10,6 +10,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/pquerna/otp"
@@ -66,6 +67,8 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 				})
 
 				if err != nil {
+					log.Errorf("🔥 Error generating MFA secret: %s", err.Error())
+
 					return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 						"error":   constants.InternalServerError,
 						"details": constants.InternalServerErrorDetails,
@@ -84,6 +87,8 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 				})
 
 				if err != nil {
+					log.Errorf("🔥 Error updating user: %s", err.Error())
+
 					return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 						"error":   constants.InternalServerError,
 						"details": constants.InternalServerErrorDetails,
@@ -96,6 +101,8 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 			mfaSecretBytes, err := base32.StdEncoding.WithPadding(base32.NoPadding).DecodeString(currentUser.MfaSecret.String)
 
 			if err != nil {
+				log.Errorf("🔥 Error decoding MFA secret: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -113,6 +120,8 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error generating MFA secret image: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -124,6 +133,8 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 			mfaImage, err := mfaSecret.Image(256, 256)
 
 			if err != nil {
+				log.Errorf("🔥 Error creating MFA image: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -131,6 +142,8 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 			}
 
 			if err := png.Encode(&pngBuffer, mfaImage); err != nil {
+				log.Errorf("🔥 Error encoding MFA image to PNG: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -178,6 +191,8 @@ func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 			var verifyRequest VerifyMFARequest
 
 			if err := c.BodyParser(&verifyRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -185,6 +200,8 @@ func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 			}
 
 			if currentUser.MfaSecret.String == "" {
+				log.Warnf("⚠️ User %s has no MFA secret set", currentUser.Email)
+
 				return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 					"error":   constants.UnauthorizedError,
 					"details": constants.UnauthorizedErrorDetails,
@@ -192,6 +209,8 @@ func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 			}
 
 			if !totp.Validate(verifyRequest.Code, currentUser.MfaSecret.String) {
+				log.Warnf("⚠️ Invalid MFA code for user %s", currentUser.Email)
+
 				return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 					"error":   constants.UnauthorizedError,
 					"details": constants.UnauthorizedErrorDetails,
@@ -212,6 +231,8 @@ func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 					Valid: true,
 				},
 			}); err != nil {
+				log.Errorf("🔥 Error updating user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -259,6 +280,8 @@ func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 			var disableRequest DisableMFARequest
 
 			if err := c.BodyParser(&disableRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -266,6 +289,8 @@ func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 			}
 
 			if disableRequest.UserId == "" {
+				log.Warn("⚠️ User ID is required to disable MFA")
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -275,6 +300,8 @@ func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 			currentUser, err := r.Postgres.GetUser(c.Context(), uuid.MustParse(disableRequest.UserId))
 
 			if err != nil {
+				log.Errorf("🔥 Error retrieving user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -298,6 +325,8 @@ func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 					Valid: true,
 				},
 			}); err != nil {
+				log.Errorf("🔥 Error updating user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

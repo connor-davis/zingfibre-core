@@ -6,6 +6,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -49,6 +50,8 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 			var registerRequest RegisterRequest
 
 			if err := c.BodyParser(&registerRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -58,6 +61,8 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 			_, err := r.Postgres.GetUserByEmail(c.Context(), registerRequest.Email)
 
 			if err == nil {
+				log.Warnf("⚠️ User with email %s already exists", registerRequest.Email)
+
 				return c.Status(fiber.StatusConflict).JSON(&fiber.Map{
 					"error":   constants.ConflictError,
 					"details": constants.ConflictErrorDetails,
@@ -67,6 +72,8 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(registerRequest.Password), bcrypt.DefaultCost)
 
 			if err != nil {
+				log.Errorf("🔥 Error hashing password: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -77,6 +84,8 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 				Email:    registerRequest.Email,
 				Password: string(hashedPassword),
 			}); err != nil {
+				log.Errorf("🔥 Error creating user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

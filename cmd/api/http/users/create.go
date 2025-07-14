@@ -8,6 +8,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -63,6 +64,8 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 			var createUserRequest CreateUserRequest
 
 			if err := c.BodyParser(&createUserRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -72,6 +75,8 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 			_, err := r.Postgres.GetUserByEmail(c.Context(), createUserRequest.Email)
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
+				log.Errorf("🔥 Error checking if user exists: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -79,6 +84,8 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 			}
 
 			if err == nil {
+				log.Warnf("⚠️ User with email %s already exists", createUserRequest.Email)
+
 				return c.Status(fiber.StatusConflict).JSON(&fiber.Map{
 					"error":   constants.ConflictError,
 					"details": constants.ConflictErrorDetails,
@@ -88,6 +95,8 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(createUserRequest.Password), bcrypt.DefaultCost)
 
 			if err != nil {
+				log.Errorf("🔥 Error hashing password: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -100,6 +109,8 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error creating user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

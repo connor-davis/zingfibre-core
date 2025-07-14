@@ -7,6 +7,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 )
 
@@ -51,6 +52,8 @@ func (r *UsersRouter) DeleteUserRoute() system.Route {
 			id, err := uuid.Parse(c.Params("id"))
 
 			if err != nil {
+				log.Errorf("🔥 Invalid UUID format: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -60,6 +63,8 @@ func (r *UsersRouter) DeleteUserRoute() system.Route {
 			_, err = r.Postgres.GetUser(c.Context(), id)
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
+				log.Errorf("🔥 Error retrieving user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -67,6 +72,8 @@ func (r *UsersRouter) DeleteUserRoute() system.Route {
 			}
 
 			if err != nil && strings.Contains(err.Error(), "no rows in result set") {
+				log.Warnf("⚠️ User with ID %s not found", id)
+
 				return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
 					"error":   constants.NotFoundError,
 					"details": constants.NotFoundErrorDetails,
@@ -76,6 +83,8 @@ func (r *UsersRouter) DeleteUserRoute() system.Route {
 			_, err = r.Postgres.DeleteUser(c.Context(), id)
 
 			if err != nil {
+				log.Errorf("🔥 Error deleting user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

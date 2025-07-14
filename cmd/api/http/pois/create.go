@@ -6,6 +6,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 )
 
 type CreatePointOfInterestRequest struct {
@@ -59,6 +60,8 @@ func (r *PointsOfInterestRouter) CreatePointOfInterestRoute() system.Route {
 			var createPointOfInterestRequest CreatePointOfInterestRequest
 
 			if err := c.BodyParser(&createPointOfInterestRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -71,6 +74,8 @@ func (r *PointsOfInterestRouter) CreatePointOfInterestRoute() system.Route {
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error creating point of interest: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

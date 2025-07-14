@@ -9,6 +9,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/jackc/pgx/v5/pgtype"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -50,6 +51,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			var loginRequest LoginRequest
 
 			if err := c.BodyParser(&loginRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -59,6 +62,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			user, err := r.Postgres.GetUserByEmail(c.Context(), loginRequest.Email)
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
+				log.Errorf("🔥 Error retrieving user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -66,6 +71,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			}
 
 			if err != nil && strings.Contains(err.Error(), "no rows in result set") {
+				log.Warnf("⚠️ User with email %s not found", loginRequest.Email)
+
 				return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 					"error":   constants.UnauthorizedError,
 					"details": constants.UnauthorizedErrorDetails,
@@ -75,6 +82,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
 
 			if err != nil {
+				log.Warnf("⚠️ Invalid password for user %s: %s", loginRequest.Email, err.Error())
+
 				return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 					"error":   constants.UnauthorizedError,
 					"details": constants.UnauthorizedErrorDetails,
@@ -84,6 +93,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			currentSession, err := r.Postgres.Sessions().Get(c)
 
 			if err != nil {
+				log.Errorf("🔥 Error retrieving session: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -94,6 +105,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			currentSession.SetExpiry(5 * time.Minute)
 
 			if err := currentSession.Save(); err != nil {
+				log.Errorf("🔥 Error saving session: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -113,6 +126,8 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error updating user: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,

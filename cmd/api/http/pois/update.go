@@ -8,6 +8,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 )
 
@@ -58,6 +59,8 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			var updatePointOfInterestRequest UpdatePointOfInterestRequest
 
 			if err := c.BodyParser(&updatePointOfInterestRequest); err != nil {
+				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -67,6 +70,8 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			id, err := uuid.Parse(c.Params("id"))
 
 			if err != nil {
+				log.Errorf("🔥 Invalid UUID format: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -76,6 +81,8 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			poi, err := r.Postgres.GetPointOfInterest(c.Context(), id)
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
+				log.Errorf("🔥 Error retrieving point of interest: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -83,6 +90,8 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			}
 
 			if err != nil && strings.Contains(err.Error(), "no rows in result set") {
+				log.Warnf("⚠️ Point of interest with ID %s not found", id)
+
 				return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
 					"error":   constants.NotFoundError,
 					"details": constants.NotFoundErrorDetails,
@@ -96,6 +105,8 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error updating point of interest: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
