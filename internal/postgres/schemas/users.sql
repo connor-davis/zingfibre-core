@@ -1,3 +1,5 @@
+CREATE TYPE role_type AS ENUM ('admin', 'staff', 'user');
+
 CREATE TABLE
     users (
         id UUID PRIMARY KEY DEFAULT generate_uuid_v4 (),

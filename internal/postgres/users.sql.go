@@ -32,7 +32,7 @@ type CreateUserParams struct {
 	MfaSecret   pgtype.Text
 	MfaEnabled  pgtype.Bool
 	MfaVerified pgtype.Bool
-	Role        interface{}
+	Role        RoleType
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -202,7 +202,7 @@ type UpdateUserParams struct {
 	MfaSecret   pgtype.Text
 	MfaEnabled  pgtype.Bool
 	MfaVerified pgtype.Bool
-	Role        interface{}
+	Role        RoleType
 	ID          uuid.UUID
 }
 
