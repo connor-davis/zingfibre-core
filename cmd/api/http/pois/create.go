@@ -45,7 +45,7 @@ func (r *PointsOfInterestRouter) CreatePointOfInterestRoute() system.Route {
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Create Point Of Interest",
 			Description: "Endpoint to create a new point of interest",
-			Tags:        []string{"Point Of Interests"},
+			Tags:        []string{"Points Of Interest"},
 			Parameters:  nil,
 			RequestBody: requestBody,
 			Responses:   responses,

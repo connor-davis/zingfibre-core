@@ -145,6 +145,10 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				Name:        "Users",
 				Description: "User related endpoints",
 			},
+			{
+				Name:        "Points Of Interest",
+				Description: "Points Of Interest related endpoints",
+			},
 		},
 		Paths: paths,
 	}

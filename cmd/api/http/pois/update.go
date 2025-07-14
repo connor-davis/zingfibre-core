@@ -44,7 +44,7 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Update Point Of Interest",
 			Description: "Endpoint to update an existing point of interest",
-			Tags:        []string{"Point Of Interests"},
+			Tags:        []string{"Points Of Interest"},
 			Parameters:  parameters,
 			RequestBody: nil,
 			Responses:   responses,

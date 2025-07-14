@@ -37,7 +37,7 @@ func (r *PointsOfInterestRouter) DeletePointOfInterestRoute() system.Route {
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Delete Point Of Interest",
 			Description: "Endpoint to delete a point of interest by ID",
-			Tags:        []string{"Point Of Interests"},
+			Tags:        []string{"Points Of Interest"},
 			Parameters:  parameters,
 			RequestBody: nil,
 			Responses:   responses,

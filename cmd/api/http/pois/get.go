@@ -107,7 +107,7 @@ func (r *PointsOfInterestRouter) GetPointOfInterestRoute() system.Route {
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Get Point Of Interest",
 			Description: "Endpoint to retrieve a point of interest by ID",
-			Tags:        []string{"Point Of Interests"},
+			Tags:        []string{"Points Of Interest"},
 			Parameters:  parameters,
 			RequestBody: nil,
 			Responses:   responses,
