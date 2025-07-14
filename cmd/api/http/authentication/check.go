@@ -18,20 +18,18 @@ func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 			RequestBody: nil,
 			Responses:   responses,
 		},
-		Method:  system.GetMethod,
-		Path:    "/authentication/check",
-		Handler: r.CheckAuthenticationHandler,
+		Method: system.GetMethod,
+		Path:   "/authentication/check",
+		Handler: func(c *fiber.Ctx) error {
+			// Implement the logic to check if the user is authenticated
+			// This is a placeholder implementation
+			isAuthenticated := true // Replace with actual authentication logic
+
+			if isAuthenticated {
+				return c.JSON(true)
+			}
+
+			return c.Status(fiber.StatusUnauthorized).JSON("Unauthorized")
+		},
 	}
-}
-
-func (r *AuthenticationRouter) CheckAuthenticationHandler(c *fiber.Ctx) error {
-	// Implement the logic to check if the user is authenticated
-	// This is a placeholder implementation
-	isAuthenticated := true // Replace with actual authentication logic
-
-	if isAuthenticated {
-		return c.JSON(true)
-	}
-
-	return c.Status(fiber.StatusUnauthorized).JSON("Unauthorized")
 }
