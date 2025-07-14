@@ -123,6 +123,7 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 					Bool:  false,
 					Valid: true,
 				},
+				Role: user.Role,
 			})
 
 			if err != nil {

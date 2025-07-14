@@ -11,8 +11,9 @@ import (
 )
 
 type RegisterRequest struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,min=8"`
+	Email    string            `json:"email" validate:"required,email"`
+	Password string            `json:"password" validate:"required,min=8"`
+	Role     postgres.RoleType `json:"role" validate:"required,oneof=admin staff user"`
 }
 
 func (r *AuthenticationRouter) RegisterRoute() system.Route {
@@ -27,6 +28,7 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 		openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 			"email":    openapi3.NewStringSchema().WithFormat("email"),
 			"password": openapi3.NewStringSchema().WithMinLength(8),
+			"role":     openapi3.NewStringSchema().WithEnum([]interface{}{"admin", "staff", "user"}).WithDefault("user"),
 		}),
 	)
 
@@ -83,6 +85,7 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 			if _, err := r.Postgres.CreateUser(c.Context(), postgres.CreateUserParams{
 				Email:    registerRequest.Email,
 				Password: string(hashedPassword),
+				Role:     registerRequest.Role,
 			}); err != nil {
 				log.Errorf("🔥 Error creating user: %s", err.Error())
 

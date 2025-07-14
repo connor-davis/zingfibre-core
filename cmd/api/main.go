@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
@@ -14,6 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackc/pgx/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
@@ -27,9 +29,42 @@ func main() {
 
 	defer databaseConnection.Close(context)
 
-	log.Info("Connected to PostgreSQL successfully")
+	log.Info("✅ Connected to PostgreSQL successfully")
 
-	postgres := postgres.New(databaseConnection)
+	postgresQueries := postgres.New(databaseConnection)
+
+	log.Info("🔃 Creating default admin user.")
+
+	existingAdmin, err := postgresQueries.GetUserByEmail(context, string(env.ADMIN_EMAIL))
+
+	if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
+		log.Infof("🔥 Error checking for existing admin user: %v", err)
+		return
+	}
+
+	if err != nil && strings.Contains(err.Error(), "no rows in result set") {
+		log.Info("🔃 No existing admin user found, creating a new one...")
+
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(string(env.ADMIN_PASSWORD)), bcrypt.DefaultCost)
+
+		if err != nil {
+			log.Errorf("🔥 Error hashing admin password: %s", err.Error())
+			return
+		}
+
+		if _, err := postgresQueries.CreateUser(context, postgres.CreateUserParams{
+			Email:    string(env.ADMIN_EMAIL),
+			Password: string(hashedPassword),
+			Role:     postgres.RoleTypeAdmin,
+		}); err != nil {
+			log.Errorf("🔥 Error creating admin user: %s", err.Error())
+			return
+		}
+
+		log.Info("✅ Admin user created successfully")
+	} else {
+		log.Infof("✅ Admin user already exists: %s", existingAdmin.Email)
+	}
 
 	app := fiber.New(fiber.Config{
 		AppName:      "Zingfibre Reporting API",
@@ -42,9 +77,9 @@ func main() {
 		Format: "${time} ${status} - ${latency} ${method} ${url}\n",
 	}))
 
-	middleware := middleware.NewMiddleware(postgres)
+	middleware := middleware.NewMiddleware(postgresQueries)
 
-	httpRouter := http.NewHttpRouter(postgres, middleware)
+	httpRouter := http.NewHttpRouter(postgresQueries, middleware)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 
