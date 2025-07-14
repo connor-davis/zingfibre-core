@@ -8,7 +8,7 @@ WHERE
 LIMIT
     1;
 
--- name: GetRmColsetlistdocsis :many
+-- name: GetRmColsetlistdocsises :many
 SELECT
     *
 FROM

@@ -18,10 +18,10 @@ sql:
       go:
         package: "zing"
         out: "internal/mysql/zing"
-  # - engine: "mysql"
-  #   queries: "internal/mysql/radius/queries"
-  #   schema: "internal/mysql/radius/schemas"
-  #   gen:
-  #     go:
-  #       package: "radius"
-  #       out: "internal/mysql/radius"
+  - engine: "mysql"
+    queries: "internal/mysql/radius/queries"
+    schema: "internal/mysql/radius/schemas"
+    gen:
+      go:
+        package: "radius"
+        out: "internal/mysql/radius"
