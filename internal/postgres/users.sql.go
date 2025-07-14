@@ -181,7 +181,8 @@ SET
     password = $2,
     mfa_secret = $3,
     mfa_enabled = $4,
-    mfa_verified = $5
+    mfa_verified = $5,
+    updated_at = NOW()
 WHERE
     id = $6 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, created_at, updated_at
 `
