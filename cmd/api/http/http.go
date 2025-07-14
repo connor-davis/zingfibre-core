@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -11,12 +12,13 @@ import (
 )
 
 type HttpRouter struct {
-	Routes   []system.Route
-	Postgres *postgres.Queries
+	Routes     []system.Route
+	Postgres   *postgres.Queries
+	Middleware *middleware.Middleware
 }
 
-func NewHttpRouter(postgres *postgres.Queries) *HttpRouter {
-	authentication := authentication.NewAuthenticationRouter(postgres)
+func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware) *HttpRouter {
+	authentication := authentication.NewAuthenticationRouter(postgres, middleware)
 	authenticationRoutes := authentication.RegisterRoutes()
 
 	routes := []system.Route{}
@@ -24,8 +26,9 @@ func NewHttpRouter(postgres *postgres.Queries) *HttpRouter {
 	routes = append(routes, authenticationRoutes...)
 
 	return &HttpRouter{
-		Routes:   routes,
-		Postgres: postgres,
+		Routes:     routes,
+		Postgres:   postgres,
+		Middleware: middleware,
 	}
 }
 

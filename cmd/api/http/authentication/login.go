@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"strings"
+	"time"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -75,6 +76,25 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 				return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 					"error":   constants.UnauthorizedError,
 					"details": constants.UnauthorizedErrorDetails,
+				})
+			}
+
+			currentSession, err := r.Postgres.Sessions().Get(c)
+
+			if err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			currentSession.Set("userId", user.ID.String())
+			currentSession.SetExpiry(5 * time.Minute)
+
+			if err := currentSession.Save(); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
 				})
 			}
 

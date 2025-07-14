@@ -24,18 +24,14 @@ func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 		},
 		Method: system.GetMethod,
 		Path:   "/authentication/check",
+		Middlewares: []fiber.Handler{
+			r.Middleware.Authorized(),
+		},
 		Handler: func(c *fiber.Ctx) error {
-			// Implement the logic to check if the user is authenticated
-			// This is a placeholder implementation
-			isAuthenticated := true // Replace with actual authentication logic
-
-			if isAuthenticated {
-				return c.Status(fiber.StatusOK).JSON(true)
-			}
-
-			return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
-				"error":   constants.UnauthorizedError,
-				"details": constants.UnauthorizedErrorDetails,
+			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+				"message": constants.Success,
+				"details": constants.SuccessDetails,
+				"data":    c.Locals("user"),
 			})
 		},
 	}

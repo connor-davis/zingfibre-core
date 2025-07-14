@@ -6,11 +6,14 @@ import (
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/env"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -36,7 +39,16 @@ func main() {
 		JSONDecoder:  json.Unmarshal,
 	})
 
-	httpRouter := http.NewHttpRouter(postgres)
+	// Logging Request ID
+	app.Use(requestid.New())
+	app.Use(logger.New(logger.Config{
+		// For more options, see the Config section
+		Format: "${pid} ${locals:requestid} ${status} - ${method} ${path}\n",
+	}))
+
+	middleware := middleware.NewMiddleware(postgres)
+
+	httpRouter := http.NewHttpRouter(postgres, middleware)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 

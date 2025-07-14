@@ -42,6 +42,9 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 		},
 		Method: system.PostMethod,
 		Path:   "/authentication/register",
+		Middlewares: []fiber.Handler{
+			r.Middleware.Authorized(),
+		},
 		Handler: func(c *fiber.Ctx) error {
 			var registerRequest RegisterRequest
 
