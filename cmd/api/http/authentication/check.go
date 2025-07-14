@@ -10,7 +10,7 @@ import (
 func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessResponse)
+	responses.Set("200", &constants.SuccessObjectResponse)
 	responses.Set("401", &constants.UnauthorizedResponse)
 
 	return system.Route{

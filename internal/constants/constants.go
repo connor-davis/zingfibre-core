@@ -40,7 +40,7 @@ var CreatedResponse = openapi3.ResponseRef{
 		}),
 }
 
-var SuccessResponse = openapi3.ResponseRef{
+var SuccessObjectResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
@@ -60,7 +60,56 @@ var SuccessResponse = openapi3.ResponseRef{
 				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 					"message": openapi3.NewStringSchema().WithDefault(Success),
 					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-					"data":    openapi3.NewObjectSchema().WithDefault(map[string]any{}),
+					"data":    openapi3.NewObjectSchema(),
+				}).NewRef(),
+			},
+		}),
+}
+
+var SuccessArrayResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(Success),
+				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+				"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
+			}),
+		).
+		WithDescription(SuccessDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"message": Success,
+					"details": SuccessDetails,
+					"data":    []any{},
+				},
+				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+					"message": openapi3.NewStringSchema().WithDefault(Success),
+					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+					"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
+				}).NewRef(),
+			},
+		}),
+}
+
+var SuccessResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(Success),
+				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+			}),
+		).
+		WithDescription(SuccessDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"message": Success,
+					"details": SuccessDetails,
+				},
+				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+					"message": openapi3.NewStringSchema().WithDefault(Success),
+					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
 				}).NewRef(),
 			},
 		}),
@@ -156,6 +205,25 @@ var InternalServerErrorResponse = openapi3.ResponseRef{
 				Example: map[string]string{
 					"message": InternalServerError,
 					"details": InternalServerErrorDetails,
+				},
+			},
+		}),
+}
+
+var NotFoundResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(NotFoundError),
+				"details": openapi3.NewStringSchema().WithDefault(NotFoundErrorDetails),
+			}),
+		).
+		WithDescription(NotFoundErrorDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": NotFoundError,
+					"details": NotFoundErrorDetails,
 				},
 			},
 		}),

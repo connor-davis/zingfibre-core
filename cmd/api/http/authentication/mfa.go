@@ -145,7 +145,7 @@ func (r *AuthenticationRouter) EnableMFARoute() system.Route {
 func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessResponse)
+	responses.Set("200", &constants.SuccessObjectResponse)
 	responses.Set("400", &constants.BadRequestResponse)
 	responses.Set("401", &constants.UnauthorizedResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
@@ -229,7 +229,7 @@ func (r *AuthenticationRouter) VerifyMFARoute() system.Route {
 func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessResponse)
+	responses.Set("200", &constants.SuccessObjectResponse)
 	responses.Set("400", &constants.BadRequestResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
