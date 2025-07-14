@@ -13,7 +13,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -39,11 +38,8 @@ func main() {
 		JSONDecoder:  json.Unmarshal,
 	})
 
-	// Logging Request ID
-	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
-		// For more options, see the Config section
-		Format: "${pid} ${locals:requestid} ${status} - ${method} ${path}\n",
+		Format: "${time} ${status} - ${latency} ${method} ${url}\n",
 	}))
 
 	middleware := middleware.NewMiddleware(postgres)
