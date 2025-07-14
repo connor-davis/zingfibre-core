@@ -33,10 +33,11 @@ INSERT INTO
         password,
         mfa_secret,
         mfa_enabled,
-        mfa_verified
+        mfa_verified,
+        role
     )
 VALUES
-    ($1, $2, $3, $4, $5) RETURNING *;
+    ($1, $2, $3, $4, $5, $6) RETURNING *;
 
 -- name: UpdateUser :one
 UPDATE users
@@ -46,9 +47,10 @@ SET
     mfa_secret = $3,
     mfa_enabled = $4,
     mfa_verified = $5,
+    role = $6,
     updated_at = NOW()
 WHERE
-    id = $6 RETURNING *;
+    id = $7 RETURNING *;
 
 -- name: DeleteUser :one
 DELETE FROM users

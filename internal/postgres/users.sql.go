@@ -19,10 +19,11 @@ INSERT INTO
         password,
         mfa_secret,
         mfa_enabled,
-        mfa_verified
+        mfa_verified,
+        role
     )
 VALUES
-    ($1, $2, $3, $4, $5) RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
+    ($1, $2, $3, $4, $5, $6) RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 `
 
 type CreateUserParams struct {
@@ -31,6 +32,7 @@ type CreateUserParams struct {
 	MfaSecret   pgtype.Text
 	MfaEnabled  pgtype.Bool
 	MfaVerified pgtype.Bool
+	Role        interface{}
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -40,6 +42,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.MfaSecret,
 		arg.MfaEnabled,
 		arg.MfaVerified,
+		arg.Role,
 	)
 	var i User
 	err := row.Scan(
@@ -187,9 +190,10 @@ SET
     mfa_secret = $3,
     mfa_enabled = $4,
     mfa_verified = $5,
+    role = $6,
     updated_at = NOW()
 WHERE
-    id = $6 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
+    id = $7 RETURNING id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 `
 
 type UpdateUserParams struct {
@@ -198,6 +202,7 @@ type UpdateUserParams struct {
 	MfaSecret   pgtype.Text
 	MfaEnabled  pgtype.Bool
 	MfaVerified pgtype.Bool
+	Role        interface{}
 	ID          uuid.UUID
 }
 
@@ -208,6 +213,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.MfaSecret,
 		arg.MfaEnabled,
 		arg.MfaVerified,
+		arg.Role,
 		arg.ID,
 	)
 	var i User
