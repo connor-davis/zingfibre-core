@@ -10,11 +10,13 @@ require (
 	github.com/gofiber/storage/postgres/v2 v2.0.3
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.5
+	github.com/pquerna/otp v1.5.0
 	golang.org/x/crypto v0.40.0
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
+	github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
