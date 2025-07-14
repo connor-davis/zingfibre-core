@@ -17,9 +17,9 @@ func NewHttpRouter() *HttpRouter {
 	}
 }
 
-func (h *HttpRouter) InitializeRoutes(app *fiber.App) {
+func (h *HttpRouter) InitializeRoutes(router fiber.Router) {
 	for _, route := range h.Registry.Routes {
-		app.Add(string(route.Method), route.Path, append(route.Middlewares, route.Handler)...)
+		router.Add(string(route.Method), route.Path, append(route.Middlewares, route.Handler)...)
 	}
 }
 

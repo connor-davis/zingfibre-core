@@ -3,6 +3,7 @@ module github.com/connor-davis/zingfibre-core
 go 1.24.3
 
 require (
+	github.com/MarceloPetrucio/go-scalar-api-reference v0.0.0-20240521013641-ce5d2efe0e06
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/goccy/go-json v0.10.5
 	github.com/gofiber/fiber/v2 v2.52.8
