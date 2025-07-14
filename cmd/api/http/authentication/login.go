@@ -54,7 +54,7 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 				})
 			}
 
-			if strings.Contains(err.Error(), "no rows in result set") {
+			if err != nil && strings.Contains(err.Error(), "no rows in result set") {
 				return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 					"error":   constants.UnauthorizedError,
 					"details": constants.UnauthorizedErrorDetails,
