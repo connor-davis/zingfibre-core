@@ -1,17 +1,34 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
 	"github.com/connor-davis/zingfibre-core/env"
+	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/jackc/pgx/v5"
 )
 
 func main() {
+	context := context.Background()
+
+	databaseConnection, err := pgx.Connect(context, string(env.POSTGRES_DSN))
+
+	if err != nil {
+		log.Infof("🔥 Failed to connect to PostgreSQL: %v", err)
+	}
+
+	defer databaseConnection.Close(context)
+
+	log.Info("Connected to PostgreSQL successfully")
+
+	postgres := postgres.New(databaseConnection)
+
 	app := fiber.New(fiber.Config{
 		AppName:      "Zingfibre Reporting API",
 		ServerHeader: "Zingfibre-API",
@@ -19,7 +36,7 @@ func main() {
 		JSONDecoder:  json.Unmarshal,
 	})
 
-	httpRouter := http.NewHttpRouter()
+	httpRouter := http.NewHttpRouter(postgres)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 

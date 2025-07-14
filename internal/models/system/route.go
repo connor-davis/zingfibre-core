@@ -1,4 +1,4 @@
-package http
+package system
 
 import (
 	"github.com/getkin/kin-openapi/openapi3"
@@ -30,26 +30,4 @@ type Route struct {
 	Path        string
 	Middlewares []fiber.Handler
 	Handler     func(*fiber.Ctx) error
-}
-
-type Registry struct {
-	Routes []Route
-}
-
-func NewRegistry() *Registry {
-	return &Registry{
-		Routes: []Route{},
-	}
-}
-
-func (r *Registry) RegisterRoute(openapi OpenAPIMetadata, method RouteMethod, path string, handler func(*fiber.Ctx) error, middlewares ...fiber.Handler) {
-	route := Route{
-		OpenAPIMetadata: openapi,
-		Method:          method,
-		Path:            path,
-		Handler:         handler,
-		Middlewares:     middlewares,
-	}
-
-	r.Routes = append(r.Routes, route)
 }
