@@ -50,6 +50,7 @@ func (r *UsersRouter) GetUsersRoute() system.Route {
 		Path:   "/users",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			page, err := strconv.Atoi(c.Query("page"))
@@ -119,6 +120,7 @@ func (r *UsersRouter) GetUserRoute() system.Route {
 		Path:   "/users/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			id, err := uuid.Parse(c.Params("id"))

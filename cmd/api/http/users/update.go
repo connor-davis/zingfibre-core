@@ -53,6 +53,7 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 		Path:   "/users/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasRole(postgres.RoleTypeAdmin),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			var updateUserRequest UpdateUserRequest

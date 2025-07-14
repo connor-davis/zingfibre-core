@@ -5,6 +5,7 @@ import (
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
+	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -47,6 +48,7 @@ func (r *UsersRouter) DeleteUserRoute() system.Route {
 		Path:   "/users/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasRole(postgres.RoleTypeAdmin),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			id, err := uuid.Parse(c.Params("id"))

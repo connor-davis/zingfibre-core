@@ -275,6 +275,7 @@ func (r *AuthenticationRouter) DisableMFARoute() system.Route {
 		Path:   "/authentication/mfa/disable",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasRole(postgres.RoleTypeAdmin),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			var disableRequest DisableMFARequest

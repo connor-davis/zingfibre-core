@@ -47,6 +47,7 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 		Path:   "/authentication/register",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasRole(postgres.RoleTypeAdmin),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			var registerRequest RegisterRequest

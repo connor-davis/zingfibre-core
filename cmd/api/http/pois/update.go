@@ -54,6 +54,7 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 		Path:   "/pois/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			var updatePointOfInterestRequest UpdatePointOfInterestRequest

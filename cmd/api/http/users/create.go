@@ -65,6 +65,7 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 		Path:   "/users",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasRole(postgres.RoleTypeAdmin),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			var createUserRequest CreateUserRequest

@@ -50,6 +50,7 @@ func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 		Path:   "/pois",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			page, err := strconv.Atoi(c.Query("page"))
@@ -119,6 +120,7 @@ func (r *PointsOfInterestRouter) GetPointOfInterestRoute() system.Route {
 		Path:   "/pois/{id}",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			id, err := uuid.Parse(c.Params("id"))

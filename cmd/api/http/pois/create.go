@@ -55,6 +55,7 @@ func (r *PointsOfInterestRouter) CreatePointOfInterestRoute() system.Route {
 		Path:   "/pois",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
 			var createPointOfInterestRequest CreatePointOfInterestRequest
