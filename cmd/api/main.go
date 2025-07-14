@@ -43,13 +43,7 @@ func main() {
 	api := app.Group("/api")
 
 	api.Get("/api-spec", func(c *fiber.Ctx) error {
-		data, err := json.MarshalIndent(openapiSpecification, "", "  ")
-
-		if err != nil {
-			return c.Status(500).SendString("Failed to generate OpenAPI JSON")
-		}
-
-		return c.Type("application/json").Send(data)
+		return c.Status(fiber.StatusOK).JSON(openapiSpecification)
 	})
 
 	api.Get("/api-doc", func(c *fiber.Ctx) error {

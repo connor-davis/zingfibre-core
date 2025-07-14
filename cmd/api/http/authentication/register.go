@@ -17,6 +17,11 @@ type RegisterRequest struct {
 func (r *AuthenticationRouter) RegisterRoute() system.Route {
 	responses := openapi3.NewResponses()
 
+	responses.Set("201", &constants.CreatedResponse)
+	responses.Set("400", &constants.BadRequestResponse)
+	responses.Set("409", &constants.ConflictResponse)
+	responses.Set("500", &constants.InternalServerErrorResponse)
+
 	requestBody := openapi3.NewRequestBody().WithJSONSchema(
 		openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 			"email":    openapi3.NewStringSchema().WithFormat("email"),
@@ -41,7 +46,10 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 			var registerRequest RegisterRequest
 
 			if err := c.BodyParser(&registerRequest); err != nil {
-				return c.Status(fiber.StatusBadRequest).JSON("Invalid request body")
+				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+					"error":   constants.BadRequestError,
+					"details": constants.BadRequestErrorDetails,
+				})
 			}
 
 			_, err := r.Postgres.GetUserByEmail(c.Context(), registerRequest.Email)
@@ -72,7 +80,10 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 				})
 			}
 
-			return c.SendStatus(fiber.StatusCreated)
+			return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
+				"message": constants.Created,
+				"details": constants.CreatedDetails,
+			})
 		},
 	}
 }

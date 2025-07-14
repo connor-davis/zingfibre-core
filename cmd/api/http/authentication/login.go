@@ -18,6 +18,11 @@ type LoginRequest struct {
 func (r *AuthenticationRouter) LoginRoute() system.Route {
 	responses := openapi3.NewResponses()
 
+	responses.Set("200", &constants.SuccessResponse)
+	responses.Set("400", &constants.BadRequestResponse)
+	responses.Set("401", &constants.UnauthorizedResponse)
+	responses.Set("500", &constants.InternalServerErrorResponse)
+
 	requestBody := openapi3.NewRequestBody().WithJSONSchema(
 		openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 			"email":    openapi3.NewStringSchema(),
@@ -42,7 +47,10 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			var loginRequest LoginRequest
 
 			if err := c.BodyParser(&loginRequest); err != nil {
-				return c.Status(fiber.StatusBadRequest).JSON("Invalid request body")
+				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+					"error":   constants.BadRequestError,
+					"details": constants.BadRequestErrorDetails,
+				})
 			}
 
 			user, err := r.Postgres.GetUserByEmail(c.Context(), loginRequest.Email)
@@ -70,7 +78,11 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 				})
 			}
 
-			return c.Status(fiber.StatusOK).JSON(user)
+			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+				"message": constants.Success,
+				"details": constants.SuccessDetails,
+				"data":    user,
+			})
 		},
 	}
 }

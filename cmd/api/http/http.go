@@ -48,10 +48,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 	paths := openapi3.NewPaths()
 
 	for _, route := range h.Routes {
-		pathItem := &openapi3.PathItem{
-			Summary:     route.Summary,
-			Description: route.Description,
-		}
+		pathItem := &openapi3.PathItem{}
 
 		switch route.Method {
 		case system.GetMethod:
@@ -98,7 +95,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 	return &openapi3.T{
 		OpenAPI: "3.0.0",
 		Info: &openapi3.Info{
-			Title:   "My API",
+			Title:   "Zingfibre Reporting API",
 			Version: "1.0.0",
 		},
 		Servers: openapi3.Servers{
@@ -109,6 +106,12 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 			{
 				URL:         "https://api.example.com",
 				Description: "Production",
+			},
+		},
+		Tags: openapi3.Tags{
+			{
+				Name:        "Authentication",
+				Description: "Authentication related endpoints",
 			},
 		},
 		Paths: paths,

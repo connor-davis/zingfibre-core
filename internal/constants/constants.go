@@ -1,5 +1,7 @@
 package constants
 
+import "github.com/getkin/kin-openapi/openapi3"
+
 const (
 	InternalServerError        string = "Internal server error"
 	InternalServerErrorDetails string = "An unexpected error occurred. Please try again later or contact support."
@@ -13,4 +15,148 @@ const (
 	ConflictErrorDetails       string = "The request could not be completed due to a conflict with the current state of the resource."
 	ForbiddenError             string = "Forbidden"
 	ForbiddenErrorDetails      string = "You do not have permission to access this resource. Please check your permissions or contact support."
+	Created                    string = "Created"
+	CreatedDetails             string = "The resource has been successfully created."
+	Success                    string = "Success"
+	SuccessDetails             string = "The request was successful."
 )
+
+var CreatedResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(Created),
+				"details": openapi3.NewStringSchema().WithDefault(CreatedDetails),
+			}),
+		).
+		WithDescription(CreatedDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": Created,
+					"details": CreatedDetails,
+				},
+			},
+		}),
+}
+
+var SuccessResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(Success),
+				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+				"data":    openapi3.NewObjectSchema().WithDefault(map[string]any{}),
+			}),
+		).
+		WithDescription(SuccessDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"message": Success,
+					"details": SuccessDetails,
+					"data":    map[string]any{},
+				},
+				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+					"message": openapi3.NewStringSchema().WithDefault(Success),
+					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+					"data":    openapi3.NewObjectSchema().WithDefault(map[string]any{}),
+				}).NewRef(),
+			},
+		}),
+}
+
+var BadRequestResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(BadRequestError),
+				"details": openapi3.NewStringSchema().WithDefault(BadRequestErrorDetails),
+			}),
+		).
+		WithDescription(BadRequestErrorDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": BadRequestError,
+					"details": BadRequestErrorDetails,
+				},
+			},
+		}),
+}
+
+var UnauthorizedResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(UnauthorizedError),
+				"details": openapi3.NewStringSchema().WithDefault(UnauthorizedErrorDetails),
+			}),
+		).
+		WithDescription(UnauthorizedErrorDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": UnauthorizedError,
+					"details": UnauthorizedErrorDetails,
+				},
+			},
+		}),
+}
+
+var ConflictResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(ConflictError),
+				"details": openapi3.NewStringSchema().WithDefault(ConflictErrorDetails),
+			}),
+		).
+		WithDescription(ConflictErrorDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": ConflictError,
+					"details": ConflictErrorDetails,
+				},
+			},
+		}),
+}
+
+var ForbiddenResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(ForbiddenError),
+				"details": openapi3.NewStringSchema().WithDefault(ForbiddenErrorDetails),
+			}),
+		).
+		WithDescription(ForbiddenErrorDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": ForbiddenError,
+					"details": ForbiddenErrorDetails,
+				},
+			},
+		}),
+}
+
+var InternalServerErrorResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(InternalServerError),
+				"details": openapi3.NewStringSchema().WithDefault(InternalServerErrorDetails),
+			}),
+		).
+		WithDescription(InternalServerErrorDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]string{
+					"message": InternalServerError,
+					"details": InternalServerErrorDetails,
+				},
+			},
+		}),
+}
