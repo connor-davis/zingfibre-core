@@ -48,9 +48,16 @@ func (r *PointsOfInterestRouter) DeletePointOfInterestRoute() system.Route {
 			r.Middleware.Authorized(),
 		},
 		Handler: func(c *fiber.Ctx) error {
-			id := c.Params("id")
+			id, err := uuid.Parse(c.Params("id"))
 
-			_, err := r.Postgres.GetPointOfInterest(c.Context(), uuid.MustParse(id))
+			if err != nil {
+				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+					"error":   constants.BadRequestError,
+					"details": constants.BadRequestErrorDetails,
+				})
+			}
+
+			_, err = r.Postgres.GetPointOfInterest(c.Context(), id)
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
@@ -66,7 +73,7 @@ func (r *PointsOfInterestRouter) DeletePointOfInterestRoute() system.Route {
 				})
 			}
 
-			_, err = r.Postgres.DeletePointOfInterest(c.Context(), uuid.MustParse(id))
+			_, err = r.Postgres.DeletePointOfInterest(c.Context(), id)
 
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{

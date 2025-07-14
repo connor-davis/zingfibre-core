@@ -2,6 +2,7 @@ package http
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
@@ -44,15 +45,17 @@ func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware
 
 func (h *HttpRouter) InitializeRoutes(router fiber.Router) {
 	for _, route := range h.Routes {
+		path := regexp.MustCompile(`\{([^}]+)\}`).ReplaceAllString(route.Path, ":$1")
+
 		switch route.Method {
 		case system.GetMethod:
-			router.Get(route.Path, append(route.Middlewares, route.Handler)...)
+			router.Get(path, append(route.Middlewares, route.Handler)...)
 		case system.PostMethod:
-			router.Post(route.Path, append(route.Middlewares, route.Handler)...)
+			router.Post(path, append(route.Middlewares, route.Handler)...)
 		case system.PutMethod:
-			router.Put(route.Path, append(route.Middlewares, route.Handler)...)
+			router.Put(path, append(route.Middlewares, route.Handler)...)
 		case system.DeleteMethod:
-			router.Delete(route.Path, append(route.Middlewares, route.Handler)...)
+			router.Delete(path, append(route.Middlewares, route.Handler)...)
 		}
 	}
 }

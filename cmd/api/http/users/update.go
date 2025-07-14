@@ -63,9 +63,16 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 				})
 			}
 
-			id := c.Params("id")
+			id, err := uuid.Parse(c.Params("id"))
 
-			user, err := r.Postgres.GetUser(c.Context(), uuid.MustParse(id))
+			if err != nil {
+				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+					"error":   constants.BadRequestError,
+					"details": constants.BadRequestErrorDetails,
+				})
+			}
+
+			user, err := r.Postgres.GetUser(c.Context(), id)
 
 			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
