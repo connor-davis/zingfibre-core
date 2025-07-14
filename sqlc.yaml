@@ -1,0 +1,27 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "internal/postgres/queries"
+    schema: "internal/postgres/schemas"
+    gen:
+      go:
+        package: "postgres"
+        out: "internal/postgres"
+        sql_package: "pgx/v5"
+        overrides:
+          - db_type: uuid
+            go_type: github.com/google/uuid.UUID
+  - engine: "mysql"
+    queries: "internal/mysql/zing/queries"
+    schema: "internal/mysql/zing/schemas"
+    gen:
+      go:
+        package: "zing"
+        out: "internal/mysql/zing"
+  # - engine: "mysql"
+  #   queries: "internal/mysql/radius/queries"
+  #   schema: "internal/mysql/radius/schemas"
+  #   gen:
+  #     go:
+  #       package: "radius"
+  #       out: "internal/mysql/radius"
