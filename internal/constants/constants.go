@@ -21,13 +21,15 @@ const (
 	SuccessDetails             string = "The request was successful."
 )
 
+var CreatedSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"message": openapi3.NewStringSchema().WithDefault(Created),
+	"details": openapi3.NewStringSchema().WithDefault(CreatedDetails),
+})
+
 var CreatedResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(Created),
-				"details": openapi3.NewStringSchema().WithDefault(CreatedDetails),
-			}),
+			CreatedSchema,
 		).
 		WithDescription(CreatedDetails).
 		WithContent(openapi3.Content{
@@ -40,14 +42,16 @@ var CreatedResponse = openapi3.ResponseRef{
 		}),
 }
 
+var SuccessObjectSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"message": openapi3.NewStringSchema().WithDefault(Success),
+	"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+	"data":    openapi3.NewObjectSchema().WithDefault(map[string]any{}),
+})
+
 var SuccessObjectResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(Success),
-				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-				"data":    openapi3.NewObjectSchema().WithDefault(map[string]any{}),
-			}),
+			SuccessObjectSchema,
 		).
 		WithDescription(SuccessDetails).
 		WithContent(openapi3.Content{
@@ -57,23 +61,21 @@ var SuccessObjectResponse = openapi3.ResponseRef{
 					"details": SuccessDetails,
 					"data":    map[string]any{},
 				},
-				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-					"message": openapi3.NewStringSchema().WithDefault(Success),
-					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-					"data":    openapi3.NewObjectSchema(),
-				}).NewRef(),
+				Schema: SuccessObjectSchema.NewRef(),
 			},
 		}),
 }
 
+var SuccessArraySchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"message": openapi3.NewStringSchema().WithDefault(Success),
+	"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+	"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
+})
+
 var SuccessArrayResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(Success),
-				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-				"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
-			}),
+			SuccessArraySchema,
 		).
 		WithDescription(SuccessDetails).
 		WithContent(openapi3.Content{
@@ -83,24 +85,22 @@ var SuccessArrayResponse = openapi3.ResponseRef{
 					"details": SuccessDetails,
 					"data":    []any{},
 				},
-				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-					"message": openapi3.NewStringSchema().WithDefault(Success),
-					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-					"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
-				}).NewRef(),
+				Schema: SuccessArraySchema.NewRef(),
 			},
 		}),
 }
 
+var SuccessPagingSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"message": openapi3.NewStringSchema().WithDefault(Success),
+	"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+	"pages":   openapi3.NewIntegerSchema().WithDefault(1),
+	"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
+})
+
 var SuccessPagingResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(Success),
-				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-				"pages":   openapi3.NewIntegerSchema().WithDefault(1),
-				"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
-			}),
+			SuccessPagingSchema,
 		).
 		WithDescription(SuccessDetails).
 		WithContent(openapi3.Content{
@@ -111,23 +111,20 @@ var SuccessPagingResponse = openapi3.ResponseRef{
 					"pages":   1,
 					"data":    []any{},
 				},
-				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-					"message": openapi3.NewStringSchema().WithDefault(Success),
-					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-					"pages":   openapi3.NewIntegerSchema().WithDefault(1),
-					"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
-				}).NewRef(),
+				Schema: SuccessPagingSchema.NewRef(),
 			},
 		}),
 }
 
+var SuccessSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"message": openapi3.NewStringSchema().WithDefault(Success),
+	"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+})
+
 var SuccessResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(Success),
-				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-			}),
+			SuccessSchema,
 		).
 		WithDescription(SuccessDetails).
 		WithContent(openapi3.Content{
@@ -136,21 +133,20 @@ var SuccessResponse = openapi3.ResponseRef{
 					"message": Success,
 					"details": SuccessDetails,
 				},
-				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-					"message": openapi3.NewStringSchema().WithDefault(Success),
-					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
-				}).NewRef(),
+				Schema: SuccessSchema.NewRef(),
 			},
 		}),
 }
 
+var BadRequestSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"error":   openapi3.NewStringSchema().WithDefault(BadRequestError),
+	"details": openapi3.NewStringSchema().WithDefault(BadRequestErrorDetails),
+})
+
 var BadRequestResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"error":   openapi3.NewStringSchema().WithDefault(BadRequestError),
-				"details": openapi3.NewStringSchema().WithDefault(BadRequestErrorDetails),
-			}),
+			BadRequestSchema,
 		).
 		WithDescription(BadRequestErrorDetails).
 		WithContent(openapi3.Content{
@@ -159,17 +155,20 @@ var BadRequestResponse = openapi3.ResponseRef{
 					"error":   BadRequestError,
 					"details": BadRequestErrorDetails,
 				},
+				Schema: BadRequestSchema.NewRef(),
 			},
 		}),
 }
 
+var UnauthorizedSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"error":   openapi3.NewStringSchema().WithDefault(UnauthorizedError),
+	"details": openapi3.NewStringSchema().WithDefault(UnauthorizedErrorDetails),
+})
+
 var UnauthorizedResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"error":   openapi3.NewStringSchema().WithDefault(UnauthorizedError),
-				"details": openapi3.NewStringSchema().WithDefault(UnauthorizedErrorDetails),
-			}),
+			UnauthorizedSchema,
 		).
 		WithDescription(UnauthorizedErrorDetails).
 		WithContent(openapi3.Content{
@@ -178,17 +177,20 @@ var UnauthorizedResponse = openapi3.ResponseRef{
 					"error":   UnauthorizedError,
 					"details": UnauthorizedErrorDetails,
 				},
+				Schema: UnauthorizedSchema.NewRef(),
 			},
 		}),
 }
 
+var ConflictSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"error":   openapi3.NewStringSchema().WithDefault(ConflictError),
+	"details": openapi3.NewStringSchema().WithDefault(ConflictErrorDetails),
+})
+
 var ConflictResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"error":   openapi3.NewStringSchema().WithDefault(ConflictError),
-				"details": openapi3.NewStringSchema().WithDefault(ConflictErrorDetails),
-			}),
+			ConflictSchema,
 		).
 		WithDescription(ConflictErrorDetails).
 		WithContent(openapi3.Content{
@@ -197,17 +199,20 @@ var ConflictResponse = openapi3.ResponseRef{
 					"error":   ConflictError,
 					"details": ConflictErrorDetails,
 				},
+				Schema: ConflictSchema.NewRef(),
 			},
 		}),
 }
 
+var ForbiddenSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"error":   openapi3.NewStringSchema().WithDefault(ForbiddenError),
+	"details": openapi3.NewStringSchema().WithDefault(ForbiddenErrorDetails),
+})
+
 var ForbiddenResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"error":   openapi3.NewStringSchema().WithDefault(ForbiddenError),
-				"details": openapi3.NewStringSchema().WithDefault(ForbiddenErrorDetails),
-			}),
+			ForbiddenSchema,
 		).
 		WithDescription(ForbiddenErrorDetails).
 		WithContent(openapi3.Content{
@@ -216,17 +221,20 @@ var ForbiddenResponse = openapi3.ResponseRef{
 					"error":   ForbiddenError,
 					"details": ForbiddenErrorDetails,
 				},
+				Schema: ForbiddenSchema.NewRef(),
 			},
 		}),
 }
 
+var InternalServerErrorSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"error":   openapi3.NewStringSchema().WithDefault(InternalServerError),
+	"details": openapi3.NewStringSchema().WithDefault(InternalServerErrorDetails),
+})
+
 var InternalServerErrorResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"error":   openapi3.NewStringSchema().WithDefault(InternalServerError),
-				"details": openapi3.NewStringSchema().WithDefault(InternalServerErrorDetails),
-			}),
+			InternalServerErrorSchema,
 		).
 		WithDescription(InternalServerErrorDetails).
 		WithContent(openapi3.Content{
@@ -235,17 +243,20 @@ var InternalServerErrorResponse = openapi3.ResponseRef{
 					"error":   InternalServerError,
 					"details": InternalServerErrorDetails,
 				},
+				Schema: InternalServerErrorSchema.NewRef(),
 			},
 		}),
 }
 
+var NotFoundSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"error":   openapi3.NewStringSchema().WithDefault(NotFoundError),
+	"details": openapi3.NewStringSchema().WithDefault(NotFoundErrorDetails),
+})
+
 var NotFoundResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
-			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"error":   openapi3.NewStringSchema().WithDefault(NotFoundError),
-				"details": openapi3.NewStringSchema().WithDefault(NotFoundErrorDetails),
-			}),
+			NotFoundSchema,
 		).
 		WithDescription(NotFoundErrorDetails).
 		WithContent(openapi3.Content{
@@ -254,6 +265,7 @@ var NotFoundResponse = openapi3.ResponseRef{
 					"error":   NotFoundError,
 					"details": NotFoundErrorDetails,
 				},
+				Schema: NotFoundSchema.NewRef(),
 			},
 		}),
 }
