@@ -11,7 +11,7 @@ import {
   SunIcon,
 } from 'lucide-react';
 
-import { capitalCase } from 'change-case';
+import { capitalCase, constantCase } from 'change-case';
 import { toast } from 'sonner';
 
 import { useAuthentication } from '@/components/providers/authentication-provider';
@@ -36,6 +36,8 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { apiClient } from '@/lib/utils';
+
+import { Avatar, AvatarFallback } from '../ui/avatar';
 
 export default function UserNav() {
   const queryClient = useQueryClient();
@@ -77,6 +79,18 @@ export default function UserNav() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
+              <Avatar>
+                <AvatarFallback>
+                  {constantCase(
+                    (user.Email ?? 'none')
+                      .split('@')[0]
+                      .split('.')
+                      .slice(0, 2)
+                      .map((word) => word.charAt(0))
+                      .join('')
+                  )}
+                </AvatarFallback>
+              </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.Email}</span>
                 <span className="truncate text-xs text-muted-foreground">
@@ -98,6 +112,18 @@ export default function UserNav() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar>
+                  <AvatarFallback>
+                    {constantCase(
+                      (user.Email ?? 'none')
+                        .split('@')[0]
+                        .split('.')
+                        .slice(0, 2)
+                        .map((word) => word.charAt(0))
+                        .join('')
+                    )}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.Email}</span>
                   <span className="truncate text-xs text-muted-foreground">

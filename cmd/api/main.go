@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
@@ -22,7 +23,17 @@ import (
 func main() {
 	context := context.Background()
 
-	postgresPool, err := pgxpool.New(context, string(env.POSTGRES_DSN))
+	postgresPoolConfig, err := pgxpool.ParseConfig(string(env.POSTGRES_DSN))
+	if err != nil {
+		log.Infof("🔥 Failed to parse PostgreSQL connection string: %v", err)
+		return
+	}
+
+	postgresPoolConfig.MaxConnLifetime = 2 * time.Minute
+	postgresPoolConfig.MaxConnIdleTime = 30 * time.Second
+	postgresPoolConfig.HealthCheckPeriod = 1 * time.Minute
+
+	postgresPool, err := pgxpool.NewWithConfig(context, postgresPoolConfig)
 
 	if err != nil {
 		log.Infof("🔥 Failed to connect to PostgreSQL: %v", err)
