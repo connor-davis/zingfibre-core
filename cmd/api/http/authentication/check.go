@@ -14,21 +14,33 @@ func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 	responses.Set("200", &openapi3.ResponseRef{
 		Value: openapi3.NewResponse().
 			WithJSONSchema(
-				schemas.ResponseSchema.Value,
+				schemas.SuccessResponseSchema.Value,
 			).
-			WithDescription(constants.SuccessDetails).
+			WithDescription("The user is authenticated.").
 			WithContent(openapi3.Content{
 				"application/json": &openapi3.MediaType{
 					Example: map[string]any{
 						"message": constants.Success,
 						"details": constants.SuccessDetails,
-						"data":    map[string]any{},
 					},
-					Schema: schemas.ResponseSchema,
+					Schema: schemas.SuccessResponseSchema,
 				},
 			}),
 	})
-	responses.Set("401", &constants.UnauthorizedResponse)
+
+	responses.Set("401", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().WithJSONSchema(
+			schemas.ErrorResponseSchema.Value,
+		).WithDescription("The user is not authenticated.").WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"error":   constants.UnauthorizedError,
+					"details": constants.UnauthorizedErrorDetails,
+				},
+				Schema: schemas.ErrorResponseSchema,
+			},
+		}),
+	})
 
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{

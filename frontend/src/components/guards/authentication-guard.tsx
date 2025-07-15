@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
-import { type LoginRequest, type ZingResponse } from '@/api-client';
+import { type ErrorResponse, type LoginRequest } from '@/api-client';
 import EnableMfaForm from '@/components/authentication/enable-mfa-form';
 import VerifyMfaForm from '@/components/authentication/verify-mfa-form';
 import { useAuthentication } from '@/components/providers/authentication-provider';
@@ -50,7 +50,7 @@ export default function AuthenticationGuard({
     ...postApiAuthenticationLoginMutation({
       client: apiClient,
     }),
-    onError: (error: ZingResponse) => {
+    onError: (error: ErrorResponse) => {
       loginForm.reset();
 
       toast.error(error.error, {

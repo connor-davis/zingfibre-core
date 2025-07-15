@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
@@ -11,10 +12,52 @@ import (
 func (r *AuthenticationRouter) LogoutRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessResponse)
-	responses.Set("400", &constants.BadRequestResponse)
-	responses.Set("401", &constants.UnauthorizedResponse)
-	responses.Set("500", &constants.InternalServerErrorResponse)
+	responses.Set("200", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.SuccessResponseSchema.Value,
+			).
+			WithDescription("User logged out successfully.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"message": constants.Success,
+						"details": constants.SuccessDetails,
+					},
+					Schema: schemas.SuccessResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("401", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).WithDescription("Unauthorized.").WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"error":   constants.UnauthorizedError,
+					"details": constants.UnauthorizedErrorDetails,
+				},
+				Schema: schemas.ErrorResponseSchema,
+			},
+		}),
+	})
+
+	responses.Set("500", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).WithDescription("Internal Server Error.").WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				},
+				Schema: schemas.ErrorResponseSchema,
+			},
+		}),
+	})
 
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{

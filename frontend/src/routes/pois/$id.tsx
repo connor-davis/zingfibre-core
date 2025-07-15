@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
+  type ErrorResponse,
   type PointOfInterest,
-  type ZingResponse,
   getApiPoisById,
 } from '@/api-client';
 import { Button } from '@/components/ui/button';
@@ -56,7 +56,7 @@ function RouteComponent() {
       client: apiClient,
       path: { id },
     }),
-    onError: (error: ZingResponse) => {
+    onError: (error: ErrorResponse) => {
       toast.error(error.error, {
         description: error.details,
         duration: 2000,

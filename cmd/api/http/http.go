@@ -167,7 +167,8 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				"CreatePointOfInterest": schemas.CreatePointOfInterestSchema,
 				"UpdatePointOfInterest": schemas.UpdatePointOfInterestSchema,
 				"LoginRequest":          schemas.LoginRequestSchema,
-				"ZingResponse":          schemas.ResponseSchema,
+				"SuccessResponse":       schemas.SuccessResponseSchema,
+				"ErrorResponse":         schemas.ErrorResponseSchema,
 			},
 		},
 	}

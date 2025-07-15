@@ -22,11 +22,90 @@ type CreateUserRequest struct {
 func (r *UsersRouter) CreateUserRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("201", &constants.SuccessResponse)
-	responses.Set("400", &constants.BadRequestResponse)
-	responses.Set("401", &constants.UnauthorizedResponse)
-	responses.Set("409", &constants.ConflictResponse)
-	responses.Set("500", &constants.InternalServerErrorResponse)
+	responses.Set("201", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.SuccessResponseSchema.Value,
+			).
+			WithDescription("User created successfully.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"message": constants.Success,
+						"details": constants.SuccessDetails,
+					},
+					Schema: schemas.SuccessResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("400", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Bad Request.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.BadRequestError,
+						"details": constants.BadRequestErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("401", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Unauthorized.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.UnauthorizedError,
+						"details": constants.UnauthorizedErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("409", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Conflict.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.ConflictError,
+						"details": constants.ConflictErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("500", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Internal Server Error.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.InternalServerError,
+						"details": constants.InternalServerErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
 
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{

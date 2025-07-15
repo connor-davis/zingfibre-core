@@ -5,7 +5,7 @@ import { type ReactNode, useState } from 'react';
 
 import { toast } from 'sonner';
 
-import type { ZingResponse } from '@/api-client';
+import type { ErrorResponse } from '@/api-client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -37,7 +37,7 @@ export default function DeletePoiDialog({
     ...deleteApiPoisByIdMutation({
       client: apiClient,
     }),
-    onError: (error: ZingResponse) => {
+    onError: (error: ErrorResponse) => {
       setPoiKey('');
 
       toast.error(error.error, {

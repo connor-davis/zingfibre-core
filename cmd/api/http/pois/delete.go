@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -15,10 +16,90 @@ import (
 func (r *PointsOfInterestRouter) DeletePointOfInterestRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessResponse)
-	responses.Set("401", &constants.UnauthorizedResponse)
-	responses.Set("404", &constants.NotFoundResponse)
-	responses.Set("500", &constants.InternalServerErrorResponse)
+	responses.Set("200", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.SuccessResponseSchema.Value,
+			).
+			WithDescription("Point of interest deleted successfully.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"message": constants.Success,
+						"details": constants.SuccessDetails,
+					},
+					Schema: schemas.SuccessResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("400", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Bad Request.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.BadRequestError,
+						"details": constants.BadRequestErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("401", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("The user is not authenticated.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.UnauthorizedError,
+						"details": constants.UnauthorizedErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("404", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Point of interest not found.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.NotFoundError,
+						"details": constants.NotFoundErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
+
+	responses.Set("500", &openapi3.ResponseRef{
+		Value: openapi3.NewResponse().
+			WithJSONSchema(
+				schemas.ErrorResponseSchema.Value,
+			).
+			WithDescription("Internal Server Error.").
+			WithContent(openapi3.Content{
+				"application/json": &openapi3.MediaType{
+					Example: map[string]any{
+						"error":   constants.InternalServerError,
+						"details": constants.InternalServerErrorDetails,
+					},
+					Schema: schemas.ErrorResponseSchema,
+				},
+			}),
+	})
 
 	parameters := []*openapi3.ParameterRef{
 		{

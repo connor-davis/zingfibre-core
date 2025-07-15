@@ -58,6 +58,7 @@ import type {
   PostApiAuthenticationMfaVerifyResponse,
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterError,
+  PostApiAuthenticationRegisterResponse,
   PostApiPoisData,
   PostApiPoisError,
   PostApiPoisResponse,
@@ -400,12 +401,12 @@ export const postApiAuthenticationRegisterOptions = (
 export const postApiAuthenticationRegisterMutation = (
   options?: Partial<Options<PostApiAuthenticationRegisterData>>
 ): UseMutationOptions<
-  unknown,
+  PostApiAuthenticationRegisterResponse,
   PostApiAuthenticationRegisterError,
   Options<PostApiAuthenticationRegisterData>
 > => {
   const mutationOptions: UseMutationOptions<
-    unknown,
+    PostApiAuthenticationRegisterResponse,
     PostApiAuthenticationRegisterError,
     Options<PostApiAuthenticationRegisterData>
   > = {

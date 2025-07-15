@@ -11,6 +11,11 @@ export type CreateUser = {
   Role?: ['admin', 'staff', 'user'];
 };
 
+export type ErrorResponse = {
+  details?: string;
+  error?: string;
+};
+
 export type LoginRequest = {
   Email?: string;
   Password?: string;
@@ -20,6 +25,27 @@ export type PointOfInterest = {
   ID?: string;
   Key?: string;
   Name?: string;
+};
+
+export type SuccessResponse = {
+  data?:
+    | {
+        Email?: string;
+        ID?: string;
+        MfaEnabled?: boolean;
+        MfaVerified?: boolean;
+        Role?: ['admin', 'staff', 'user'];
+      }
+    | Array<unknown>
+    | {
+        ID?: string;
+        Key?: string;
+        Name?: string;
+      }
+    | Array<unknown>;
+  details?: string;
+  message?: string;
+  pages?: number;
 };
 
 export type UpdatePointOfInterest = {
@@ -40,37 +66,6 @@ export type User = {
   Role?: ['admin', 'staff', 'user'];
 };
 
-export type ZingResponse = {
-  data?:
-    | {
-        Email?: string;
-        ID?: string;
-        MfaEnabled?: boolean;
-        MfaVerified?: boolean;
-        Role?: ['admin', 'staff', 'user'];
-      }
-    | Array<{
-        Email?: string;
-        ID?: string;
-        MfaEnabled?: boolean;
-        MfaVerified?: boolean;
-        Role?: ['admin', 'staff', 'user'];
-      }>
-    | {
-        ID?: string;
-        Key?: string;
-        Name?: string;
-      }
-    | Array<{
-        ID?: string;
-        Key?: string;
-        Name?: string;
-      }>;
-  details?: string;
-  error?: string;
-  pages?: number;
-};
-
 export type GetApiAuthenticationCheckData = {
   body?: never;
   path?: never;
@@ -80,7 +75,7 @@ export type GetApiAuthenticationCheckData = {
 
 export type GetApiAuthenticationCheckErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * The user is not authenticated.
    */
   401: {
     details?: string;
@@ -94,7 +89,7 @@ export type GetApiAuthenticationCheckError =
 
 export type GetApiAuthenticationCheckResponses = {
   /**
-   * The request was successful.
+   * The user is authenticated.
    */
   200: {
     data?:
@@ -105,25 +100,15 @@ export type GetApiAuthenticationCheckResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<{
-          Email?: string;
-          ID?: string;
-          MfaEnabled?: boolean;
-          MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
-        }>
+      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
-      | Array<{
-          ID?: string;
-          Key?: string;
-          Name?: string;
-        }>;
+      | Array<unknown>;
     details?: string;
-    error?: string;
+    message?: string;
     pages?: number;
   };
 };
@@ -143,21 +128,21 @@ export type PostApiAuthenticationLoginData = {
 
 export type PostApiAuthenticationLoginErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Invalid request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -171,14 +156,27 @@ export type PostApiAuthenticationLoginError =
 
 export type PostApiAuthenticationLoginResponses = {
   /**
-   * The request was successful.
+   * User logged in successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -194,21 +192,14 @@ export type PostApiAuthenticationLogoutData = {
 
 export type PostApiAuthenticationLogoutErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
-   */
-  400: {
-    details?: string;
-    error?: string;
-  };
-  /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -222,11 +213,27 @@ export type PostApiAuthenticationLogoutError =
 
 export type PostApiAuthenticationLogoutResponses = {
   /**
-   * The request was successful.
+   * User logged out successfully.
    */
   200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -244,14 +251,21 @@ export type PostApiAuthenticationMfaDisableData = {
 
 export type PostApiAuthenticationMfaDisableErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Unauthorized.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -265,14 +279,27 @@ export type PostApiAuthenticationMfaDisableError =
 
 export type PostApiAuthenticationMfaDisableResponses = {
   /**
-   * The request was successful.
+   * MFA disabled successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -288,7 +315,14 @@ export type GetApiAuthenticationMfaEnableData = {
 
 export type GetApiAuthenticationMfaEnableErrors = {
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Unauthorized.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -315,21 +349,21 @@ export type PostApiAuthenticationMfaVerifyData = {
 
 export type PostApiAuthenticationMfaVerifyErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -343,14 +377,27 @@ export type PostApiAuthenticationMfaVerifyError =
 
 export type PostApiAuthenticationMfaVerifyResponses = {
   /**
-   * The request was successful.
+   * MFA code verified successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -370,21 +417,21 @@ export type PostApiAuthenticationRegisterData = {
 
 export type PostApiAuthenticationRegisterErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * The request could not be completed due to a conflict with the current state of the resource.
+   * Conflict.
    */
   409: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -398,10 +445,32 @@ export type PostApiAuthenticationRegisterError =
 
 export type PostApiAuthenticationRegisterResponses = {
   /**
-   * The resource has been successfully created.
+   * User registered successfully.
    */
-  201: unknown;
+  201: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
 };
+
+export type PostApiAuthenticationRegisterResponse =
+  PostApiAuthenticationRegisterResponses[keyof PostApiAuthenticationRegisterResponses];
 
 export type GetApiPoisData = {
   body?: never;
@@ -415,14 +484,21 @@ export type GetApiPoisData = {
 
 export type GetApiPoisErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -435,12 +511,24 @@ export type GetApiPoisError = GetApiPoisErrors[keyof GetApiPoisErrors];
 
 export type GetApiPoisResponses = {
   /**
-   * The request was successful.
+   * Points of interest retrieved successfully.
    */
   200: {
-    data?: Array<{
-      [key: string]: unknown;
-    }>;
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
     pages?: number;
@@ -461,28 +549,28 @@ export type PostApiPoisData = {
 
 export type PostApiPoisErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * The user is not authenticated.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The request could not be completed due to a conflict with the current state of the resource.
+   * Conflict.
    */
   409: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -495,11 +583,27 @@ export type PostApiPoisError = PostApiPoisErrors[keyof PostApiPoisErrors];
 
 export type PostApiPoisResponses = {
   /**
-   * The request was successful.
+   * Point of interest created successfully.
    */
   201: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -517,21 +621,28 @@ export type DeleteApiPoisByIdData = {
 
 export type DeleteApiPoisByIdErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * The user is not authenticated.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The requested resource could not be found. Please check the URL or contact support.
+   * Point of interest not found.
    */
   404: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -545,11 +656,27 @@ export type DeleteApiPoisByIdError =
 
 export type DeleteApiPoisByIdResponses = {
   /**
-   * The request was successful.
+   * Point of interest deleted successfully.
    */
   200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -567,21 +694,28 @@ export type GetApiPoisByIdData = {
 
 export type GetApiPoisByIdErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The requested resource could not be found. Please check the URL or contact support.
+   * Not Found.
    */
   404: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -595,14 +729,27 @@ export type GetApiPoisByIdError =
 
 export type GetApiPoisByIdResponses = {
   /**
-   * The request was successful.
+   * Point of interest retrieved successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -623,28 +770,28 @@ export type PutApiPoisByIdData = {
 
 export type PutApiPoisByIdErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The requested resource could not be found. Please check the URL or contact support.
+   * Not Found.
    */
   404: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -658,14 +805,27 @@ export type PutApiPoisByIdError =
 
 export type PutApiPoisByIdResponses = {
   /**
-   * The request was successful.
+   * Point of interest updated successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -684,14 +844,21 @@ export type GetApiUsersData = {
 
 export type GetApiUsersErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -704,12 +871,24 @@ export type GetApiUsersError = GetApiUsersErrors[keyof GetApiUsersErrors];
 
 export type GetApiUsersResponses = {
   /**
-   * The request was successful.
+   * Users retrieved successfully.
    */
   200: {
-    data?: Array<{
-      [key: string]: unknown;
-    }>;
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
     pages?: number;
@@ -732,28 +911,28 @@ export type PostApiUsersData = {
 
 export type PostApiUsersErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The request could not be completed due to a conflict with the current state of the resource.
+   * Conflict.
    */
   409: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -766,11 +945,27 @@ export type PostApiUsersError = PostApiUsersErrors[keyof PostApiUsersErrors];
 
 export type PostApiUsersResponses = {
   /**
-   * The request was successful.
+   * User created successfully.
    */
   201: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -788,21 +983,21 @@ export type DeleteApiUsersByIdData = {
 
 export type DeleteApiUsersByIdErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The requested resource could not be found. Please check the URL or contact support.
+   * Not Found.
    */
   404: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -816,11 +1011,27 @@ export type DeleteApiUsersByIdError =
 
 export type DeleteApiUsersByIdResponses = {
   /**
-   * The request was successful.
+   * User deleted successfully.
    */
   200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -838,21 +1049,28 @@ export type GetApiUsersByIdData = {
 
 export type GetApiUsersByIdErrors = {
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The requested resource could not be found. Please check the URL or contact support.
+   * User not found.
    */
   404: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -866,14 +1084,27 @@ export type GetApiUsersByIdError =
 
 export type GetApiUsersByIdResponses = {
   /**
-   * The request was successful.
+   * User retrieved successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -894,28 +1125,28 @@ export type PutApiUsersByIdData = {
 
 export type PutApiUsersByIdErrors = {
   /**
-   * The request could not be understood or was missing required parameters.
+   * Bad Request.
    */
   400: {
     details?: string;
     error?: string;
   };
   /**
-   * You are not authorized to access this resource. Please log in or contact support.
+   * Unauthorized.
    */
   401: {
     details?: string;
     error?: string;
   };
   /**
-   * The requested resource could not be found. Please check the URL or contact support.
+   * User not found.
    */
   404: {
     details?: string;
     error?: string;
   };
   /**
-   * An unexpected error occurred. Please try again later or contact support.
+   * Internal Server Error.
    */
   500: {
     details?: string;
@@ -929,14 +1160,27 @@ export type PutApiUsersByIdError =
 
 export type PutApiUsersByIdResponses = {
   /**
-   * The request was successful.
+   * User updated successfully.
    */
   200: {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: ['admin', 'staff', 'user'];
+        }
+      | Array<unknown>
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<unknown>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
