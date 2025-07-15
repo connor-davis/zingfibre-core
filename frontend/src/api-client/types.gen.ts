@@ -8,7 +8,7 @@ export type CreatePointOfInterest = {
 export type CreateUser = {
   Email?: string;
   Password?: string;
-  Role?: ['admin', 'staff', 'user'];
+  Role?: 'admin' | 'staff' | 'user';
 };
 
 export type ErrorResponse = {
@@ -34,7 +34,7 @@ export type SuccessResponse = {
         ID?: string;
         MfaEnabled?: boolean;
         MfaVerified?: boolean;
-        Role?: ['admin', 'staff', 'user'];
+        Role?: 'admin' | 'staff' | 'user';
       }
     | {
         ID?: string;
@@ -55,7 +55,7 @@ export type UpdatePointOfInterest = {
 
 export type UpdateUser = {
   Email?: string;
-  Role?: ['admin', 'staff', 'user'];
+  Role?: 'admin' | 'staff' | 'user';
 };
 
 export type User = {
@@ -63,7 +63,7 @@ export type User = {
   ID?: string;
   MfaEnabled?: boolean;
   MfaVerified?: boolean;
-  Role?: ['admin', 'staff', 'user'];
+  Role?: 'admin' | 'staff' | 'user';
 };
 
 export type GetApiAuthenticationCheckData = {
@@ -98,7 +98,7 @@ export type GetApiAuthenticationCheckResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -165,7 +165,7 @@ export type PostApiAuthenticationLoginResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -222,7 +222,7 @@ export type PostApiAuthenticationLogoutResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -288,7 +288,7 @@ export type PostApiAuthenticationMfaDisableResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -386,7 +386,7 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -408,7 +408,7 @@ export type PostApiAuthenticationRegisterData = {
   body?: {
     Email?: string;
     Password?: string;
-    Role?: ['admin', 'staff', 'user'];
+    Role?: 'admin' | 'staff' | 'user';
   };
   path?: never;
   query?: never;
@@ -454,7 +454,7 @@ export type PostApiAuthenticationRegisterResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -520,7 +520,7 @@ export type GetApiPoisResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -592,7 +592,7 @@ export type PostApiPoisResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -665,7 +665,7 @@ export type DeleteApiPoisByIdResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -738,7 +738,7 @@ export type GetApiPoisByIdResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -814,7 +814,7 @@ export type PutApiPoisByIdResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -880,7 +880,7 @@ export type GetApiUsersResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -902,7 +902,7 @@ export type PostApiUsersData = {
   body?: {
     Email?: string;
     Password?: string;
-    Role?: ['admin', 'staff', 'user'];
+    Role?: 'admin' | 'staff' | 'user';
   };
   path?: never;
   query?: never;
@@ -954,7 +954,7 @@ export type PostApiUsersResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -1020,7 +1020,7 @@ export type DeleteApiUsersByIdResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -1093,7 +1093,7 @@ export type GetApiUsersByIdResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;
@@ -1114,7 +1114,7 @@ export type GetApiUsersByIdResponse =
 export type PutApiUsersByIdData = {
   body?: {
     Email?: string;
-    Role?: ['admin', 'staff', 'user'];
+    Role?: 'admin' | 'staff' | 'user';
   };
   path: {
     id: string;
@@ -1169,7 +1169,7 @@ export type PutApiUsersByIdResponses = {
           ID?: string;
           MfaEnabled?: boolean;
           MfaVerified?: boolean;
-          Role?: ['admin', 'staff', 'user'];
+          Role?: 'admin' | 'staff' | 'user';
         }
       | {
           ID?: string;

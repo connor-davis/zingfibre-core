@@ -7,7 +7,7 @@ var UserSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema
 	"Email":       openapi3.NewStringSchema().WithFormat("email"),
 	"MfaEnabled":  openapi3.NewBoolSchema(),
 	"MfaVerified": openapi3.NewBoolSchema(),
-	"Role":        openapi3.NewStringSchema().WithEnum([]interface{}{"admin", "staff", "user"}).WithDefault("user"),
+	"Role":        openapi3.NewStringSchema().WithEnum("admin", "staff", "user").WithDefault("user"),
 }).NewRef()
 
 var UserArraySchema = openapi3.NewArraySchema().WithProperties(map[string]*openapi3.Schema{
@@ -15,16 +15,16 @@ var UserArraySchema = openapi3.NewArraySchema().WithProperties(map[string]*opena
 	"Email":       openapi3.NewStringSchema().WithFormat("email"),
 	"MfaEnabled":  openapi3.NewBoolSchema(),
 	"MfaVerified": openapi3.NewBoolSchema(),
-	"Role":        openapi3.NewStringSchema().WithEnum([]interface{}{"admin", "staff", "user"}).WithDefault("user"),
+	"Role":        openapi3.NewStringSchema().WithEnum("admin", "staff", "user").WithDefault("user"),
 }).NewRef()
 
 var CreateUserSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 	"Email":    openapi3.NewStringSchema().WithFormat("email"),
 	"Password": openapi3.NewStringSchema().WithMinLength(8),
-	"Role":     openapi3.NewStringSchema().WithEnum([]interface{}{"admin", "staff", "user"}).WithDefault("user"),
+	"Role":     openapi3.NewStringSchema().WithEnum("admin", "staff", "user").WithDefault("user"),
 }).NewRef()
 
 var UpdateUserSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 	"Email": openapi3.NewStringSchema().WithFormat("email"),
-	"Role":  openapi3.NewStringSchema().WithEnum([]interface{}{"admin", "staff", "user"}).WithDefault("user"),
+	"Role":  openapi3.NewStringSchema().WithEnum("admin", "staff", "user").WithDefault("user"),
 }).NewRef()
