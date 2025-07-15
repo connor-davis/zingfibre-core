@@ -10,6 +10,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/env"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
+	"github.com/connor-davis/zingfibre-core/internal/sessions"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -36,6 +37,8 @@ func main() {
 	}
 
 	defer postgresPool.Close()
+
+	sessions := sessions.NewSessions(postgresPool)
 
 	log.Info("✅ Connected to PostgreSQL successfully")
 
@@ -91,9 +94,9 @@ func main() {
 		Format: "${time} ${status} - ${latency} ${method} ${url}\n",
 	}))
 
-	middleware := middleware.NewMiddleware(postgresQueries)
+	middleware := middleware.NewMiddleware(postgresQueries, sessions)
 
-	httpRouter := http.NewHttpRouter(postgresQueries, middleware)
+	httpRouter := http.NewHttpRouter(postgresQueries, middleware, sessions)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 

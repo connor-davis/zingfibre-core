@@ -28,7 +28,7 @@ func (r *AuthenticationRouter) LogoutRoute() system.Route {
 		Method: system.PostMethod,
 		Path:   "/authentication/logout",
 		Handler: func(c *fiber.Ctx) error {
-			currentSession, err := r.Postgres.Sessions().Get(c)
+			currentSession, err := r.Sessions.Get(c)
 
 			if err != nil {
 				log.Errorf("🔥 Error retrieving session: %s", err.Error())

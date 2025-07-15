@@ -88,7 +88,7 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 				})
 			}
 
-			currentSession, err := r.Postgres.Sessions().Get(c)
+			currentSession, err := r.Sessions.Get(c)
 
 			if err != nil {
 				log.Errorf("🔥 Error retrieving session: %s", err.Error())

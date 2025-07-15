@@ -13,22 +13,24 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
 type HttpRouter struct {
 	Routes     []system.Route
 	Postgres   *postgres.Queries
 	Middleware *middleware.Middleware
+	Sessions   *session.Store
 }
 
-func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware) *HttpRouter {
-	authentication := authentication.NewAuthenticationRouter(postgres, middleware)
+func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware, sessions *session.Store) *HttpRouter {
+	authentication := authentication.NewAuthenticationRouter(postgres, middleware, sessions)
 	authenticationRoutes := authentication.RegisterRoutes()
 
-	users := users.NewUsersRouter(postgres, middleware)
+	users := users.NewUsersRouter(postgres, middleware, sessions)
 	usersRoutes := users.RegisterRoutes()
 
-	pois := pois.NewPointOfInterestsRouter(postgres, middleware)
+	pois := pois.NewPointOfInterestsRouter(postgres, middleware, sessions)
 	poisRoutes := pois.RegisterRoutes()
 
 	routes := []system.Route{}
@@ -41,6 +43,7 @@ func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware
 		Routes:     routes,
 		Postgres:   postgres,
 		Middleware: middleware,
+		Sessions:   sessions,
 	}
 }
 

@@ -11,7 +11,7 @@ import (
 
 func (m *Middleware) Authorized() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		currentSession, err := m.Postgres.Sessions().Get(c)
+		currentSession, err := m.Sessions.Get(c)
 
 		if err != nil {
 			log.Errorf("🔥 Error retrieving session: %s", err.Error())

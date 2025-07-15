@@ -1,19 +1,19 @@
-package postgres
+package sessions
 
 import (
 	"time"
 
 	"github.com/connor-davis/zingfibre-core/env"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	fiberPg "github.com/gofiber/storage/postgres/v2"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func (q *Queries) Sessions() *session.Store {
-	sessions := session.New(session.Config{
+func NewSessions(db *pgxpool.Pool) *session.Store {
+	return session.New(session.Config{
 		Storage: fiberPg.New(fiberPg.Config{
-			Table:         "sessions",
-			ConnectionURI: string(env.POSTGRES_DSN),
+			Table: "sessions",
+			DB:    db,
 		}),
 		KeyLookup:         "cookie:zingfibre_sessions",
 		CookieDomain:      string(env.COOKIE_DOMAIN),
@@ -24,11 +24,4 @@ func (q *Queries) Sessions() *session.Store {
 		CookieHTTPOnly:    false,
 		Expiration:        5 * time.Minute,
 	})
-
-	if sessions == nil {
-		log.Errorf("🔥 Failed to create session store")
-		return nil
-	}
-
-	return sessions
 }

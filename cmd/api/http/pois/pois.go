@@ -4,14 +4,16 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
+	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
 type PointsOfInterestRouter struct {
 	Postgres   *postgres.Queries
 	Middleware *middleware.Middleware
+	Sessions   *session.Store
 }
 
-func NewPointOfInterestsRouter(postgres *postgres.Queries, middleware *middleware.Middleware) *PointsOfInterestRouter {
+func NewPointOfInterestsRouter(postgres *postgres.Queries, middleware *middleware.Middleware, sessions *session.Store) *PointsOfInterestRouter {
 	return &PointsOfInterestRouter{
 		Postgres:   postgres,
 		Middleware: middleware,
