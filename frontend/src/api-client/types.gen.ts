@@ -90,6 +90,42 @@ export type PostApiAuthenticationLoginResponses = {
 export type PostApiAuthenticationLoginResponse =
   PostApiAuthenticationLoginResponses[keyof PostApiAuthenticationLoginResponses];
 
+export type PostApiAuthenticationLogoutData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/api/authentication/logout';
+};
+
+export type PostApiAuthenticationLogoutErrors = {
+  /**
+   * The request could not be understood or was missing required parameters.
+   */
+  400: unknown;
+  /**
+   * You are not authorized to access this resource. Please log in or contact support.
+   */
+  401: unknown;
+  /**
+   * An unexpected error occurred. Please try again later or contact support.
+   */
+  500: unknown;
+  default: unknown;
+};
+
+export type PostApiAuthenticationLogoutResponses = {
+  /**
+   * The request was successful.
+   */
+  200: {
+    details?: string;
+    message?: string;
+  };
+};
+
+export type PostApiAuthenticationLogoutResponse =
+  PostApiAuthenticationLogoutResponses[keyof PostApiAuthenticationLogoutResponses];
+
 export type PostApiAuthenticationMfaDisableData = {
   body?: {
     userId?: string;

@@ -52,8 +52,8 @@ export default function VerifyMfaForm() {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen p-3 bg-muted">
-      <div className="flex flex-col w-full h-auto p-3 space-y-5 border rounded-md lg:max-w-96 bg-background items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-screen h-screen p-3">
+      <div className="flex flex-col w-full md:max-w-96 items-center justify-center gap-5 md:gap-10 p-5 md:p-10 m-5 md:m-10 border rounded-md bg-popover">
         <div className="flex flex-col space-y-3 text-center items-center justify-center">
           <Label className="text-sm">Welcome back, {user.Email}!</Label>
           <Label className="text-xs text-muted-foreground">

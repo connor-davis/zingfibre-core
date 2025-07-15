@@ -15,24 +15,24 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
 	context := context.Background()
 
-	databaseConnection, err := pgx.Connect(context, string(env.POSTGRES_DSN))
+	postgresPool, err := pgxpool.New(context, string(env.POSTGRES_DSN))
 
 	if err != nil {
 		log.Infof("🔥 Failed to connect to PostgreSQL: %v", err)
 	}
 
-	defer databaseConnection.Close(context)
+	defer postgresPool.Close()
 
 	log.Info("✅ Connected to PostgreSQL successfully")
 
-	postgresQueries := postgres.New(databaseConnection)
+	postgresQueries := postgres.New(postgresPool)
 
 	log.Info("🔃 Creating default admin user.")
 

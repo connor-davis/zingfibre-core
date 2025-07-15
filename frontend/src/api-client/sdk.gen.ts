@@ -29,6 +29,9 @@ import type {
   PostApiAuthenticationLoginData,
   PostApiAuthenticationLoginErrors,
   PostApiAuthenticationLoginResponses,
+  PostApiAuthenticationLogoutData,
+  PostApiAuthenticationLogoutErrors,
+  PostApiAuthenticationLogoutResponses,
   PostApiAuthenticationMfaDisableData,
   PostApiAuthenticationMfaDisableErrors,
   PostApiAuthenticationMfaDisableResponses,
@@ -106,6 +109,25 @@ export const postApiAuthenticationLogin = <
       'Content-Type': 'application/json',
       ...options?.headers,
     },
+  });
+};
+
+/**
+ * Logout
+ * Endpoint for user logout
+ */
+export const postApiAuthenticationLogout = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<PostApiAuthenticationLogoutData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).post<
+    PostApiAuthenticationLogoutResponses,
+    PostApiAuthenticationLogoutErrors,
+    ThrowOnError
+  >({
+    url: '/api/authentication/logout',
+    ...options,
   });
 };
 

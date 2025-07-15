@@ -19,6 +19,7 @@ import {
   getApiUsers,
   getApiUsersById,
   postApiAuthenticationLogin,
+  postApiAuthenticationLogout,
   postApiAuthenticationMfaDisable,
   postApiAuthenticationMfaVerify,
   postApiAuthenticationRegister,
@@ -42,6 +43,8 @@ import type {
   GetApiUsersResponse,
   PostApiAuthenticationLoginData,
   PostApiAuthenticationLoginResponse,
+  PostApiAuthenticationLogoutData,
+  PostApiAuthenticationLogoutResponse,
   PostApiAuthenticationMfaDisableData,
   PostApiAuthenticationMfaDisableResponse,
   PostApiAuthenticationMfaVerifyData,
@@ -163,7 +166,59 @@ export const postApiAuthenticationLoginMutation = (
         ...localOptions,
         throwOnError: true,
       });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
 
+export const postApiAuthenticationLogoutQueryKey = (
+  options?: Options<PostApiAuthenticationLogoutData>
+) => createQueryKey('postApiAuthenticationLogout', options);
+
+/**
+ * Logout
+ * Endpoint for user logout
+ */
+export const postApiAuthenticationLogoutOptions = (
+  options?: Options<PostApiAuthenticationLogoutData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await postApiAuthenticationLogout({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: postApiAuthenticationLogoutQueryKey(options),
+  });
+};
+
+/**
+ * Logout
+ * Endpoint for user logout
+ */
+export const postApiAuthenticationLogoutMutation = (
+  options?: Partial<Options<PostApiAuthenticationLogoutData>>
+): UseMutationOptions<
+  PostApiAuthenticationLogoutResponse,
+  DefaultError,
+  Options<PostApiAuthenticationLogoutData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiAuthenticationLogoutResponse,
+    DefaultError,
+    Options<PostApiAuthenticationLogoutData>
+  > = {
+    mutationFn: async (localOptions) => {
+      const { data } = await postApiAuthenticationLogout({
+        ...options,
+        ...localOptions,
+        throwOnError: true,
+      });
       return data;
     },
   };
