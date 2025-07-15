@@ -148,7 +148,7 @@ var BadRequestResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(BadRequestError),
+				"error":   openapi3.NewStringSchema().WithDefault(BadRequestError),
 				"details": openapi3.NewStringSchema().WithDefault(BadRequestErrorDetails),
 			}),
 		).
@@ -156,7 +156,7 @@ var BadRequestResponse = openapi3.ResponseRef{
 		WithContent(openapi3.Content{
 			"application/json": &openapi3.MediaType{
 				Example: map[string]string{
-					"message": BadRequestError,
+					"error":   BadRequestError,
 					"details": BadRequestErrorDetails,
 				},
 			},
@@ -167,7 +167,7 @@ var UnauthorizedResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(UnauthorizedError),
+				"error":   openapi3.NewStringSchema().WithDefault(UnauthorizedError),
 				"details": openapi3.NewStringSchema().WithDefault(UnauthorizedErrorDetails),
 			}),
 		).
@@ -175,7 +175,7 @@ var UnauthorizedResponse = openapi3.ResponseRef{
 		WithContent(openapi3.Content{
 			"application/json": &openapi3.MediaType{
 				Example: map[string]string{
-					"message": UnauthorizedError,
+					"error":   UnauthorizedError,
 					"details": UnauthorizedErrorDetails,
 				},
 			},
@@ -186,7 +186,7 @@ var ConflictResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(ConflictError),
+				"error":   openapi3.NewStringSchema().WithDefault(ConflictError),
 				"details": openapi3.NewStringSchema().WithDefault(ConflictErrorDetails),
 			}),
 		).
@@ -194,7 +194,7 @@ var ConflictResponse = openapi3.ResponseRef{
 		WithContent(openapi3.Content{
 			"application/json": &openapi3.MediaType{
 				Example: map[string]string{
-					"message": ConflictError,
+					"error":   ConflictError,
 					"details": ConflictErrorDetails,
 				},
 			},
@@ -205,7 +205,7 @@ var ForbiddenResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(ForbiddenError),
+				"error":   openapi3.NewStringSchema().WithDefault(ForbiddenError),
 				"details": openapi3.NewStringSchema().WithDefault(ForbiddenErrorDetails),
 			}),
 		).
@@ -213,7 +213,7 @@ var ForbiddenResponse = openapi3.ResponseRef{
 		WithContent(openapi3.Content{
 			"application/json": &openapi3.MediaType{
 				Example: map[string]string{
-					"message": ForbiddenError,
+					"error":   ForbiddenError,
 					"details": ForbiddenErrorDetails,
 				},
 			},
@@ -224,7 +224,7 @@ var InternalServerErrorResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(InternalServerError),
+				"error":   openapi3.NewStringSchema().WithDefault(InternalServerError),
 				"details": openapi3.NewStringSchema().WithDefault(InternalServerErrorDetails),
 			}),
 		).
@@ -232,7 +232,7 @@ var InternalServerErrorResponse = openapi3.ResponseRef{
 		WithContent(openapi3.Content{
 			"application/json": &openapi3.MediaType{
 				Example: map[string]string{
-					"message": InternalServerError,
+					"error":   InternalServerError,
 					"details": InternalServerErrorDetails,
 				},
 			},
@@ -243,7 +243,7 @@ var NotFoundResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
 			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-				"message": openapi3.NewStringSchema().WithDefault(NotFoundError),
+				"error":   openapi3.NewStringSchema().WithDefault(NotFoundError),
 				"details": openapi3.NewStringSchema().WithDefault(NotFoundErrorDetails),
 			}),
 		).
@@ -251,7 +251,7 @@ var NotFoundResponse = openapi3.ResponseRef{
 		WithContent(openapi3.Content{
 			"application/json": &openapi3.MediaType{
 				Example: map[string]string{
-					"message": NotFoundError,
+					"error":   NotFoundError,
 					"details": NotFoundErrorDetails,
 				},
 			},
