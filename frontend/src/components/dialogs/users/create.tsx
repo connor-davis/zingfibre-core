@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
-import { type CreateUser } from '@/api-client';
+import { type BadRequestResponse, type CreateUser } from '@/api-client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -54,9 +54,9 @@ export default function CreateUserDialog({
     ...postApiAuthenticationRegisterMutation({
       client: apiClient,
     }),
-    onError: (error) => {
-      toast.error('Failed', {
-        description: error.message,
+    onError: (error: BadRequestResponse) => {
+      toast.error(error.error, {
+        description: error.details,
         duration: 2000,
       });
     },

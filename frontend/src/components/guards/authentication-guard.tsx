@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
-import { type LoginRequest } from '@/api-client';
+import { type BadRequestResponse, type LoginRequest } from '@/api-client';
 import EnableMfaForm from '@/components/authentication/enable-mfa-form';
 import VerifyMfaForm from '@/components/authentication/verify-mfa-form';
 import { useAuthentication } from '@/components/providers/authentication-provider';
@@ -50,11 +50,11 @@ export default function AuthenticationGuard({
     ...postApiAuthenticationLoginMutation({
       client: apiClient,
     }),
-    onError: (error) => {
+    onError: (error: BadRequestResponse) => {
       loginForm.reset();
 
-      toast.error('Login failed', {
-        description: error.message,
+      toast.error(error.error, {
+        description: error.details,
         duration: 2000,
       });
     },

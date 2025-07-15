@@ -22,7 +22,6 @@ export type CreateClientConfig<T extends DefaultClientOptions = ClientOptions> =
 
 export const client = createClient(
   createConfig<ClientOptions>({
-    baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:4000',
-    credentials: 'include',
+    baseUrl: 'http://localhost:4000',
   })
 );

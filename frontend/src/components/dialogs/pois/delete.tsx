@@ -5,6 +5,7 @@ import { type ReactNode, useState } from 'react';
 
 import { toast } from 'sonner';
 
+import type { BadRequestResponse } from '@/api-client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -36,11 +37,11 @@ export default function DeletePoiDialog({
     ...deleteApiPoisByIdMutation({
       client: apiClient,
     }),
-    onError: (error) => {
+    onError: (error: BadRequestResponse) => {
       setPoiKey('');
 
-      toast.error('Failed', {
-        description: error.message,
+      toast.error(error.error, {
+        description: error.details,
         duration: 2000,
       });
     },
