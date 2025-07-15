@@ -6,5 +6,9 @@ export default {
     lint: 'eslint',
     path: 'src/api-client',
   },
-  plugins: ['@tanstack/react-query', '@hey-api/client-fetch'],
+  plugins: [
+    '@tanstack/react-query',
+    '@hey-api/client-fetch',
+    '@hey-api/typescript',
+  ],
 };

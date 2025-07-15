@@ -36,12 +36,12 @@ export type SuccessResponse = {
         MfaVerified?: boolean;
         Role?: ['admin', 'staff', 'user'];
       }
-    | Array<unknown>
     | {
         ID?: string;
         Key?: string;
         Name?: string;
       }
+    | Array<unknown>
     | Array<unknown>;
   details?: string;
   message?: string;
@@ -100,12 +100,12 @@ export type GetApiAuthenticationCheckResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -167,12 +167,12 @@ export type PostApiAuthenticationLoginResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -224,12 +224,12 @@ export type PostApiAuthenticationLogoutResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -290,12 +290,12 @@ export type PostApiAuthenticationMfaDisableResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -388,12 +388,12 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -456,12 +456,12 @@ export type PostApiAuthenticationRegisterResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -522,12 +522,12 @@ export type GetApiPoisResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -594,12 +594,12 @@ export type PostApiPoisResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -667,12 +667,12 @@ export type DeleteApiPoisByIdResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -740,12 +740,12 @@ export type GetApiPoisByIdResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -816,12 +816,12 @@ export type PutApiPoisByIdResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -882,12 +882,12 @@ export type GetApiUsersResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -956,12 +956,12 @@ export type PostApiUsersResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -1022,12 +1022,12 @@ export type DeleteApiUsersByIdResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -1095,12 +1095,12 @@ export type GetApiUsersByIdResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;
@@ -1171,12 +1171,12 @@ export type PutApiUsersByIdResponses = {
           MfaVerified?: boolean;
           Role?: ['admin', 'staff', 'user'];
         }
-      | Array<unknown>
       | {
           ID?: string;
           Key?: string;
           Name?: string;
         }
+      | Array<unknown>
       | Array<unknown>;
     details?: string;
     message?: string;

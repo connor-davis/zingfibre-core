@@ -36,7 +36,7 @@ export const Route = createFileRoute('/users/')({
 
     return {
       ...data,
-      users: data?.data as User[],
+      users: data?.data,
       pages: data ? (data.pages ? data.pages : 1) : 1,
     } as {
       users?: User[];

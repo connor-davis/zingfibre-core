@@ -35,7 +35,7 @@ export const Route = createFileRoute('/pois/')({
 
     return {
       ...data,
-      pois: data?.data as PointOfInterest[],
+      pois: data?.data,
       pages: data ? (data.pages ? data.pages : 1) : 1,
     } as {
       pois?: PointOfInterest[];
