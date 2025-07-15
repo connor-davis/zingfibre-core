@@ -1,6 +1,7 @@
 package pois
 
 import (
+	"math"
 	"strconv"
 	"strings"
 
@@ -16,7 +17,7 @@ import (
 func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("200", &constants.SuccessArrayResponse)
+	responses.Set("200", &constants.SuccessPagingResponse)
 	responses.Set("401", &constants.UnauthorizedResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
@@ -73,9 +74,12 @@ func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 				})
 			}
 
+			pages := int32(math.Ceil(float64(len(pois)) / 10))
+
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
+				"pages":   pages,
 				"data":    pois,
 			})
 		},

@@ -92,6 +92,35 @@ var SuccessArrayResponse = openapi3.ResponseRef{
 		}),
 }
 
+var SuccessPagingResponse = openapi3.ResponseRef{
+	Value: openapi3.NewResponse().
+		WithJSONSchema(
+			openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+				"message": openapi3.NewStringSchema().WithDefault(Success),
+				"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+				"pages":   openapi3.NewIntegerSchema().WithDefault(1),
+				"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
+			}),
+		).
+		WithDescription(SuccessDetails).
+		WithContent(openapi3.Content{
+			"application/json": &openapi3.MediaType{
+				Example: map[string]any{
+					"message": Success,
+					"details": SuccessDetails,
+					"pages":   1,
+					"data":    []any{},
+				},
+				Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+					"message": openapi3.NewStringSchema().WithDefault(Success),
+					"details": openapi3.NewStringSchema().WithDefault(SuccessDetails),
+					"pages":   openapi3.NewIntegerSchema().WithDefault(1),
+					"data":    openapi3.NewArraySchema().WithItems(openapi3.NewObjectSchema()),
+				}).NewRef(),
+			},
+		}),
+}
+
 var SuccessResponse = openapi3.ResponseRef{
 	Value: openapi3.NewResponse().
 		WithJSONSchema(
