@@ -18,6 +18,14 @@ WHERE
 LIMIT
     1;
 
+-- name: GetTotalUsers :one
+SELECT
+    COUNT(*) AS total
+FROM
+    users
+LIMIT
+    1;
+
 -- name: GetUsers :many
 SELECT
     *

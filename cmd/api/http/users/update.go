@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -13,7 +14,8 @@ import (
 )
 
 type UpdateUserRequest struct {
-	Email string `json:"email"`
+	Email string            `json:"email"`
+	Role  postgres.RoleType `json:"role"`
 }
 
 func (r *UsersRouter) UpdateUserRoute() system.Route {
@@ -46,8 +48,12 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 			Description: "Endpoint to update an existing user",
 			Tags:        []string{"Users"},
 			Parameters:  parameters,
-			RequestBody: nil,
-			Responses:   responses,
+			RequestBody: &openapi3.RequestBodyRef{
+				Value: openapi3.NewRequestBody().WithJSONSchema(
+					schemas.UserSchema.Value,
+				),
+			},
+			Responses: responses,
 		},
 		Method: system.PutMethod,
 		Path:   "/users/{id}",
@@ -98,13 +104,14 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 				})
 			}
 
-			_, err = r.Postgres.UpdateUser(c.Context(), postgres.UpdateUserParams{
+			updatedUser, err := r.Postgres.UpdateUser(c.Context(), postgres.UpdateUserParams{
 				ID:          user.ID,
 				Email:       updateUserRequest.Email,
 				Password:    user.Password,
 				MfaSecret:   user.MfaSecret,
 				MfaEnabled:  user.MfaEnabled,
 				MfaVerified: user.MfaVerified,
+				Role:        updateUserRequest.Role,
 			})
 
 			if err != nil {
@@ -119,6 +126,7 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
+				"data":    updatedUser,
 			})
 		},
 	}

@@ -60,6 +60,17 @@ func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 				page = 1
 			}
 
+			totalPointsOfInterest, err := r.Postgres.GetTotalPointsOfInterest(c.Context())
+
+			if err != nil {
+				log.Errorf("🔥 Error retrieving total points of interest: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"message": constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
 			pois, err := r.Postgres.GetPointsOfInterest(c.Context(), postgres.GetPointsOfInterestParams{
 				Limit:  10, // Default limit
 				Offset: (int32(page) - 1) * 10,
@@ -74,7 +85,7 @@ func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 				})
 			}
 
-			pages := int32(math.Ceil(float64(len(pois)) / 10))
+			pages := int32(math.Ceil(float64(totalPointsOfInterest) / 10))
 
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,

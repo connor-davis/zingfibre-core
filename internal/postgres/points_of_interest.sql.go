@@ -122,6 +122,22 @@ func (q *Queries) GetPointsOfInterest(ctx context.Context, arg GetPointsOfIntere
 	return items, nil
 }
 
+const getTotalPointsOfInterest = `-- name: GetTotalPointsOfInterest :one
+SELECT
+    COUNT(*) AS total
+FROM
+    points_of_interest
+LIMIT
+    1
+`
+
+func (q *Queries) GetTotalPointsOfInterest(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, getTotalPointsOfInterest)
+	var total int64
+	err := row.Scan(&total)
+	return total, err
+}
+
 const updatePointOfInterest = `-- name: UpdatePointOfInterest :one
 UPDATE points_of_interest
 SET

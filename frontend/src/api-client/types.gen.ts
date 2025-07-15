@@ -5,6 +5,12 @@ export type LoginRequest = {
   Password?: string;
 };
 
+export type PointOfInterest = {
+  ID?: string;
+  Key?: string;
+  Name?: string;
+};
+
 export type User = {
   Email?: string;
   ID?: string;
@@ -420,7 +426,11 @@ export type GetApiPoisByIdResponse =
   GetApiPoisByIdResponses[keyof GetApiPoisByIdResponses];
 
 export type PutApiPoisByIdData = {
-  body?: never;
+  body?: {
+    ID?: string;
+    Key?: string;
+    Name?: string;
+  };
   path: {
     id: string;
   };
@@ -629,7 +639,13 @@ export type GetApiUsersByIdResponse =
   GetApiUsersByIdResponses[keyof GetApiUsersByIdResponses];
 
 export type PutApiUsersByIdData = {
-  body?: never;
+  body?: {
+    Email?: string;
+    ID?: string;
+    MfaEnabled?: boolean;
+    MfaVerified?: boolean;
+    Role?: ['admin', 'staff', 'user'];
+  };
   path: {
     id: string;
   };

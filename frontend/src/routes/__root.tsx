@@ -21,8 +21,8 @@ export const Route = createRootRoute({
                 <div className="flex w-screen h-screen overflow-hidden">
                   <AppSidebar />
 
-                  <div className="flex flex-col w-full h-full overflow-hidden gap-3">
-                    <div className="flex items-center gap-3 px-3 pt-3">
+                  <div className="flex flex-col w-full h-full overflow-hidden">
+                    <div className="flex items-center gap-3 p-3">
                       <SidebarTrigger />
 
                       <Link to="/">

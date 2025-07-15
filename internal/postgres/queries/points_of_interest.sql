@@ -8,6 +8,14 @@ WHERE
 LIMIT
     1;
 
+-- name: GetTotalPointsOfInterest :one
+SELECT
+    COUNT(*) AS total
+FROM
+    points_of_interest
+LIMIT
+    1;
+
 -- name: GetPointsOfInterest :many
 SELECT
     *

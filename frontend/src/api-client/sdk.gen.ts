@@ -305,6 +305,10 @@ export const putApiPoisById = <ThrowOnError extends boolean = false>(
   >({
     url: '/api/pois/{id}',
     ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 };
 
@@ -394,5 +398,9 @@ export const putApiUsersById = <ThrowOnError extends boolean = false>(
   >({
     url: '/api/users/{id}',
     ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 };

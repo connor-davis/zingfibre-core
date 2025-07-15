@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -47,8 +48,12 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			Description: "Endpoint to update an existing point of interest",
 			Tags:        []string{"Points Of Interest"},
 			Parameters:  parameters,
-			RequestBody: nil,
-			Responses:   responses,
+			RequestBody: &openapi3.RequestBodyRef{
+				Value: openapi3.NewRequestBody().WithJSONSchema(
+					schemas.PointOfInterestSchema.Value,
+				),
+			},
+			Responses: responses,
 		},
 		Method: system.PutMethod,
 		Path:   "/pois/{id}",
@@ -99,7 +104,7 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 				})
 			}
 
-			_, err = r.Postgres.UpdatePointOfInterest(c.Context(), postgres.UpdatePointOfInterestParams{
+			updatedPointOfInterest, err := r.Postgres.UpdatePointOfInterest(c.Context(), postgres.UpdatePointOfInterestParams{
 				ID:   poi.ID,
 				Name: updatePointOfInterestRequest.Name,
 				Key:  updatePointOfInterestRequest.Key,
@@ -117,6 +122,7 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
+				"data":    updatedPointOfInterest,
 			})
 		},
 	}
