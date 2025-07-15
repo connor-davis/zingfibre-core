@@ -8,7 +8,6 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pois"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
-	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
@@ -161,24 +160,14 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 		Paths: paths,
 		Components: &openapi3.Components{
 			Schemas: openapi3.Schemas{
-				"User":                        schemas.UserSchema,
-				"CreateUser":                  schemas.CreateUserSchema,
-				"UpdateUser":                  schemas.UpdateUserSchema,
-				"PointOfInterest":             schemas.PointOfInterestSchema,
-				"CreatePointOfInterest":       schemas.CreatePointOfInterestSchema,
-				"UpdatePointOfInterest":       schemas.UpdatePointOfInterestSchema,
-				"LoginRequest":                schemas.LoginRequestSchema,
-				"CreatedResponse":             constants.CreatedSchema.NewRef(),
-				"SuccessResponse":             constants.SuccessSchema.NewRef(),
-				"SuccessObjectResponse":       constants.SuccessObjectSchema.NewRef(),
-				"SuccessArrayResponse":        constants.SuccessArraySchema.NewRef(),
-				"SuccessPagingResponse":       constants.SuccessPagingSchema.NewRef(),
-				"BadRequestResponse":          constants.BadRequestSchema.NewRef(),
-				"ConflictResponse":            constants.ConflictSchema.NewRef(),
-				"UnauthorizedResponse":        constants.UnauthorizedSchema.NewRef(),
-				"ForbiddenResponse":           constants.ForbiddenSchema.NewRef(),
-				"InternalServerErrorResponse": constants.InternalServerErrorSchema.NewRef(),
-				"NotFoundResponse":            constants.NotFoundSchema.NewRef(),
+				"User":                  schemas.UserSchema,
+				"CreateUser":            schemas.CreateUserSchema,
+				"UpdateUser":            schemas.UpdateUserSchema,
+				"PointOfInterest":       schemas.PointOfInterestSchema,
+				"CreatePointOfInterest": schemas.CreatePointOfInterestSchema,
+				"UpdatePointOfInterest": schemas.UpdatePointOfInterestSchema,
+				"LoginRequest":          schemas.LoginRequestSchema,
+				"ZingResponse":          schemas.ResponseSchema,
 			},
 		},
 	}

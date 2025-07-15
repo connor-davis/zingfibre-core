@@ -14,11 +14,7 @@ func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 	responses.Set("200", &openapi3.ResponseRef{
 		Value: openapi3.NewResponse().
 			WithJSONSchema(
-				openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-					"message": openapi3.NewStringSchema().WithDefault(constants.Success),
-					"details": openapi3.NewStringSchema().WithDefault(constants.SuccessDetails),
-					"data":    schemas.UserSchema.Value,
-				}),
+				schemas.ResponseSchema.Value,
 			).
 			WithDescription(constants.SuccessDetails).
 			WithContent(openapi3.Content{
@@ -28,11 +24,7 @@ func (r *AuthenticationRouter) CheckAuthenticationRoute() system.Route {
 						"details": constants.SuccessDetails,
 						"data":    map[string]any{},
 					},
-					Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-						"message": openapi3.NewStringSchema().WithDefault(constants.Success),
-						"details": openapi3.NewStringSchema().WithDefault(constants.SuccessDetails),
-						"data":    schemas.UserSchema.Value,
-					}).NewRef(),
+					Schema: schemas.ResponseSchema,
 				},
 			}),
 	})

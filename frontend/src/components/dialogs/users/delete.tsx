@@ -5,7 +5,7 @@ import { type ReactNode, useState } from 'react';
 
 import { toast } from 'sonner';
 
-import type { BadRequestResponse } from '@/api-client';
+import type { ZingResponse } from '@/api-client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -37,7 +37,7 @@ export default function DeleteUserDialog({
     ...deleteApiUsersByIdMutation({
       client: apiClient,
     }),
-    onError: (error: BadRequestResponse) => {
+    onError: (error: ZingResponse) => {
       setUserEmail('');
 
       toast.error(error.error, {

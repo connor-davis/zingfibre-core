@@ -28,10 +28,6 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 	responses.Set("401", &constants.UnauthorizedResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
-	requestBody := openapi3.NewRequestBody().WithJSONSchema(
-		schemas.LoginRequestSchema.Value,
-	)
-
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Login",
@@ -39,7 +35,9 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			Tags:        []string{"Authentication"},
 			Parameters:  nil,
 			RequestBody: &openapi3.RequestBodyRef{
-				Value: requestBody,
+				Value: openapi3.NewRequestBody().WithJSONSchema(
+					schemas.LoginRequestSchema.Value,
+				),
 			},
 			Responses: responses,
 		},

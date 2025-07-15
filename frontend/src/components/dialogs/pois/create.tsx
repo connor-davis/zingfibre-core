@@ -6,10 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
-import {
-  type BadRequestResponse,
-  type CreatePointOfInterest,
-} from '@/api-client';
+import { type CreatePointOfInterest, type ZingResponse } from '@/api-client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -45,7 +42,7 @@ export default function CreatePoiDialog({ children }: { children: ReactNode }) {
     ...postApiPoisMutation({
       client: apiClient,
     }),
-    onError: (error: BadRequestResponse) => {
+    onError: (error: ZingResponse) => {
       toast.error(error.error, {
         description: error.details,
         duration: 2000,

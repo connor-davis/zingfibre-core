@@ -106,7 +106,6 @@ func (r *UsersRouter) GetUsersRoute() system.Route {
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
 				"pages":   pages,
-				"total":   len(users),
 				"data":    users,
 			})
 		},
