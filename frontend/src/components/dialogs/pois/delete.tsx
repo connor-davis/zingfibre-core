@@ -21,11 +21,11 @@ import { apiClient } from '@/lib/utils';
 
 export default function DeletePoiDialog({
   id,
-  key,
+  poiKey: key,
   children,
 }: {
   id: string;
-  key: string;
+  poiKey: string;
   children: ReactNode;
 }) {
   const router = useRouter();
@@ -74,7 +74,7 @@ export default function DeletePoiDialog({
             placeholder="Enter key to confirm"
           />
           <Label className="text-sm text-muted-foreground">
-            Please enter {poiKey} to confirm.
+            Please enter {key} to confirm.
           </Label>
         </div>
 

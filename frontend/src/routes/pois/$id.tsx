@@ -72,13 +72,13 @@ function RouteComponent() {
     <div className="flex flex-col w-full h-full bg-popover border-t p-3 gap-3">
       <div className="flex items-center justify-between w-full h-auto">
         <div className="flex items-center gap-3">
-          <Link to="/users">
+          <Link to="/pois">
             <Button variant="ghost" size="icon">
               <ArrowLeftIcon className="size-4" />
             </Button>
           </Link>
 
-          <Label className="text-lg">Edit User</Label>
+          <Label className="text-lg">Edit Point of Interest</Label>
         </div>
       </div>
 

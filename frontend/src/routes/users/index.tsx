@@ -33,6 +33,7 @@ export const Route = createFileRoute('/users/')({
     return {
       ...data,
       users: data?.data as User[],
+      pages: data ? (data.pages ? data.pages : 1) : 1,
     } as {
       users?: User[];
       pages?: number;
@@ -44,7 +45,7 @@ function RouteComponent() {
   const { page } = useSearch({ from: '/users/' });
   const { users, pages } = Route.useLoaderData();
 
-  if (pages && page > pages) {
+  if (pages && pages !== 0 && page > pages) {
     return <Navigate to="/users" search={{ page: pages }} />;
   }
 
@@ -109,7 +110,7 @@ function RouteComponent() {
       {pages && (
         <div className="flex items-center justify-end w-full p-3">
           <Label className="text-xs text-muted-foreground">
-            Page {1} of {pages}
+            Page {page} of {pages}
           </Label>
 
           <Link to="/users" search={{ page: page - 1 }} disabled={page === 1}>

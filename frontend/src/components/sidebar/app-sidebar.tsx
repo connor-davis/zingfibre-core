@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { LayoutDashboardIcon, UsersIcon } from 'lucide-react';
+import { LayoutDashboardIcon, MapPinIcon, UsersIcon } from 'lucide-react';
 
 import UserNav from '@/components/sidebar/user-nav';
 import {
@@ -32,9 +32,19 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      <SidebarSeparator className="mx-0" />
+
       <SidebarFooter className="px-0">
         <SidebarGroup className="py-0">
           <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/pois">
+                  <MapPinIcon />
+                  <span>Points of Interest</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <Link to="/users">

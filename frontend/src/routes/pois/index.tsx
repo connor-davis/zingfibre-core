@@ -32,6 +32,7 @@ export const Route = createFileRoute('/pois/')({
     return {
       ...data,
       pois: data?.data as PointOfInterest[],
+      pages: data ? (data.pages ? data.pages : 1) : 1,
     } as {
       pois?: PointOfInterest[];
       pages?: number;
@@ -43,7 +44,7 @@ function RouteComponent() {
   const { page } = useSearch({ from: '/pois/' });
   const { pois, pages } = Route.useLoaderData();
 
-  if (pages && page > pages) {
+  if (pages && pages !== 0 && page > pages) {
     return <Navigate to="/pois" search={{ page: pages }} />;
   }
 
@@ -85,7 +86,7 @@ function RouteComponent() {
                   <Link to="/pois/$id" params={{ id: poi.ID! }}>
                     <Button variant="ghost">Edit</Button>
                   </Link>
-                  <DeletePoiDialog id={poi.ID!} key={poi.Key!}>
+                  <DeletePoiDialog id={poi.ID!} poiKey={poi.Key!}>
                     <Button variant="ghost">Delete</Button>
                   </DeletePoiDialog>
                 </RoleGuard>
@@ -95,7 +96,7 @@ function RouteComponent() {
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full p-5">
             <Label className="text-sm text-muted-foreground">
-              No users found.
+              No points of interest found.
             </Label>
           </div>
         )}
@@ -104,7 +105,7 @@ function RouteComponent() {
       {pages && (
         <div className="flex items-center justify-end w-full p-3">
           <Label className="text-xs text-muted-foreground">
-            Page {1} of {pages}
+            Page {page} of {pages}
           </Label>
 
           <Link to="/pois" search={{ page: page - 1 }} disabled={page === 1}>
