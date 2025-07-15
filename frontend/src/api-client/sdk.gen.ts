@@ -241,9 +241,9 @@ export const getApiPois = <ThrowOnError extends boolean = false>(
  * Endpoint to create a new point of interest
  */
 export const postApiPois = <ThrowOnError extends boolean = false>(
-  options: Options<PostApiPoisData, ThrowOnError>
+  options?: Options<PostApiPoisData, ThrowOnError>
 ) => {
-  return (options.client ?? _heyApiClient).post<
+  return (options?.client ?? _heyApiClient).post<
     PostApiPoisResponses,
     PostApiPoisErrors,
     ThrowOnError
@@ -252,7 +252,7 @@ export const postApiPois = <ThrowOnError extends boolean = false>(
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...options?.headers,
     },
   });
 };
@@ -334,9 +334,9 @@ export const getApiUsers = <ThrowOnError extends boolean = false>(
  * Endpoint to create a new user
  */
 export const postApiUsers = <ThrowOnError extends boolean = false>(
-  options: Options<PostApiUsersData, ThrowOnError>
+  options?: Options<PostApiUsersData, ThrowOnError>
 ) => {
-  return (options.client ?? _heyApiClient).post<
+  return (options?.client ?? _heyApiClient).post<
     PostApiUsersResponses,
     PostApiUsersErrors,
     ThrowOnError
@@ -345,7 +345,7 @@ export const postApiUsers = <ThrowOnError extends boolean = false>(
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...options?.headers,
     },
   });
 };

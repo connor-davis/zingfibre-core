@@ -519,14 +519,14 @@ export const getApiPoisInfiniteOptions = (
   );
 };
 
-export const postApiPoisQueryKey = (options: Options<PostApiPoisData>) =>
+export const postApiPoisQueryKey = (options?: Options<PostApiPoisData>) =>
   createQueryKey('postApiPois', options);
 
 /**
  * Create Point Of Interest
  * Endpoint to create a new point of interest
  */
-export const postApiPoisOptions = (options: Options<PostApiPoisData>) => {
+export const postApiPoisOptions = (options?: Options<PostApiPoisData>) => {
   return queryOptions({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await postApiPois({
@@ -721,14 +721,14 @@ export const getApiUsersInfiniteOptions = (
   );
 };
 
-export const postApiUsersQueryKey = (options: Options<PostApiUsersData>) =>
+export const postApiUsersQueryKey = (options?: Options<PostApiUsersData>) =>
   createQueryKey('postApiUsers', options);
 
 /**
  * Create User
  * Endpoint to create a new user
  */
-export const postApiUsersOptions = (options: Options<PostApiUsersData>) => {
+export const postApiUsersOptions = (options?: Options<PostApiUsersData>) => {
   return queryOptions({
     queryFn: async ({ queryKey, signal }) => {
       const { data } = await postApiUsers({

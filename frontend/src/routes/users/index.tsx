@@ -9,6 +9,7 @@ import { capitalCase } from 'change-case';
 import { z } from 'zod';
 
 import { type User, getApiUsers } from '@/api-client';
+import CreateUserDialog from '@/components/dialogs/users/create';
 import DeleteUserDialog from '@/components/dialogs/users/delete';
 import RoleGuard from '@/components/guards/role-guard';
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,9 @@ function RouteComponent() {
         </div>
         <div className="flex items-center gap-3">
           <RoleGuard value="admin">
-            <Button variant="ghost">Add</Button>
+            <CreateUserDialog>
+              <Button variant="ghost">Add</Button>
+            </CreateUserDialog>
           </RoleGuard>
         </div>
       </div>

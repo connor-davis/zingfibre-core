@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -27,39 +28,16 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 	responses.Set("409", &constants.ConflictResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
-	requestBody := &openapi3.RequestBodyRef{
-		Value: &openapi3.RequestBody{
-			Description: "User creation request body",
-			Required:    true,
-			Content: openapi3.Content{
-				"application/json": &openapi3.MediaType{
-					Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-						"email": {
-							Type: &openapi3.Types{"string"},
-						},
-						"password": {
-							Type:      &openapi3.Types{"string"},
-							MinLength: 8,
-						},
-						"role": {
-							Type:    &openapi3.Types{"string"},
-							Enum:    []interface{}{"admin", "staff", "user"},
-							Default: "user",
-						},
-					}).NewRef(),
-				},
-			},
-		},
-	}
-
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Create User",
 			Description: "Endpoint to create a new user",
 			Tags:        []string{"Users"},
 			Parameters:  nil,
-			RequestBody: requestBody,
-			Responses:   responses,
+			RequestBody: &openapi3.RequestBodyRef{
+				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.CreateUserSchema.Value),
+			},
+			Responses: responses,
 		},
 		Method: system.PostMethod,
 		Path:   "/users",

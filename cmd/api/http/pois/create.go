@@ -2,6 +2,7 @@ package pois
 
 import (
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -23,33 +24,16 @@ func (r *PointsOfInterestRouter) CreatePointOfInterestRoute() system.Route {
 	responses.Set("409", &constants.ConflictResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
-	requestBody := &openapi3.RequestBodyRef{
-		Value: &openapi3.RequestBody{
-			Description: "Point Of Interest creation request body",
-			Required:    true,
-			Content: openapi3.Content{
-				"application/json": &openapi3.MediaType{
-					Schema: openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-						"name": {
-							Type: &openapi3.Types{"string"},
-						},
-						"key": {
-							Type: &openapi3.Types{"string"},
-						},
-					}).NewRef(),
-				},
-			},
-		},
-	}
-
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Create Point Of Interest",
 			Description: "Endpoint to create a new point of interest",
 			Tags:        []string{"Points Of Interest"},
 			Parameters:  nil,
-			RequestBody: requestBody,
-			Responses:   responses,
+			RequestBody: &openapi3.RequestBodyRef{
+				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.CreatePointOfInterestSchema.Value),
+			},
+			Responses: responses,
 		},
 		Method: system.PostMethod,
 		Path:   "/pois",

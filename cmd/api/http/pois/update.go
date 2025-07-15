@@ -50,7 +50,7 @@ func (r *PointsOfInterestRouter) UpdatePointOfInterestRoute() system.Route {
 			Parameters:  parameters,
 			RequestBody: &openapi3.RequestBodyRef{
 				Value: openapi3.NewRequestBody().WithJSONSchema(
-					schemas.PointOfInterestSchema.Value,
+					schemas.UpdatePointOfInterestSchema.Value,
 				),
 			},
 			Responses: responses,

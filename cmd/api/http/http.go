@@ -160,9 +160,13 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 		Paths: paths,
 		Components: &openapi3.Components{
 			Schemas: openapi3.Schemas{
-				"User":            schemas.UserSchema,
-				"PointOfInterest": schemas.PointOfInterestSchema,
-				"LoginRequest":    schemas.LoginRequestSchema,
+				"User":                  schemas.UserSchema,
+				"CreateUser":            schemas.CreateUserSchema,
+				"UpdateUser":            schemas.UpdateUserSchema,
+				"PointOfInterest":       schemas.PointOfInterestSchema,
+				"CreatePointOfInterest": schemas.CreatePointOfInterestSchema,
+				"UpdatePointOfInterest": schemas.UpdatePointOfInterestSchema,
+				"LoginRequest":          schemas.LoginRequestSchema,
 			},
 		},
 	}

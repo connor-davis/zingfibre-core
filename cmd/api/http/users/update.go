@@ -49,9 +49,7 @@ func (r *UsersRouter) UpdateUserRoute() system.Route {
 			Tags:        []string{"Users"},
 			Parameters:  parameters,
 			RequestBody: &openapi3.RequestBodyRef{
-				Value: openapi3.NewRequestBody().WithJSONSchema(
-					schemas.UserSchema.Value,
-				),
+				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.UpdateUserSchema.Value),
 			},
 			Responses: responses,
 		},

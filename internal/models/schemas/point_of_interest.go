@@ -7,3 +7,13 @@ var PointOfInterestSchema = openapi3.NewSchema().WithProperties(map[string]*open
 	"Name": openapi3.NewStringSchema(),
 	"Key":  openapi3.NewStringSchema(),
 }).NewRef()
+
+var CreatePointOfInterestSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"Name": openapi3.NewStringSchema(),
+	"Key":  openapi3.NewStringSchema(),
+}).NewRef()
+
+var UpdatePointOfInterestSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"Name": openapi3.NewStringSchema(),
+	"Key":  openapi3.NewStringSchema(),
+}).NewRef()

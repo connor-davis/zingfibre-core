@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -24,14 +25,6 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 	responses.Set("409", &constants.ConflictResponse)
 	responses.Set("500", &constants.InternalServerErrorResponse)
 
-	requestBody := openapi3.NewRequestBody().WithJSONSchema(
-		openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-			"email":    openapi3.NewStringSchema().WithFormat("email"),
-			"password": openapi3.NewStringSchema().WithMinLength(8),
-			"role":     openapi3.NewStringSchema().WithEnum([]interface{}{"admin", "staff", "user"}).WithDefault("user"),
-		}),
-	)
-
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
 			Summary:     "Register",
@@ -39,7 +32,9 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 			Tags:        []string{"Authentication"},
 			Parameters:  nil,
 			RequestBody: &openapi3.RequestBodyRef{
-				Value: requestBody,
+				Value: openapi3.NewRequestBody().WithJSONSchema(
+					schemas.CreateUserSchema.Value,
+				),
 			},
 			Responses: responses,
 		},

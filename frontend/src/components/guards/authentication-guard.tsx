@@ -115,7 +115,7 @@ export default function AuthenticationGuard({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Email" {...field} />
+                      <Input type="email" placeholder="Email" {...field} />
                     </FormControl>
                     <FormDescription>
                       Please enter your email address.
