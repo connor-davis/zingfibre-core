@@ -288,6 +288,7 @@ export type GetApiPoisResponses = {
     }>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
@@ -494,6 +495,7 @@ export type GetApiUsersResponses = {
     }>;
     details?: string;
     message?: string;
+    pages?: number;
   };
 };
 
