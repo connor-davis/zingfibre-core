@@ -66,8 +66,6 @@ export default function CreateUserDialog({
         duration: 2000,
       });
 
-      createUserForm.reset();
-
       return router.invalidate();
     },
   });

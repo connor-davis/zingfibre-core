@@ -14,6 +14,8 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 
+import RoleGuard from '../guards/role-guard';
+
 export default function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
@@ -32,29 +34,33 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarSeparator className="mx-0" />
-
       <SidebarFooter className="px-0">
-        <SidebarGroup className="py-0">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to="/pois">
-                  <MapPinIcon />
-                  <span>Points of Interest</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to="/users">
-                  <UsersIcon />
-                  <span>Users</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
+        <RoleGuard value={['admin', 'staff']}>
+          <SidebarSeparator className="mx-0" />
+
+          <SidebarGroup className="py-0">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/pois">
+                    <MapPinIcon />
+                    <span>Points of Interest</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <RoleGuard value={['admin']}>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/users">
+                      <UsersIcon />
+                      <span>Users</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </RoleGuard>
+            </SidebarMenu>
+          </SidebarGroup>
+        </RoleGuard>
 
         <SidebarSeparator className="mx-0" />
 

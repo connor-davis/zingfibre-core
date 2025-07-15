@@ -54,8 +54,6 @@ export default function CreatePoiDialog({ children }: { children: ReactNode }) {
         duration: 2000,
       });
 
-      createPoiForm.reset();
-
       return router.invalidate();
     },
   });

@@ -88,10 +88,16 @@ func (r *UsersRouter) CreateUserRoute() system.Route {
 				})
 			}
 
+			role := postgres.RoleTypeUser
+
+			if createUserRequest.Role != "" {
+				role = createUserRequest.Role
+			}
+
 			_, err = r.Postgres.CreateUser(c.Context(), postgres.CreateUserParams{
 				Email:    createUserRequest.Email,
 				Password: string(hashedPassword),
-				Role:     createUserRequest.Role,
+				Role:     role,
 			})
 
 			if err != nil {

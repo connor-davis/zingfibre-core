@@ -14,7 +14,7 @@ import (
 type RegisterRequest struct {
 	Email    string            `json:"email" validate:"required,email"`
 	Password string            `json:"password" validate:"required,min=8"`
-	Role     postgres.RoleType `json:"role" validate:"required,oneof=admin staff user"`
+	Role     postgres.RoleType `json:"role"`
 }
 
 func (r *AuthenticationRouter) RegisterRoute() system.Route {
@@ -78,10 +78,16 @@ func (r *AuthenticationRouter) RegisterRoute() system.Route {
 				})
 			}
 
+			role := postgres.RoleTypeUser
+
+			if registerRequest.Role != "" {
+				role = registerRequest.Role
+			}
+
 			if _, err := r.Postgres.CreateUser(c.Context(), postgres.CreateUserParams{
 				Email:    registerRequest.Email,
 				Password: string(hashedPassword),
-				Role:     registerRequest.Role,
+				Role:     role,
 			}); err != nil {
 				log.Errorf("🔥 Error creating user: %s", err.Error())
 
