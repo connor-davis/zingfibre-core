@@ -5,13 +5,8 @@ import "github.com/getkin/kin-openapi/openapi3"
 var SuccessResponseSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 	"message": openapi3.NewStringSchema().WithDefault("Success"),
 	"details": openapi3.NewStringSchema().WithDefault("Operation completed successfully"),
-	"data": openapi3.NewAnyOfSchema([]*openapi3.Schema{
-		UserSchema.Value,
-		openapi3.NewArraySchema().WithAdditionalProperties(UserSchema.Value),
-		PointOfInterestSchema.Value,
-		openapi3.NewArraySchema().WithAdditionalProperties(PointOfInterestSchema.Value),
-	}...),
-	"pages": openapi3.NewIntegerSchema().WithDefault(1),
+	"data":    openapi3.NewAllOfSchema(UserSchema.Value, PointOfInterestSchema.Value, UserArraySchema.Value, PointOfInterestArraySchema.Value),
+	"pages":   openapi3.NewIntegerSchema().WithDefault(1),
 }).NewRef()
 
 var ErrorResponseSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
