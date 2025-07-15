@@ -36,6 +36,20 @@ func (r *UsersRouter) GetUsersRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	return system.Route{
@@ -72,8 +86,9 @@ func (r *UsersRouter) GetUsersRoute() system.Route {
 			}
 
 			users, err := r.Postgres.GetUsers(c.Context(), postgres.GetUsersParams{
-				Limit:  10, // Default limit
-				Offset: (int32(page) - 1) * 10,
+				Limit:      10, // Default limit
+				Offset:     (int32(page) - 1) * 10,
+				SearchTerm: c.Query("search"),
 			})
 
 			if err != nil {

@@ -31,6 +31,10 @@ SELECT
     *
 FROM
     users
+WHERE
+    TRIM(LOWER(email)) ILIKE '%' || TRIM(LOWER(sqlc.arg(search_term)::text)) || '%'
+ORDER BY
+    email ASC
 LIMIT $1
 OFFSET $2;
 

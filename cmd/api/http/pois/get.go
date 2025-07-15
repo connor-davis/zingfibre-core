@@ -36,6 +36,20 @@ func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	return system.Route{
@@ -72,8 +86,9 @@ func (r *PointsOfInterestRouter) GetPointsOfInterestRoute() system.Route {
 			}
 
 			pois, err := r.Postgres.GetPointsOfInterest(c.Context(), postgres.GetPointsOfInterestParams{
-				Limit:  10, // Default limit
-				Offset: (int32(page) - 1) * 10,
+				Limit:      10, // Default limit
+				Offset:     (int32(page) - 1) * 10,
+				SearchTerm: c.Query("search"),
 			})
 
 			if err != nil {

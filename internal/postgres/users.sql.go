@@ -159,17 +159,22 @@ SELECT
     id, email, password, mfa_secret, mfa_enabled, mfa_verified, role, created_at, updated_at
 FROM
     users
+WHERE
+    TRIM(LOWER(email)) ILIKE '%' || TRIM(LOWER($3::text)) || '%'
+ORDER BY
+    email ASC
 LIMIT $1
 OFFSET $2
 `
 
 type GetUsersParams struct {
-	Limit  int32
-	Offset int32
+	Limit      int32
+	Offset     int32
+	SearchTerm string
 }
 
 func (q *Queries) GetUsers(ctx context.Context, arg GetUsersParams) ([]User, error) {
-	rows, err := q.db.Query(ctx, getUsers, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, getUsers, arg.Limit, arg.Offset, arg.SearchTerm)
 	if err != nil {
 		return nil, err
 	}

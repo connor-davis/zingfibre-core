@@ -21,6 +21,11 @@ SELECT
     *
 FROM
     points_of_interest
+WHERE
+    TRIM(LOWER(name)) ILIKE '%' || TRIM(LOWER(sqlc.arg(search_term)::text)) || '%'
+    OR TRIM(LOWER(key)) ILIKE '%' || TRIM(LOWER(sqlc.arg(search_term)::text)) || '%'
+ORDER BY
+    key ASC
 LIMIT $1
 OFFSET $2;
 

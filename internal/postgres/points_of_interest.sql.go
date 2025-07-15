@@ -87,17 +87,23 @@ SELECT
     id, name, key, created_at, updated_at
 FROM
     points_of_interest
+WHERE
+    TRIM(LOWER(name)) ILIKE '%' || TRIM(LOWER($3::text)) || '%'
+    OR TRIM(LOWER(key)) ILIKE '%' || TRIM(LOWER($3::text)) || '%'
+ORDER BY
+    key ASC
 LIMIT $1
 OFFSET $2
 `
 
 type GetPointsOfInterestParams struct {
-	Limit  int32
-	Offset int32
+	Limit      int32
+	Offset     int32
+	SearchTerm string
 }
 
 func (q *Queries) GetPointsOfInterest(ctx context.Context, arg GetPointsOfInterestParams) ([]PointsOfInterest, error) {
-	rows, err := q.db.Query(ctx, getPointsOfInterest, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, getPointsOfInterest, arg.Limit, arg.Offset, arg.SearchTerm)
 	if err != nil {
 		return nil, err
 	}
