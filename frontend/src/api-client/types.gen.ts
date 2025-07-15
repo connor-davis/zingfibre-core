@@ -289,6 +289,7 @@ export type GetApiPoisData = {
   path?: never;
   query?: {
     page?: number;
+    search?: string;
   };
   url: '/api/pois';
 };
@@ -496,6 +497,7 @@ export type GetApiUsersData = {
   path?: never;
   query?: {
     page?: number;
+    search?: string;
   };
   url: '/api/users';
 };

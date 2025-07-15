@@ -2,6 +2,7 @@ import {
   Link,
   Navigate,
   createFileRoute,
+  useRouter,
   useSearch,
 } from '@tanstack/react-router';
 
@@ -12,6 +13,7 @@ import CreatePoiDialog from '@/components/dialogs/pois/create';
 import DeletePoiDialog from '@/components/dialogs/pois/delete';
 import RoleGuard from '@/components/guards/role-guard';
 import { Button } from '@/components/ui/button';
+import { DebounceInput } from '@/components/ui/debounce-input';
 import { Label } from '@/components/ui/label';
 import { apiClient, cn } from '@/lib/utils';
 
@@ -19,13 +21,15 @@ export const Route = createFileRoute('/pois/')({
   component: () => <RouteComponent />,
   validateSearch: z.object({
     page: z.coerce.number().default(1),
+    search: z.string().default(''),
   }),
-  loaderDeps: ({ search: { page } }) => ({ page }),
-  loader: async ({ deps: { page } }) => {
+  loaderDeps: ({ search: { page, search } }) => ({ page, search }),
+  loader: async ({ deps: { page, search } }) => {
     const { data } = await getApiPois({
       client: apiClient,
       query: {
         page,
+        search,
       },
     });
 
@@ -41,6 +45,8 @@ export const Route = createFileRoute('/pois/')({
 });
 
 function RouteComponent() {
+  const router = useRouter();
+
   const { page } = useSearch({ from: '/pois/' });
   const { pois, pages } = Route.useLoaderData();
 
@@ -55,6 +61,23 @@ function RouteComponent() {
           <Label className="text-lg">Points of Interest</Label>
         </div>
         <div className="flex items-center gap-3">
+          <DebounceInput
+            type="text"
+            placeholder="Search points of interest..."
+            className="w-64"
+            onChange={(e) => {
+              const search = e.target.value;
+
+              router.navigate({
+                to: '/pois',
+                search: {
+                  page,
+                  search,
+                },
+              });
+            }}
+          />
+
           <RoleGuard value="admin">
             <CreatePoiDialog>
               <Button variant="ghost">Add</Button>
