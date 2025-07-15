@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as PoisIndexRouteImport } from './routes/pois/index'
 import { Route as UsersIdRouteImport } from './routes/users/$id'
+import { Route as PoisIdRouteImport } from './routes/pois/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,39 +25,57 @@ const UsersIndexRoute = UsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoisIndexRoute = PoisIndexRouteImport.update({
+  id: '/pois/',
+  path: '/pois/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersIdRoute = UsersIdRouteImport.update({
   id: '/users/$id',
   path: '/users/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoisIdRoute = PoisIdRouteImport.update({
+  id: '/pois/$id',
+  path: '/pois/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/pois/$id': typeof PoisIdRoute
   '/users/$id': typeof UsersIdRoute
+  '/pois': typeof PoisIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/pois/$id': typeof PoisIdRoute
   '/users/$id': typeof UsersIdRoute
+  '/pois': typeof PoisIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/pois/$id': typeof PoisIdRoute
   '/users/$id': typeof UsersIdRoute
+  '/pois/': typeof PoisIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/users/$id' | '/users'
+  fullPaths: '/' | '/pois/$id' | '/users/$id' | '/pois' | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/users/$id' | '/users'
-  id: '__root__' | '/' | '/users/$id' | '/users/'
+  to: '/' | '/pois/$id' | '/users/$id' | '/pois' | '/users'
+  id: '__root__' | '/' | '/pois/$id' | '/users/$id' | '/pois/' | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PoisIdRoute: typeof PoisIdRoute
   UsersIdRoute: typeof UsersIdRoute
+  PoisIndexRoute: typeof PoisIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
 
@@ -75,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pois/': {
+      id: '/pois/'
+      path: '/pois'
+      fullPath: '/pois'
+      preLoaderRoute: typeof PoisIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users/$id': {
       id: '/users/$id'
       path: '/users/$id'
@@ -82,12 +109,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pois/$id': {
+      id: '/pois/$id'
+      path: '/pois/$id'
+      fullPath: '/pois/$id'
+      preLoaderRoute: typeof PoisIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PoisIdRoute: PoisIdRoute,
   UsersIdRoute: UsersIdRoute,
+  PoisIndexRoute: PoisIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
