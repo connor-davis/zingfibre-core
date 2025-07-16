@@ -35,6 +35,126 @@ export type RechargeTypeCounts = {
   Types?: Array<string>;
 };
 
+export type ReportCustomer = {
+  Email?: string;
+  FirstName?: string;
+  PhoneNumber?: string;
+  RadiusUsername?: string;
+  Surname?: string;
+};
+
+export type ReportCustomers = Array<{
+  Email?: string;
+  FirstName?: string;
+  PhoneNumber?: string;
+  RadiusUsername?: string;
+  Surname?: string;
+}>;
+
+export type ReportExpiringCustomer = {
+  Address?: string;
+  Email?: string;
+  Expiration?: string;
+  FirstName?: string;
+  LastPurchaseDuration?: string;
+  LastPurchaseSpeed?: string;
+  PhoneNumber?: string;
+  RadiusUsername?: string;
+  Surname?: string;
+};
+
+export type ReportExpiringCustomers = Array<{
+  Address?: string;
+  Email?: string;
+  Expiration?: string;
+  FirstName?: string;
+  LastPurchaseDuration?: string;
+  LastPurchaseSpeed?: string;
+  PhoneNumber?: string;
+  RadiusUsername?: string;
+  Surname?: string;
+}>;
+
+export type ReportRecharge = {
+  Amount?: number;
+  BuildName?: string;
+  BuildType?: string;
+  DateCreated?: string;
+  Email?: string;
+  FirstName?: string;
+  ItemName?: string;
+  ServiceId?: number;
+  Successful?: boolean;
+  Surname?: string;
+};
+
+export type ReportRechargeSummaries = Array<{
+  Amount?: number;
+  BuildName?: string;
+  BuildType?: string;
+  DateCreated?: string;
+  Email?: string;
+  FirstName?: string;
+  ItemName?: string;
+  ServiceId?: number;
+  Successful?: boolean;
+  Surname?: string;
+}>;
+
+export type ReportRechargeSummary = {
+  Amount?: number;
+  BuildName?: string;
+  BuildType?: string;
+  DateCreated?: string;
+  Email?: string;
+  FirstName?: string;
+  ItemName?: string;
+  ServiceId?: number;
+  Successful?: boolean;
+  Surname?: string;
+};
+
+export type ReportRecharges = Array<{
+  Amount?: number;
+  BuildName?: string;
+  BuildType?: string;
+  DateCreated?: string;
+  Email?: string;
+  FirstName?: string;
+  ItemName?: string;
+  ServiceId?: number;
+  Successful?: boolean;
+  Surname?: string;
+}>;
+
+export type ReportSummaries = Array<{
+  AmountFee?: string;
+  AmountGross?: string;
+  AmountNet?: string;
+  BuildName?: string;
+  BuildType?: string;
+  CashAmount?: number;
+  CashCode?: string;
+  DateCreated?: string;
+  ItemName?: string;
+  RadiusUsername?: string;
+  ServiceId?: string;
+}>;
+
+export type ReportSummary = {
+  AmountFee?: string;
+  AmountGross?: string;
+  AmountNet?: string;
+  BuildName?: string;
+  BuildType?: string;
+  CashAmount?: number;
+  CashCode?: string;
+  DateCreated?: string;
+  ItemName?: string;
+  RadiusUsername?: string;
+  ServiceId?: string;
+};
+
 export type SuccessResponse = {
   data?:
     | {
@@ -67,7 +187,123 @@ export type SuccessResponse = {
           [key: string]: number | string | undefined;
         }>;
         Types?: Array<string>;
-      };
+      }
+    | Array<{
+        RechargeCount?: number;
+        RechargeMaxDate?: string;
+        RechargeName?: string;
+        RechargePeriod?: string;
+      }>
+    | {
+        Email?: string;
+        FirstName?: string;
+        PhoneNumber?: string;
+        RadiusUsername?: string;
+        Surname?: string;
+      }
+    | Array<{
+        Email?: string;
+        FirstName?: string;
+        PhoneNumber?: string;
+        RadiusUsername?: string;
+        Surname?: string;
+      }>
+    | {
+        Address?: string;
+        Email?: string;
+        Expiration?: string;
+        FirstName?: string;
+        LastPurchaseDuration?: string;
+        LastPurchaseSpeed?: string;
+        PhoneNumber?: string;
+        RadiusUsername?: string;
+        Surname?: string;
+      }
+    | Array<{
+        Address?: string;
+        Email?: string;
+        Expiration?: string;
+        FirstName?: string;
+        LastPurchaseDuration?: string;
+        LastPurchaseSpeed?: string;
+        PhoneNumber?: string;
+        RadiusUsername?: string;
+        Surname?: string;
+      }>
+    | {
+        Amount?: number;
+        BuildName?: string;
+        BuildType?: string;
+        DateCreated?: string;
+        Email?: string;
+        FirstName?: string;
+        ItemName?: string;
+        ServiceId?: number;
+        Successful?: boolean;
+        Surname?: string;
+      }
+    | Array<{
+        Amount?: number;
+        BuildName?: string;
+        BuildType?: string;
+        DateCreated?: string;
+        Email?: string;
+        FirstName?: string;
+        ItemName?: string;
+        ServiceId?: number;
+        Successful?: boolean;
+        Surname?: string;
+      }>
+    | {
+        Amount?: number;
+        BuildName?: string;
+        BuildType?: string;
+        DateCreated?: string;
+        Email?: string;
+        FirstName?: string;
+        ItemName?: string;
+        ServiceId?: number;
+        Successful?: boolean;
+        Surname?: string;
+      }
+    | Array<{
+        Amount?: number;
+        BuildName?: string;
+        BuildType?: string;
+        DateCreated?: string;
+        Email?: string;
+        FirstName?: string;
+        ItemName?: string;
+        ServiceId?: number;
+        Successful?: boolean;
+        Surname?: string;
+      }>
+    | {
+        AmountFee?: string;
+        AmountGross?: string;
+        AmountNet?: string;
+        BuildName?: string;
+        BuildType?: string;
+        CashAmount?: number;
+        CashCode?: string;
+        DateCreated?: string;
+        ItemName?: string;
+        RadiusUsername?: string;
+        ServiceId?: string;
+      }
+    | Array<{
+        AmountFee?: string;
+        AmountGross?: string;
+        AmountNet?: string;
+        BuildName?: string;
+        BuildType?: string;
+        CashAmount?: number;
+        CashCode?: string;
+        DateCreated?: string;
+        ItemName?: string;
+        RadiusUsername?: string;
+        ServiceId?: string;
+      }>;
   details?: string;
   message?: string;
   pages?: number;
@@ -159,7 +395,123 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -226,7 +578,123 @@ export type GetApiAuthenticationCheckResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -310,7 +778,123 @@ export type PostApiAuthenticationLoginResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -384,7 +968,123 @@ export type PostApiAuthenticationLogoutResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -467,7 +1167,123 @@ export type PostApiAuthenticationMfaDisableResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -582,7 +1398,123 @@ export type PostApiAuthenticationMfaVerifyResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -667,7 +1599,123 @@ export type PostApiAuthenticationRegisterResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -750,7 +1798,123 @@ export type GetApiPoisResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -839,7 +2003,123 @@ export type PostApiPoisResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -929,7 +2209,123 @@ export type DeleteApiPoisByIdResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1019,7 +2415,123 @@ export type GetApiPoisByIdResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1112,7 +2624,123 @@ export type PutApiPoisByIdResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1121,6 +2749,968 @@ export type PutApiPoisByIdResponses = {
 
 export type PutApiPoisByIdResponse =
   PutApiPoisByIdResponses[keyof PutApiPoisByIdResponses];
+
+export type GetApiReportsCustomersData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/reports/customers';
+};
+
+export type GetApiReportsCustomersErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiReportsCustomersError =
+  GetApiReportsCustomersErrors[keyof GetApiReportsCustomersErrors];
+
+export type GetApiReportsCustomersResponses = {
+  /**
+   * The zingfibre customers report
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiReportsCustomersResponse =
+  GetApiReportsCustomersResponses[keyof GetApiReportsCustomersResponses];
+
+export type GetApiReportsExpiringCustomersData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/reports/expiring-customers';
+};
+
+export type GetApiReportsExpiringCustomersErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiReportsExpiringCustomersError =
+  GetApiReportsExpiringCustomersErrors[keyof GetApiReportsExpiringCustomersErrors];
+
+export type GetApiReportsExpiringCustomersResponses = {
+  /**
+   * The zingfibre expiring customers report
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiReportsExpiringCustomersResponse =
+  GetApiReportsExpiringCustomersResponses[keyof GetApiReportsExpiringCustomersResponses];
+
+export type GetApiReportsRechargesData = {
+  body?: never;
+  path?: never;
+  query: {
+    poi?: string;
+    startDate: string;
+    endDate: string;
+  };
+  url: '/api/reports/recharges';
+};
+
+export type GetApiReportsRechargesErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiReportsRechargesError =
+  GetApiReportsRechargesErrors[keyof GetApiReportsRechargesErrors];
+
+export type GetApiReportsRechargesResponses = {
+  /**
+   * The zingfibre recharges report
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiReportsRechargesResponse =
+  GetApiReportsRechargesResponses[keyof GetApiReportsRechargesResponses];
+
+export type GetApiReportsRechargesSummaryData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/reports/recharges-summary';
+};
+
+export type GetApiReportsRechargesSummaryErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiReportsRechargesSummaryError =
+  GetApiReportsRechargesSummaryErrors[keyof GetApiReportsRechargesSummaryErrors];
+
+export type GetApiReportsRechargesSummaryResponses = {
+  /**
+   * The zingfibre recharges summary report
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiReportsRechargesSummaryResponse =
+  GetApiReportsRechargesSummaryResponses[keyof GetApiReportsRechargesSummaryResponses];
+
+export type GetApiReportsSummaryData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/reports/summary';
+};
+
+export type GetApiReportsSummaryErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiReportsSummaryError =
+  GetApiReportsSummaryErrors[keyof GetApiReportsSummaryErrors];
+
+export type GetApiReportsSummaryResponses = {
+  /**
+   * The zingfibre summary report
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiReportsSummaryResponse =
+  GetApiReportsSummaryResponses[keyof GetApiReportsSummaryResponses];
 
 export type GetApiUsersData = {
   body?: never;
@@ -1195,7 +3785,123 @@ export type GetApiUsersResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1286,7 +3992,123 @@ export type PostApiUsersResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1369,7 +4191,123 @@ export type DeleteApiUsersByIdResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1459,7 +4397,123 @@ export type GetApiUsersByIdResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1552,7 +4606,123 @@ export type PutApiUsersByIdResponses = {
             [key: string]: number | string | undefined;
           }>;
           Types?: Array<string>;
-        };
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Email?: string;
+          FirstName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FirstName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FirstName?: string;
+          ItemName?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+          Surname?: string;
+        }>
+      | {
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }
+      | Array<{
+          AmountFee?: string;
+          AmountGross?: string;
+          AmountNet?: string;
+          BuildName?: string;
+          BuildType?: string;
+          CashAmount?: number;
+          CashCode?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          RadiusUsername?: string;
+          ServiceId?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;

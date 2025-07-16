@@ -29,11 +29,13 @@ func (r *ReportsRouter) RegisterRoutes() []system.Route {
 	expiringCustomersRoute := r.ExpiringCustomersRoute()
 	rechargesRoute := r.RechargesRoute()
 	rechargesSummaryRoute := r.RechargesSummaryRoute()
+	summaryRoute := r.SummaryRoute()
 
 	return []system.Route{
 		customersRoute,
 		expiringCustomersRoute,
 		rechargesRoute,
 		rechargesSummaryRoute,
+		summaryRoute,
 	}
 }

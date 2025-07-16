@@ -23,6 +23,21 @@ import type {
   GetApiPoisData,
   GetApiPoisErrors,
   GetApiPoisResponses,
+  GetApiReportsCustomersData,
+  GetApiReportsCustomersErrors,
+  GetApiReportsCustomersResponses,
+  GetApiReportsExpiringCustomersData,
+  GetApiReportsExpiringCustomersErrors,
+  GetApiReportsExpiringCustomersResponses,
+  GetApiReportsRechargesData,
+  GetApiReportsRechargesErrors,
+  GetApiReportsRechargesResponses,
+  GetApiReportsRechargesSummaryData,
+  GetApiReportsRechargesSummaryErrors,
+  GetApiReportsRechargesSummaryResponses,
+  GetApiReportsSummaryData,
+  GetApiReportsSummaryErrors,
+  GetApiReportsSummaryResponses,
   GetApiUsersByIdData,
   GetApiUsersByIdErrors,
   GetApiUsersByIdResponses,
@@ -331,6 +346,95 @@ export const putApiPoisById = <ThrowOnError extends boolean = false>(
       'Content-Type': 'application/json',
       ...options.headers,
     },
+  });
+};
+
+/**
+ * Customers Report
+ * Endpoint to retrieve customers report
+ */
+export const getApiReportsCustomers = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiReportsCustomersData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiReportsCustomersResponses,
+    GetApiReportsCustomersErrors,
+    ThrowOnError
+  >({
+    url: '/api/reports/customers',
+    ...options,
+  });
+};
+
+/**
+ * Expiring Customers Report
+ * Endpoint to retrieve expiring customers report
+ */
+export const getApiReportsExpiringCustomers = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiReportsExpiringCustomersData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiReportsExpiringCustomersResponses,
+    GetApiReportsExpiringCustomersErrors,
+    ThrowOnError
+  >({
+    url: '/api/reports/expiring-customers',
+    ...options,
+  });
+};
+
+/**
+ * Recharges Report
+ * Endpoint to retrieve recharges report
+ */
+export const getApiReportsRecharges = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiReportsRechargesData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetApiReportsRechargesResponses,
+    GetApiReportsRechargesErrors,
+    ThrowOnError
+  >({
+    url: '/api/reports/recharges',
+    ...options,
+  });
+};
+
+/**
+ * Recharges Summary Report
+ * Endpoint to retrieve recharges summary report
+ */
+export const getApiReportsRechargesSummary = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiReportsRechargesSummaryData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiReportsRechargesSummaryResponses,
+    GetApiReportsRechargesSummaryErrors,
+    ThrowOnError
+  >({
+    url: '/api/reports/recharges-summary',
+    ...options,
+  });
+};
+
+/**
+ * Summary Report
+ * Endpoint to retrieve summary report
+ */
+export const getApiReportsSummary = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiReportsSummaryData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiReportsSummaryResponses,
+    GetApiReportsSummaryErrors,
+    ThrowOnError
+  >({
+    url: '/api/reports/summary',
+    ...options,
   });
 };
 

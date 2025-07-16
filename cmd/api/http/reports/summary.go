@@ -108,7 +108,7 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 			Responses:   responses,
 		},
 		Method: system.GetMethod,
-		Path:   "/reports/recharges",
+		Path:   "/reports/summary",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
 			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
@@ -119,7 +119,7 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 			summaries, err := r.Zing.GetReportsSummary(c.Context(), poi)
 
 			if err != nil {
-				log.Errorf("🔥 Error fetching recharges from Zing: %s", err.Error())
+				log.Errorf("🔥 Error fetching summaries from Zing: %s", err.Error())
 
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,

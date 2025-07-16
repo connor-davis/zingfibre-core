@@ -16,6 +16,11 @@ import {
   getApiAuthenticationMfaEnable,
   getApiPois,
   getApiPoisById,
+  getApiReportsCustomers,
+  getApiReportsExpiringCustomers,
+  getApiReportsRecharges,
+  getApiReportsRechargesSummary,
+  getApiReportsSummary,
   getApiUsers,
   getApiUsersById,
   postApiAuthenticationLogin,
@@ -42,6 +47,11 @@ import type {
   GetApiPoisData,
   GetApiPoisError,
   GetApiPoisResponse,
+  GetApiReportsCustomersData,
+  GetApiReportsExpiringCustomersData,
+  GetApiReportsRechargesData,
+  GetApiReportsRechargesSummaryData,
+  GetApiReportsSummaryData,
   GetApiUsersByIdData,
   GetApiUsersData,
   GetApiUsersError,
@@ -685,6 +695,131 @@ export const putApiPoisByIdMutation = (
     },
   };
   return mutationOptions;
+};
+
+export const getApiReportsCustomersQueryKey = (
+  options?: Options<GetApiReportsCustomersData>
+) => createQueryKey('getApiReportsCustomers', options);
+
+/**
+ * Customers Report
+ * Endpoint to retrieve customers report
+ */
+export const getApiReportsCustomersOptions = (
+  options?: Options<GetApiReportsCustomersData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsCustomers({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsCustomersQueryKey(options),
+  });
+};
+
+export const getApiReportsExpiringCustomersQueryKey = (
+  options?: Options<GetApiReportsExpiringCustomersData>
+) => createQueryKey('getApiReportsExpiringCustomers', options);
+
+/**
+ * Expiring Customers Report
+ * Endpoint to retrieve expiring customers report
+ */
+export const getApiReportsExpiringCustomersOptions = (
+  options?: Options<GetApiReportsExpiringCustomersData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsExpiringCustomers({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsExpiringCustomersQueryKey(options),
+  });
+};
+
+export const getApiReportsRechargesQueryKey = (
+  options: Options<GetApiReportsRechargesData>
+) => createQueryKey('getApiReportsRecharges', options);
+
+/**
+ * Recharges Report
+ * Endpoint to retrieve recharges report
+ */
+export const getApiReportsRechargesOptions = (
+  options: Options<GetApiReportsRechargesData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsRecharges({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsRechargesQueryKey(options),
+  });
+};
+
+export const getApiReportsRechargesSummaryQueryKey = (
+  options?: Options<GetApiReportsRechargesSummaryData>
+) => createQueryKey('getApiReportsRechargesSummary', options);
+
+/**
+ * Recharges Summary Report
+ * Endpoint to retrieve recharges summary report
+ */
+export const getApiReportsRechargesSummaryOptions = (
+  options?: Options<GetApiReportsRechargesSummaryData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsRechargesSummary({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsRechargesSummaryQueryKey(options),
+  });
+};
+
+export const getApiReportsSummaryQueryKey = (
+  options?: Options<GetApiReportsSummaryData>
+) => createQueryKey('getApiReportsSummary', options);
+
+/**
+ * Summary Report
+ * Endpoint to retrieve summary report
+ */
+export const getApiReportsSummaryOptions = (
+  options?: Options<GetApiReportsSummaryData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsSummary({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsSummaryQueryKey(options),
+  });
 };
 
 export const getApiUsersQueryKey = (options?: Options<GetApiUsersData>) =>

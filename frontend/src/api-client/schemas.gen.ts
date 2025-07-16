@@ -97,6 +97,359 @@ export const RechargeTypeCountsSchema = {
   },
 } as const;
 
+export const ReportCustomerSchema = {
+  properties: {
+    Email: {
+      format: 'email',
+      type: 'string',
+    },
+    FirstName: {
+      type: 'string',
+    },
+    PhoneNumber: {
+      type: 'string',
+    },
+    RadiusUsername: {
+      type: 'string',
+    },
+    Surname: {
+      type: 'string',
+    },
+  },
+} as const;
+
+export const ReportCustomersSchema = {
+  items: {
+    properties: {
+      Email: {
+        format: 'email',
+        type: 'string',
+      },
+      FirstName: {
+        type: 'string',
+      },
+      PhoneNumber: {
+        type: 'string',
+      },
+      RadiusUsername: {
+        type: 'string',
+      },
+      Surname: {
+        type: 'string',
+      },
+    },
+  },
+  type: 'array',
+} as const;
+
+export const ReportExpiringCustomerSchema = {
+  properties: {
+    Address: {
+      type: 'string',
+    },
+    Email: {
+      format: 'email',
+      type: 'string',
+    },
+    Expiration: {
+      type: 'string',
+    },
+    FirstName: {
+      type: 'string',
+    },
+    LastPurchaseDuration: {
+      type: 'string',
+    },
+    LastPurchaseSpeed: {
+      type: 'string',
+    },
+    PhoneNumber: {
+      type: 'string',
+    },
+    RadiusUsername: {
+      type: 'string',
+    },
+    Surname: {
+      type: 'string',
+    },
+  },
+} as const;
+
+export const ReportExpiringCustomersSchema = {
+  items: {
+    properties: {
+      Address: {
+        type: 'string',
+      },
+      Email: {
+        format: 'email',
+        type: 'string',
+      },
+      Expiration: {
+        type: 'string',
+      },
+      FirstName: {
+        type: 'string',
+      },
+      LastPurchaseDuration: {
+        type: 'string',
+      },
+      LastPurchaseSpeed: {
+        type: 'string',
+      },
+      PhoneNumber: {
+        type: 'string',
+      },
+      RadiusUsername: {
+        type: 'string',
+      },
+      Surname: {
+        type: 'string',
+      },
+    },
+  },
+  type: 'array',
+} as const;
+
+export const ReportRechargeSchema = {
+  properties: {
+    Amount: {
+      type: 'number',
+    },
+    BuildName: {
+      type: 'string',
+    },
+    BuildType: {
+      type: 'string',
+    },
+    DateCreated: {
+      format: 'date-time',
+      type: 'string',
+    },
+    Email: {
+      format: 'email',
+      type: 'string',
+    },
+    FirstName: {
+      type: 'string',
+    },
+    ItemName: {
+      type: 'string',
+    },
+    ServiceId: {
+      format: 'int64',
+      type: 'integer',
+    },
+    Successful: {
+      type: 'boolean',
+    },
+    Surname: {
+      type: 'string',
+    },
+  },
+} as const;
+
+export const ReportRechargeSummariesSchema = {
+  items: {
+    properties: {
+      Amount: {
+        type: 'number',
+      },
+      BuildName: {
+        type: 'string',
+      },
+      BuildType: {
+        type: 'string',
+      },
+      DateCreated: {
+        format: 'date-time',
+        type: 'string',
+      },
+      Email: {
+        format: 'email',
+        type: 'string',
+      },
+      FirstName: {
+        type: 'string',
+      },
+      ItemName: {
+        type: 'string',
+      },
+      ServiceId: {
+        format: 'int64',
+        type: 'integer',
+      },
+      Successful: {
+        type: 'boolean',
+      },
+      Surname: {
+        type: 'string',
+      },
+    },
+  },
+  type: 'array',
+} as const;
+
+export const ReportRechargeSummarySchema = {
+  properties: {
+    Amount: {
+      type: 'number',
+    },
+    BuildName: {
+      type: 'string',
+    },
+    BuildType: {
+      type: 'string',
+    },
+    DateCreated: {
+      format: 'date-time',
+      type: 'string',
+    },
+    Email: {
+      format: 'email',
+      type: 'string',
+    },
+    FirstName: {
+      type: 'string',
+    },
+    ItemName: {
+      type: 'string',
+    },
+    ServiceId: {
+      format: 'int64',
+      type: 'integer',
+    },
+    Successful: {
+      type: 'boolean',
+    },
+    Surname: {
+      type: 'string',
+    },
+  },
+} as const;
+
+export const ReportRechargesSchema = {
+  items: {
+    properties: {
+      Amount: {
+        type: 'number',
+      },
+      BuildName: {
+        type: 'string',
+      },
+      BuildType: {
+        type: 'string',
+      },
+      DateCreated: {
+        format: 'date-time',
+        type: 'string',
+      },
+      Email: {
+        format: 'email',
+        type: 'string',
+      },
+      FirstName: {
+        type: 'string',
+      },
+      ItemName: {
+        type: 'string',
+      },
+      ServiceId: {
+        format: 'int64',
+        type: 'integer',
+      },
+      Successful: {
+        type: 'boolean',
+      },
+      Surname: {
+        type: 'string',
+      },
+    },
+  },
+  type: 'array',
+} as const;
+
+export const ReportSummariesSchema = {
+  items: {
+    properties: {
+      AmountFee: {
+        type: 'string',
+      },
+      AmountGross: {
+        type: 'string',
+      },
+      AmountNet: {
+        type: 'string',
+      },
+      BuildName: {
+        type: 'string',
+      },
+      BuildType: {
+        type: 'string',
+      },
+      CashAmount: {
+        type: 'number',
+      },
+      CashCode: {
+        type: 'string',
+      },
+      DateCreated: {
+        format: 'date-time',
+        type: 'string',
+      },
+      ItemName: {
+        type: 'string',
+      },
+      RadiusUsername: {
+        type: 'string',
+      },
+      ServiceId: {
+        type: 'string',
+      },
+    },
+  },
+  type: 'array',
+} as const;
+
+export const ReportSummarySchema = {
+  properties: {
+    AmountFee: {
+      type: 'string',
+    },
+    AmountGross: {
+      type: 'string',
+    },
+    AmountNet: {
+      type: 'string',
+    },
+    BuildName: {
+      type: 'string',
+    },
+    BuildType: {
+      type: 'string',
+    },
+    CashAmount: {
+      type: 'number',
+    },
+    CashCode: {
+      type: 'string',
+    },
+    DateCreated: {
+      format: 'date-time',
+      type: 'string',
+    },
+    ItemName: {
+      type: 'string',
+    },
+    RadiusUsername: {
+      type: 'string',
+    },
+    ServiceId: {
+      type: 'string',
+    },
+  },
+} as const;
+
 export const SuccessResponseSchema = {
   properties: {
     data: {
@@ -204,6 +557,369 @@ export const SuccessResponseSchema = {
               type: 'array',
             },
           },
+        },
+        {
+          items: {
+            properties: {
+              RechargeCount: {
+                type: 'integer',
+              },
+              RechargeMaxDate: {
+                format: 'date-time',
+                type: 'string',
+              },
+              RechargeName: {
+                type: 'string',
+              },
+              RechargePeriod: {
+                type: 'string',
+              },
+            },
+          },
+          type: 'array',
+        },
+        {
+          properties: {
+            Email: {
+              format: 'email',
+              type: 'string',
+            },
+            FirstName: {
+              type: 'string',
+            },
+            PhoneNumber: {
+              type: 'string',
+            },
+            RadiusUsername: {
+              type: 'string',
+            },
+            Surname: {
+              type: 'string',
+            },
+          },
+        },
+        {
+          items: {
+            properties: {
+              Email: {
+                format: 'email',
+                type: 'string',
+              },
+              FirstName: {
+                type: 'string',
+              },
+              PhoneNumber: {
+                type: 'string',
+              },
+              RadiusUsername: {
+                type: 'string',
+              },
+              Surname: {
+                type: 'string',
+              },
+            },
+          },
+          type: 'array',
+        },
+        {
+          properties: {
+            Address: {
+              type: 'string',
+            },
+            Email: {
+              format: 'email',
+              type: 'string',
+            },
+            Expiration: {
+              type: 'string',
+            },
+            FirstName: {
+              type: 'string',
+            },
+            LastPurchaseDuration: {
+              type: 'string',
+            },
+            LastPurchaseSpeed: {
+              type: 'string',
+            },
+            PhoneNumber: {
+              type: 'string',
+            },
+            RadiusUsername: {
+              type: 'string',
+            },
+            Surname: {
+              type: 'string',
+            },
+          },
+        },
+        {
+          items: {
+            properties: {
+              Address: {
+                type: 'string',
+              },
+              Email: {
+                format: 'email',
+                type: 'string',
+              },
+              Expiration: {
+                type: 'string',
+              },
+              FirstName: {
+                type: 'string',
+              },
+              LastPurchaseDuration: {
+                type: 'string',
+              },
+              LastPurchaseSpeed: {
+                type: 'string',
+              },
+              PhoneNumber: {
+                type: 'string',
+              },
+              RadiusUsername: {
+                type: 'string',
+              },
+              Surname: {
+                type: 'string',
+              },
+            },
+          },
+          type: 'array',
+        },
+        {
+          properties: {
+            Amount: {
+              type: 'number',
+            },
+            BuildName: {
+              type: 'string',
+            },
+            BuildType: {
+              type: 'string',
+            },
+            DateCreated: {
+              format: 'date-time',
+              type: 'string',
+            },
+            Email: {
+              format: 'email',
+              type: 'string',
+            },
+            FirstName: {
+              type: 'string',
+            },
+            ItemName: {
+              type: 'string',
+            },
+            ServiceId: {
+              format: 'int64',
+              type: 'integer',
+            },
+            Successful: {
+              type: 'boolean',
+            },
+            Surname: {
+              type: 'string',
+            },
+          },
+        },
+        {
+          items: {
+            properties: {
+              Amount: {
+                type: 'number',
+              },
+              BuildName: {
+                type: 'string',
+              },
+              BuildType: {
+                type: 'string',
+              },
+              DateCreated: {
+                format: 'date-time',
+                type: 'string',
+              },
+              Email: {
+                format: 'email',
+                type: 'string',
+              },
+              FirstName: {
+                type: 'string',
+              },
+              ItemName: {
+                type: 'string',
+              },
+              ServiceId: {
+                format: 'int64',
+                type: 'integer',
+              },
+              Successful: {
+                type: 'boolean',
+              },
+              Surname: {
+                type: 'string',
+              },
+            },
+          },
+          type: 'array',
+        },
+        {
+          properties: {
+            Amount: {
+              type: 'number',
+            },
+            BuildName: {
+              type: 'string',
+            },
+            BuildType: {
+              type: 'string',
+            },
+            DateCreated: {
+              format: 'date-time',
+              type: 'string',
+            },
+            Email: {
+              format: 'email',
+              type: 'string',
+            },
+            FirstName: {
+              type: 'string',
+            },
+            ItemName: {
+              type: 'string',
+            },
+            ServiceId: {
+              format: 'int64',
+              type: 'integer',
+            },
+            Successful: {
+              type: 'boolean',
+            },
+            Surname: {
+              type: 'string',
+            },
+          },
+        },
+        {
+          items: {
+            properties: {
+              Amount: {
+                type: 'number',
+              },
+              BuildName: {
+                type: 'string',
+              },
+              BuildType: {
+                type: 'string',
+              },
+              DateCreated: {
+                format: 'date-time',
+                type: 'string',
+              },
+              Email: {
+                format: 'email',
+                type: 'string',
+              },
+              FirstName: {
+                type: 'string',
+              },
+              ItemName: {
+                type: 'string',
+              },
+              ServiceId: {
+                format: 'int64',
+                type: 'integer',
+              },
+              Successful: {
+                type: 'boolean',
+              },
+              Surname: {
+                type: 'string',
+              },
+            },
+          },
+          type: 'array',
+        },
+        {
+          properties: {
+            AmountFee: {
+              type: 'string',
+            },
+            AmountGross: {
+              type: 'string',
+            },
+            AmountNet: {
+              type: 'string',
+            },
+            BuildName: {
+              type: 'string',
+            },
+            BuildType: {
+              type: 'string',
+            },
+            CashAmount: {
+              type: 'number',
+            },
+            CashCode: {
+              type: 'string',
+            },
+            DateCreated: {
+              format: 'date-time',
+              type: 'string',
+            },
+            ItemName: {
+              type: 'string',
+            },
+            RadiusUsername: {
+              type: 'string',
+            },
+            ServiceId: {
+              type: 'string',
+            },
+          },
+        },
+        {
+          items: {
+            properties: {
+              AmountFee: {
+                type: 'string',
+              },
+              AmountGross: {
+                type: 'string',
+              },
+              AmountNet: {
+                type: 'string',
+              },
+              BuildName: {
+                type: 'string',
+              },
+              BuildType: {
+                type: 'string',
+              },
+              CashAmount: {
+                type: 'number',
+              },
+              CashCode: {
+                type: 'string',
+              },
+              DateCreated: {
+                format: 'date-time',
+                type: 'string',
+              },
+              ItemName: {
+                type: 'string',
+              },
+              RadiusUsername: {
+                type: 'string',
+              },
+              ServiceId: {
+                type: 'string',
+              },
+            },
+          },
+          type: 'array',
         },
       ],
     },
