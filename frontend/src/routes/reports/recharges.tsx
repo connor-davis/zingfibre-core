@@ -11,8 +11,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDownIcon } from 'lucide-react';
+import { ArrowUpDown, CalendarIcon, ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
+
+import { format, parseISO } from 'date-fns';
+import z from 'zod';
 
 import {
   type ErrorResponse,
@@ -22,6 +25,7 @@ import {
 } from '@/api-client';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -31,6 +35,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
   Table,
   TableBody,
   TableCell,
@@ -38,10 +47,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { apiClient } from '@/lib/utils';
+import { apiClient, cn } from '@/lib/utils';
 
 export const Route = createFileRoute('/reports/recharges')({
   component: RouteComponent,
+  validateSearch: z.object({
+    poi: z.string().default(''),
+    startDate: z
+      .string()
+      .default(
+        new Date(new Date().setDate(new Date().getDate() - 30)).toISOString()
+      ),
+    endDate: z.string().default(new Date().toISOString()),
+  }),
   pendingComponent: () => (
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Label className="text-muted-foreground">
@@ -77,16 +95,18 @@ export const Route = createFileRoute('/reports/recharges')({
     return <ErrorComponent error={error} />;
   },
   wrapInSuspense: true,
-  loaderDeps: ({ search: { poi } }) => ({ poi }),
-  loader: async ({ deps: { poi } }) => {
+  loaderDeps: ({ search: { poi, startDate, endDate } }) => ({
+    poi,
+    startDate,
+    endDate,
+  }),
+  loader: async ({ deps: { poi, startDate, endDate } }) => {
     const { data } = await getApiReportsRecharges({
       client: apiClient,
       query: {
         poi,
-        startDate: new Date(
-          new Date().setDate(new Date().getDate() - 30)
-        ).toISOString(),
-        endDate: new Date().toISOString(),
+        startDate,
+        endDate,
       },
       throwOnError: true,
     });
@@ -335,7 +355,7 @@ export const columns = [
 ] as ColumnDef<ReportRecharge>[];
 
 function RouteComponent() {
-  const { poi } = Route.useLoaderDeps();
+  const { poi, startDate, endDate } = Route.useLoaderDeps();
   const { expiringCustomers } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -395,6 +415,46 @@ function RouteComponent() {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Popover modal>
+            <Button
+              id="date"
+              variant="outline"
+              className={cn(
+                'w-full justify-start text-left font-normal',
+                !startDate && !endDate && 'text-muted-foreground'
+              )}
+              asChild
+            >
+              <PopoverTrigger>
+                <CalendarIcon className="mr-2 size-4" />
+                {startDate ? (
+                  endDate ? (
+                    <>
+                      {format(parseISO(startDate), 'LLL dd, y')} -{' '}
+                      {format(parseISO(endDate), 'LLL dd, y')}
+                    </>
+                  ) : (
+                    format(parseISO(startDate), 'LLL dd, y')
+                  )
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </PopoverTrigger>
+            </Button>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="range"
+                defaultMonth={startDate ? parseISO(startDate) : undefined}
+                selected={{
+                  from: startDate ? parseISO(startDate) : undefined,
+                  to: endDate ? parseISO(endDate) : undefined,
+                }}
+                onSelect={(selected) => console.log(selected)}
+                numberOfMonths={2}
+              />
+            </PopoverContent>
+          </Popover>
 
           <Button asChild>
             <a
