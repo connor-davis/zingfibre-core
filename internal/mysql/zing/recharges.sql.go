@@ -86,7 +86,8 @@ FROM
 			recharge_period
 	) AS sub
 ORDER BY
-	recharge_max_date ASC
+	recharge_max_date ASC,
+    recharge_count DESC
 `
 
 type GetRechargeTypeCountsParams struct {
