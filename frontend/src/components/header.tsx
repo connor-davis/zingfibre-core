@@ -53,7 +53,10 @@ export default function Header() {
             onValueChange={(value) => {
               router.navigate({
                 to: routerState.location.pathname,
-                search: { poi: value.replaceAll('--', '') },
+                search: (previous) => ({
+                  ...previous,
+                  poi: value === '--' ? undefined : value,
+                }),
               });
             }}
           >
