@@ -42,9 +42,9 @@ export const Route = createFileRoute('/')({
     </AuthenticationGuard>
   ),
   validateSearch: z.object({
-    count: z.number().optional(),
-    period: z.string().optional(),
-    poi: z.string().optional(),
+    count: z.number().default(1),
+    period: z.string().default('months'),
+    poi: z.string().default(''),
   }),
   loaderDeps: ({ search: { count, period, poi } }) => ({
     count: count ?? 1,
@@ -78,7 +78,7 @@ export const Route = createFileRoute('/')({
 });
 
 function App() {
-  const { count, period } = useSearch({ from: '/' });
+  const { period } = useSearch({ from: '/' });
   const router = useRouter();
 
   const { items, types } = Route.useLoaderData();
@@ -95,7 +95,7 @@ function App() {
             <DebounceIncrementorInput
               className="w-24"
               min={1}
-              defaultValue={count}
+              defaultValue={1}
               onChange={(value) => {
                 console.log(value);
 
