@@ -9,18 +9,9 @@ export default {
     path: 'src/api-client',
   },
   plugins: [
-    {
-      dates: true,
-      name: '@hey-api/transformers',
-      bigInt: true,
-    },
-    {
-      enums: 'javascript',
-      name: '@hey-api/typescript',
-    },
-    {
-      name: '@hey-api/sdk',
-      transformer: true,
-    },
+    '@tanstack/react-query',
+    '@hey-api/client-fetch',
+    '@hey-api/typescript',
+    '@hey-api/schemas',
   ],
 } as UserConfig;
