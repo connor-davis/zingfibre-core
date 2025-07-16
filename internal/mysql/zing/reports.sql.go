@@ -13,8 +13,11 @@ import (
 
 const getReportsCustomers = `-- name: GetReportsCustomers :many
 SELECT
-    t1.id, t1.firstname, t1.surname, t1.password, t1.passwordsalt, t1.email, t1.phonenumber, t1.idnumber, t1.radiususername, t1.preferemailcommunication, t1.language, t1.registrationapproved, t1.registrationdeclined, t1.setownpassword, t1.subscriptiontoken, t1.proofofaddressdocumentid, t1.idbookdocumentid, t1.approvedbyuserid, t1.addressid, t1.potentialaddress, t1.salesagentid, t1.datecreated, t1.deleted,
-    t2.RadiusUsername AS t2_radius_username
+    t1.FirstName AS first_name,
+    t1.Surname AS surname,
+    t1.Email AS email,
+    t2.RadiusUsername AS radius_username,
+    t1.PhoneNumber AS phone_number
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
@@ -22,30 +25,11 @@ WHERE
 `
 
 type GetReportsCustomersRow struct {
-	ID                       string
-	Firstname                sql.NullString
-	Surname                  sql.NullString
-	Password                 sql.NullString
-	Passwordsalt             sql.NullString
-	Email                    sql.NullString
-	Phonenumber              sql.NullString
-	Idnumber                 sql.NullString
-	Radiususername           sql.NullString
-	Preferemailcommunication bool
-	Language                 sql.NullString
-	Registrationapproved     bool
-	Registrationdeclined     bool
-	Setownpassword           bool
-	Subscriptiontoken        sql.NullString
-	Proofofaddressdocumentid sql.NullString
-	Idbookdocumentid         sql.NullString
-	Approvedbyuserid         sql.NullString
-	Addressid                sql.NullString
-	Potentialaddress         sql.NullString
-	Salesagentid             sql.NullString
-	Datecreated              time.Time
-	Deleted                  bool
-	T2RadiusUsername         sql.NullString
+	FirstName      sql.NullString
+	Surname        sql.NullString
+	Email          sql.NullString
+	RadiusUsername sql.NullString
+	PhoneNumber    sql.NullString
 }
 
 func (q *Queries) GetReportsCustomers(ctx context.Context, poi string) ([]GetReportsCustomersRow, error) {
@@ -58,30 +42,11 @@ func (q *Queries) GetReportsCustomers(ctx context.Context, poi string) ([]GetRep
 	for rows.Next() {
 		var i GetReportsCustomersRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.Firstname,
+			&i.FirstName,
 			&i.Surname,
-			&i.Password,
-			&i.Passwordsalt,
 			&i.Email,
-			&i.Phonenumber,
-			&i.Idnumber,
-			&i.Radiususername,
-			&i.Preferemailcommunication,
-			&i.Language,
-			&i.Registrationapproved,
-			&i.Registrationdeclined,
-			&i.Setownpassword,
-			&i.Subscriptiontoken,
-			&i.Proofofaddressdocumentid,
-			&i.Idbookdocumentid,
-			&i.Approvedbyuserid,
-			&i.Addressid,
-			&i.Potentialaddress,
-			&i.Salesagentid,
-			&i.Datecreated,
-			&i.Deleted,
-			&i.T2RadiusUsername,
+			&i.RadiusUsername,
+			&i.PhoneNumber,
 		); err != nil {
 			return nil, err
 		}
@@ -98,7 +63,11 @@ func (q *Queries) GetReportsCustomers(ctx context.Context, poi string) ([]GetRep
 
 const getReportsExpiringCustomers = `-- name: GetReportsExpiringCustomers :many
 SELECT
-    t1.id, t1.firstname, t1.surname, t1.password, t1.passwordsalt, t1.email, t1.phonenumber, t1.idnumber, t1.radiususername, t1.preferemailcommunication, t1.language, t1.registrationapproved, t1.registrationdeclined, t1.setownpassword, t1.subscriptiontoken, t1.proofofaddressdocumentid, t1.idbookdocumentid, t1.approvedbyuserid, t1.addressid, t1.potentialaddress, t1.salesagentid, t1.datecreated, t1.deleted,
+    t1.FirstName AS first_name,
+    t1.Surname AS surname,
+    t1.Email AS email,
+    t1.PhoneNumber AS phone_number,
+    t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
     t4.RadiusUsername AS t4_radius_username,
@@ -129,34 +98,16 @@ type GetReportsExpiringCustomersParams struct {
 }
 
 type GetReportsExpiringCustomersRow struct {
-	ID                       string
-	Firstname                sql.NullString
-	Surname                  sql.NullString
-	Password                 sql.NullString
-	Passwordsalt             sql.NullString
-	Email                    sql.NullString
-	Phonenumber              sql.NullString
-	Idnumber                 sql.NullString
-	Radiususername           sql.NullString
-	Preferemailcommunication bool
-	Language                 sql.NullString
-	Registrationapproved     bool
-	Registrationdeclined     bool
-	Setownpassword           bool
-	Subscriptiontoken        sql.NullString
-	Proofofaddressdocumentid sql.NullString
-	Idbookdocumentid         sql.NullString
-	Approvedbyuserid         sql.NullString
-	Addressid                sql.NullString
-	Potentialaddress         sql.NullString
-	Salesagentid             sql.NullString
-	Datecreated              time.Time
-	Deleted                  bool
-	LastPurchaseDuration     sql.NullString
-	LastPurchaseSpeed        sql.NullString
-	T4RadiusUsername         sql.NullString
-	Expiration               string
-	Address                  string
+	FirstName            sql.NullString
+	Surname              sql.NullString
+	Email                sql.NullString
+	PhoneNumber          sql.NullString
+	RadiusUsername       sql.NullString
+	LastPurchaseDuration sql.NullString
+	LastPurchaseSpeed    sql.NullString
+	T4RadiusUsername     sql.NullString
+	Expiration           string
+	Address              string
 }
 
 func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, arg GetReportsExpiringCustomersParams) ([]GetReportsExpiringCustomersRow, error) {
@@ -169,29 +120,11 @@ func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, arg GetReport
 	for rows.Next() {
 		var i GetReportsExpiringCustomersRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.Firstname,
+			&i.FirstName,
 			&i.Surname,
-			&i.Password,
-			&i.Passwordsalt,
 			&i.Email,
-			&i.Phonenumber,
-			&i.Idnumber,
-			&i.Radiususername,
-			&i.Preferemailcommunication,
-			&i.Language,
-			&i.Registrationapproved,
-			&i.Registrationdeclined,
-			&i.Setownpassword,
-			&i.Subscriptiontoken,
-			&i.Proofofaddressdocumentid,
-			&i.Idbookdocumentid,
-			&i.Approvedbyuserid,
-			&i.Addressid,
-			&i.Potentialaddress,
-			&i.Salesagentid,
-			&i.Datecreated,
-			&i.Deleted,
+			&i.PhoneNumber,
+			&i.RadiusUsername,
 			&i.LastPurchaseDuration,
 			&i.LastPurchaseSpeed,
 			&i.T4RadiusUsername,
@@ -306,11 +239,13 @@ func (q *Queries) GetReportsRechargeTypeCounts(ctx context.Context, arg GetRepor
 
 const getReportsRecharges = `-- name: GetReportsRecharges :many
 SELECT
-    t2.RadiusUsername AS radius_username,
     t1.DateCreated AS date_created,
+    t2.Email AS email,
+    t2.FirstName AS first_name,
+    t2.Surname AS surname,
     CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
-    t1.id, t1.customerid, t1.productid, t1.method, t1.paymentservicepaymentid, t1.paymentservicepayload, t1.paymentservicequeryparams, t1.rechargesuccessful, t1.failurereason, t1.paymentamount, t1.expirydate, t1.previousrmexpirydate, t1.userid, t1.fromrmsvcid, t1.tormsvcid, t1.datecreated, t1.deleted,
-    t2.id, t2.firstname, t2.surname, t2.password, t2.passwordsalt, t2.email, t2.phonenumber, t2.idnumber, t2.radiususername, t2.preferemailcommunication, t2.language, t2.registrationapproved, t2.registrationdeclined, t2.setownpassword, t2.subscriptiontoken, t2.proofofaddressdocumentid, t2.idbookdocumentid, t2.approvedbyuserid, t2.addressid, t2.potentialaddress, t2.salesagentid, t2.datecreated, t2.deleted,
+    t1.PaymentAmount AS amount,
+    t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
     t6.Name AS build_type
@@ -336,52 +271,16 @@ type GetReportsRechargesParams struct {
 }
 
 type GetReportsRechargesRow struct {
-	RadiusUsername            sql.NullString
-	DateCreated               time.Time
-	ItemName                  string
-	ID                        string
-	Customerid                sql.NullString
-	Productid                 sql.NullString
-	Method                    sql.NullString
-	Paymentservicepaymentid   sql.NullString
-	Paymentservicepayload     sql.NullString
-	Paymentservicequeryparams sql.NullString
-	Rechargesuccessful        bool
-	Failurereason             sql.NullString
-	Paymentamount             sql.NullString
-	Expirydate                sql.NullTime
-	Previousrmexpirydate      sql.NullTime
-	Userid                    sql.NullString
-	Fromrmsvcid               sql.NullInt32
-	Tormsvcid                 sql.NullInt32
-	Datecreated               time.Time
-	Deleted                   bool
-	ID_2                      sql.NullString
-	Firstname                 sql.NullString
-	Surname                   sql.NullString
-	Password                  sql.NullString
-	Passwordsalt              sql.NullString
-	Email                     sql.NullString
-	Phonenumber               sql.NullString
-	Idnumber                  sql.NullString
-	Radiususername            sql.NullString
-	Preferemailcommunication  sql.NullBool
-	Language                  sql.NullString
-	Registrationapproved      sql.NullBool
-	Registrationdeclined      sql.NullBool
-	Setownpassword            sql.NullBool
-	Subscriptiontoken         sql.NullString
-	Proofofaddressdocumentid  sql.NullString
-	Idbookdocumentid          sql.NullString
-	Approvedbyuserid          sql.NullString
-	Addressid                 sql.NullString
-	Potentialaddress          sql.NullString
-	Salesagentid              sql.NullString
-	Datecreated_2             sql.NullTime
-	Deleted_2                 sql.NullBool
-	ServiceID                 sql.NullInt64
-	BuildName                 sql.NullString
-	BuildType                 sql.NullString
+	DateCreated time.Time
+	Email       sql.NullString
+	FirstName   sql.NullString
+	Surname     sql.NullString
+	ItemName    string
+	Amount      sql.NullString
+	Successful  bool
+	ServiceID   sql.NullInt64
+	BuildName   sql.NullString
+	BuildType   sql.NullString
 }
 
 func (q *Queries) GetReportsRecharges(ctx context.Context, arg GetReportsRechargesParams) ([]GetReportsRechargesRow, error) {
@@ -394,49 +293,13 @@ func (q *Queries) GetReportsRecharges(ctx context.Context, arg GetReportsRecharg
 	for rows.Next() {
 		var i GetReportsRechargesRow
 		if err := rows.Scan(
-			&i.RadiusUsername,
 			&i.DateCreated,
-			&i.ItemName,
-			&i.ID,
-			&i.Customerid,
-			&i.Productid,
-			&i.Method,
-			&i.Paymentservicepaymentid,
-			&i.Paymentservicepayload,
-			&i.Paymentservicequeryparams,
-			&i.Rechargesuccessful,
-			&i.Failurereason,
-			&i.Paymentamount,
-			&i.Expirydate,
-			&i.Previousrmexpirydate,
-			&i.Userid,
-			&i.Fromrmsvcid,
-			&i.Tormsvcid,
-			&i.Datecreated,
-			&i.Deleted,
-			&i.ID_2,
-			&i.Firstname,
-			&i.Surname,
-			&i.Password,
-			&i.Passwordsalt,
 			&i.Email,
-			&i.Phonenumber,
-			&i.Idnumber,
-			&i.Radiususername,
-			&i.Preferemailcommunication,
-			&i.Language,
-			&i.Registrationapproved,
-			&i.Registrationdeclined,
-			&i.Setownpassword,
-			&i.Subscriptiontoken,
-			&i.Proofofaddressdocumentid,
-			&i.Idbookdocumentid,
-			&i.Approvedbyuserid,
-			&i.Addressid,
-			&i.Potentialaddress,
-			&i.Salesagentid,
-			&i.Datecreated_2,
-			&i.Deleted_2,
+			&i.FirstName,
+			&i.Surname,
+			&i.ItemName,
+			&i.Amount,
+			&i.Successful,
 			&i.ServiceID,
 			&i.BuildName,
 			&i.BuildType,
@@ -456,11 +319,13 @@ func (q *Queries) GetReportsRecharges(ctx context.Context, arg GetReportsRecharg
 
 const getReportsRechargesSummary = `-- name: GetReportsRechargesSummary :many
 SELECT
-    t2.RadiusUsername AS radius_username,
     t1.DateCreated AS date_created,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') as item_name,
-    t1.id, t1.customerid, t1.productid, t1.method, t1.paymentservicepaymentid, t1.paymentservicepayload, t1.paymentservicequeryparams, t1.rechargesuccessful, t1.failurereason, t1.paymentamount, t1.expirydate, t1.previousrmexpirydate, t1.userid, t1.fromrmsvcid, t1.tormsvcid, t1.datecreated, t1.deleted,
-    t2.id, t2.firstname, t2.surname, t2.password, t2.passwordsalt, t2.email, t2.phonenumber, t2.idnumber, t2.radiususername, t2.preferemailcommunication, t2.language, t2.registrationapproved, t2.registrationdeclined, t2.setownpassword, t2.subscriptiontoken, t2.proofofaddressdocumentid, t2.idbookdocumentid, t2.approvedbyuserid, t2.addressid, t2.potentialaddress, t2.salesagentid, t2.datecreated, t2.deleted,
+    t2.Email AS email,
+    t2.FirstName AS first_name,
+    t2.Surname AS surname,
+    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    t1.PaymentAmount AS amount,
+    t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
     t6.Name AS build_type
@@ -479,52 +344,16 @@ ORDER BY
 `
 
 type GetReportsRechargesSummaryRow struct {
-	RadiusUsername            sql.NullString
-	DateCreated               time.Time
-	ItemName                  string
-	ID                        string
-	Customerid                sql.NullString
-	Productid                 sql.NullString
-	Method                    sql.NullString
-	Paymentservicepaymentid   sql.NullString
-	Paymentservicepayload     sql.NullString
-	Paymentservicequeryparams sql.NullString
-	Rechargesuccessful        bool
-	Failurereason             sql.NullString
-	Paymentamount             sql.NullString
-	Expirydate                sql.NullTime
-	Previousrmexpirydate      sql.NullTime
-	Userid                    sql.NullString
-	Fromrmsvcid               sql.NullInt32
-	Tormsvcid                 sql.NullInt32
-	Datecreated               time.Time
-	Deleted                   bool
-	ID_2                      sql.NullString
-	Firstname                 sql.NullString
-	Surname                   sql.NullString
-	Password                  sql.NullString
-	Passwordsalt              sql.NullString
-	Email                     sql.NullString
-	Phonenumber               sql.NullString
-	Idnumber                  sql.NullString
-	Radiususername            sql.NullString
-	Preferemailcommunication  sql.NullBool
-	Language                  sql.NullString
-	Registrationapproved      sql.NullBool
-	Registrationdeclined      sql.NullBool
-	Setownpassword            sql.NullBool
-	Subscriptiontoken         sql.NullString
-	Proofofaddressdocumentid  sql.NullString
-	Idbookdocumentid          sql.NullString
-	Approvedbyuserid          sql.NullString
-	Addressid                 sql.NullString
-	Potentialaddress          sql.NullString
-	Salesagentid              sql.NullString
-	Datecreated_2             sql.NullTime
-	Deleted_2                 sql.NullBool
-	ServiceID                 sql.NullInt64
-	BuildName                 sql.NullString
-	BuildType                 sql.NullString
+	DateCreated time.Time
+	Email       sql.NullString
+	FirstName   sql.NullString
+	Surname     sql.NullString
+	ItemName    string
+	Amount      sql.NullString
+	Successful  bool
+	ServiceID   sql.NullInt64
+	BuildName   sql.NullString
+	BuildType   sql.NullString
 }
 
 func (q *Queries) GetReportsRechargesSummary(ctx context.Context, poi string) ([]GetReportsRechargesSummaryRow, error) {
@@ -537,49 +366,13 @@ func (q *Queries) GetReportsRechargesSummary(ctx context.Context, poi string) ([
 	for rows.Next() {
 		var i GetReportsRechargesSummaryRow
 		if err := rows.Scan(
-			&i.RadiusUsername,
 			&i.DateCreated,
-			&i.ItemName,
-			&i.ID,
-			&i.Customerid,
-			&i.Productid,
-			&i.Method,
-			&i.Paymentservicepaymentid,
-			&i.Paymentservicepayload,
-			&i.Paymentservicequeryparams,
-			&i.Rechargesuccessful,
-			&i.Failurereason,
-			&i.Paymentamount,
-			&i.Expirydate,
-			&i.Previousrmexpirydate,
-			&i.Userid,
-			&i.Fromrmsvcid,
-			&i.Tormsvcid,
-			&i.Datecreated,
-			&i.Deleted,
-			&i.ID_2,
-			&i.Firstname,
-			&i.Surname,
-			&i.Password,
-			&i.Passwordsalt,
 			&i.Email,
-			&i.Phonenumber,
-			&i.Idnumber,
-			&i.Radiususername,
-			&i.Preferemailcommunication,
-			&i.Language,
-			&i.Registrationapproved,
-			&i.Registrationdeclined,
-			&i.Setownpassword,
-			&i.Subscriptiontoken,
-			&i.Proofofaddressdocumentid,
-			&i.Idbookdocumentid,
-			&i.Approvedbyuserid,
-			&i.Addressid,
-			&i.Potentialaddress,
-			&i.Salesagentid,
-			&i.Datecreated_2,
-			&i.Deleted_2,
+			&i.FirstName,
+			&i.Surname,
+			&i.ItemName,
+			&i.Amount,
+			&i.Successful,
 			&i.ServiceID,
 			&i.BuildName,
 			&i.BuildType,
@@ -599,13 +392,9 @@ func (q *Queries) GetReportsRechargesSummary(ctx context.Context, poi string) ([
 
 const getReportsSummary = `-- name: GetReportsSummary :many
 SELECT
-    t1.RadiusUsername AS radius_username,
     t2.DateCreated AS date_created,
-
-    CASE WHEN JSON_VALID(PaymentServicePayload) = 1
-        THEN CONCAT(t3.Category, ' ', t3.Name, ' Access')
-        ELSE 'Intro Package'
-    END AS item_name,
+    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    t4.RadiusUsername AS radius_username,
 
     CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
         THEN JSON_VALUE(PaymentServicePayload, '$.amount_gross') 
@@ -653,9 +442,9 @@ ORDER BY
 `
 
 type GetReportsSummaryRow struct {
-	RadiusUsername sql.NullString
 	DateCreated    sql.NullTime
 	ItemName       string
+	RadiusUsername sql.NullString
 	AmountGross    string
 	AmountFee      string
 	AmountNet      string
@@ -676,9 +465,9 @@ func (q *Queries) GetReportsSummary(ctx context.Context, poi string) ([]GetRepor
 	for rows.Next() {
 		var i GetReportsSummaryRow
 		if err := rows.Scan(
-			&i.RadiusUsername,
 			&i.DateCreated,
 			&i.ItemName,
+			&i.RadiusUsername,
 			&i.AmountGross,
 			&i.AmountFee,
 			&i.AmountNet,
@@ -687,63 +476,6 @@ func (q *Queries) GetReportsSummary(ctx context.Context, poi string) ([]GetRepor
 			&i.ServiceID,
 			&i.BuildName,
 			&i.BuildType,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getReportsUnregisteredCustomers = `-- name: GetReportsUnregisteredCustomers :many
-SELECT
-    t1.id, t1.firstname, t1.surname, t1.password, t1.passwordsalt, t1.email, t1.phonenumber, t1.idnumber, t1.radiususername, t1.preferemailcommunication, t1.language, t1.registrationapproved, t1.registrationdeclined, t1.setownpassword, t1.subscriptiontoken, t1.proofofaddressdocumentid, t1.idbookdocumentid, t1.approvedbyuserid, t1.addressid, t1.potentialaddress, t1.salesagentid, t1.datecreated, t1.deleted
-FROM
-    Customers t1
-LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
-WHERE
-    TRIM(LOWER(t2.POP)) LIKE CONCAT(TRIM(LOWER(?)),'%')
-`
-
-func (q *Queries) GetReportsUnregisteredCustomers(ctx context.Context, poi string) ([]Customer, error) {
-	rows, err := q.db.QueryContext(ctx, getReportsUnregisteredCustomers, poi)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Customer
-	for rows.Next() {
-		var i Customer
-		if err := rows.Scan(
-			&i.ID,
-			&i.Firstname,
-			&i.Surname,
-			&i.Password,
-			&i.Passwordsalt,
-			&i.Email,
-			&i.Phonenumber,
-			&i.Idnumber,
-			&i.Radiususername,
-			&i.Preferemailcommunication,
-			&i.Language,
-			&i.Registrationapproved,
-			&i.Registrationdeclined,
-			&i.Setownpassword,
-			&i.Subscriptiontoken,
-			&i.Proofofaddressdocumentid,
-			&i.Idbookdocumentid,
-			&i.Approvedbyuserid,
-			&i.Addressid,
-			&i.Potentialaddress,
-			&i.Salesagentid,
-			&i.Datecreated,
-			&i.Deleted,
 		); err != nil {
 			return nil, err
 		}

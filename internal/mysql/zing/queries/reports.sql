@@ -46,9 +46,8 @@ SELECT
     t1.FirstName AS first_name,
     t1.Surname AS surname,
     t1.Email AS email,
-    t1.PhoneNumber AS phone_number,
-
-    t2.RadiusUsername AS radius_username
+    t2.RadiusUsername AS radius_username,
+    t1.PhoneNumber AS phone_number
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
@@ -61,7 +60,6 @@ SELECT
     t1.Email AS email,
     t1.PhoneNumber AS phone_number,
     t4.RadiusUsername AS radius_username,
-    t4.Address AS address,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
     t4.RadiusUsername AS t4_radius_username,
