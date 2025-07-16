@@ -1,17 +1,27 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
+import z from 'zod';
+
 import AuthenticationGuard from '@/components/guards/authentication-guard';
+import Header from '@/components/header';
 import { AuthenticationProvider } from '@/components/providers/authentication-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import AppSidebar from '@/components/sidebar/app-sidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import { queryClient } from '@/lib/utils';
 
 export const Route = createRootRoute({
-  component: () => (
+  component: RootComponent,
+  validateSearch: z.object({
+    poi: z.string().optional(),
+  }),
+});
+
+function RootComponent() {
+  return (
     <ThemeProvider defaultTheme="system" defaultAppearance="zing">
       <QueryClientProvider client={queryClient}>
         <AuthenticationProvider>
@@ -22,27 +32,10 @@ export const Route = createRootRoute({
                   <AppSidebar />
 
                   <div className="flex flex-col w-full h-full overflow-hidden">
-                    <div className="flex items-center gap-3 p-3">
-                      <SidebarTrigger />
-
-                      <Link to="/">
-                        <img
-                          src="/zing-logo.png"
-                          alt="Zing Logo"
-                          className="h-7 dark:hidden"
-                        />
-
-                        <img
-                          src="/zing-logo-dark.png"
-                          alt="Zing Logo"
-                          className="h-7 hidden dark:block"
-                        />
-                      </Link>
-                    </div>
-
+                    <Header />
                     <Outlet />
                     {import.meta.env.MODE === 'development' && (
-                      <TanStackRouterDevtools position="top-right" />
+                      <TanStackRouterDevtools position="bottom-right" />
                     )}
                   </div>
                 </div>
@@ -54,5 +47,5 @@ export const Route = createRootRoute({
 
       <Toaster />
     </ThemeProvider>
-  ),
-});
+  );
+}

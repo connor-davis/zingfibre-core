@@ -202,6 +202,10 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 
 				for _, row := range rows {
 					if string(row.Period.([]byte)) == period {
+						if row.ProductName.String == "" {
+							row.ProductName.String = "Intro Package"
+						}
+
 						if _, exists := base[row.ProductName.String]; !exists {
 							base[row.ProductName.String] = int(row.RechargeCount)
 						} else {
