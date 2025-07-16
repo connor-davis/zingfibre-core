@@ -416,17 +416,16 @@ function RouteComponent() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Popover modal>
-            <Button
-              id="date"
-              variant="outline"
-              className={cn(
-                'w-full justify-start text-left font-normal',
-                !startDate && !endDate && 'text-muted-foreground'
-              )}
-              asChild
-            >
-              <PopoverTrigger>
+          <Popover>
+            <PopoverTrigger>
+              <Button
+                id="date"
+                variant="outline"
+                className={cn(
+                  'w-full justify-start text-left font-normal',
+                  !startDate && !endDate && 'text-muted-foreground'
+                )}
+              >
                 <CalendarIcon className="mr-2 size-4" />
                 {startDate ? (
                   endDate ? (
@@ -440,8 +439,8 @@ function RouteComponent() {
                 ) : (
                   <span>Pick a date</span>
                 )}
-              </PopoverTrigger>
-            </Button>
+              </Button>
+            </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
