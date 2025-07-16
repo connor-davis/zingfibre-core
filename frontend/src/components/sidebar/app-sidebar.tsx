@@ -54,7 +54,7 @@ export default function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/">
+                  <Link to="/reports/customers">
                     <UsersIcon />
                     <span>Customers</span>
                   </Link>
@@ -62,7 +62,7 @@ export default function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/">
+                  <Link to="/reports/expiring-customers">
                     <SpeechIcon />
                     <span>Expiring Customers</span>
                   </Link>
@@ -70,7 +70,7 @@ export default function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/">
+                  <Link to="/reports/recharges">
                     <RefreshCcwIcon />
                     <span>Recharges</span>
                   </Link>
@@ -78,7 +78,7 @@ export default function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/">
+                  <Link to="/reports/recharges-summary">
                     <RefreshCcwDotIcon />
                     <span>Recharges Summary</span>
                   </Link>
@@ -86,7 +86,7 @@ export default function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/">
+                  <Link to="/reports/summary">
                     <CircleDotIcon />
                     <span>Summary</span>
                   </Link>
