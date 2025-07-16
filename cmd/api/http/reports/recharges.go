@@ -40,8 +40,9 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				Schema: &openapi3.SchemaRef{
 					Value: &openapi3.Schema{
 						Type: &openapi3.Types{
-							"date",
+							"string",
 						},
+						Format: "date-time",
 					},
 				},
 			},
@@ -54,8 +55,9 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				Schema: &openapi3.SchemaRef{
 					Value: &openapi3.Schema{
 						Type: &openapi3.Types{
-							"date",
+							"string",
 						},
+						Format: "date-time",
 					},
 				},
 			},
@@ -150,6 +152,8 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 			startDateParsed, err := time.Parse(time.RFC3339, startDate)
 
 			if err != nil {
+				log.Errorf("🔥 Error parsing start date: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -159,6 +163,8 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 			endDateParsed, err := time.Parse(time.RFC3339, endDate)
 
 			if err != nil {
+				log.Errorf("🔥 Error parsing end date: %s", err.Error())
+
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
 					"details": constants.BadRequestErrorDetails,
@@ -172,6 +178,8 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error fetching recharges from Zing: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -194,7 +202,7 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 					Email:       recharge.Email.String,
 					FirstName:   recharge.FirstName.String,
 					Surname:     recharge.Surname.String,
-					ItemName:    recharge.ItemName,
+					ItemName:    string(recharge.ItemName.([]byte)),
 					Amount:      amount,
 					Successful:  recharge.Successful,
 					ServiceId:   strconv.Itoa(int(recharge.ServiceID.Int64)),
@@ -318,6 +326,8 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 			rechargeSummaries, err := r.Zing.GetReportsRechargesSummary(c.Context(), poi)
 
 			if err != nil {
+				log.Errorf("🔥 Error fetching recharges summary from Zing: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -340,7 +350,7 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 					Email:       rechargeSummary.Email.String,
 					FirstName:   rechargeSummary.FirstName.String,
 					Surname:     rechargeSummary.Surname.String,
-					ItemName:    rechargeSummary.ItemName,
+					ItemName:    string(rechargeSummary.ItemName.([]byte)),
 					Amount:      amount,
 					Successful:  rechargeSummary.Successful,
 					ServiceId:   strconv.Itoa(int(rechargeSummary.ServiceID.Int64)),

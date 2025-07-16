@@ -87,7 +87,10 @@ SELECT
     t2.Email AS email,
     t2.FirstName AS first_name,
     t2.Surname AS surname,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    CASE 
+        WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
+        ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
+    END AS item_name,
     t1.PaymentAmount AS amount,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
@@ -113,7 +116,10 @@ SELECT
     t2.Email AS email,
     t2.FirstName AS first_name,
     t2.Surname AS surname,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    CASE 
+        WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
+        ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
+    END AS item_name,
     t1.PaymentAmount AS amount,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
@@ -135,7 +141,10 @@ ORDER BY
 -- name: GetReportsSummary :many
 SELECT
     t2.DateCreated AS date_created,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    CASE 
+        WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
+        ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
+    END AS item_name,
     t4.RadiusUsername AS radius_username,
 
     CASE WHEN JSON_VALID(PaymentServicePayload) = 1 

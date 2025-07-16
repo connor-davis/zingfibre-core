@@ -240,7 +240,10 @@ SELECT
     t2.Email AS email,
     t2.FirstName AS first_name,
     t2.Surname AS surname,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    CASE 
+        WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
+        ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
+    END AS item_name,
     t1.PaymentAmount AS amount,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
@@ -272,7 +275,7 @@ type GetReportsRechargesRow struct {
 	Email       sql.NullString
 	FirstName   sql.NullString
 	Surname     sql.NullString
-	ItemName    string
+	ItemName    interface{}
 	Amount      sql.NullString
 	Successful  bool
 	ServiceID   sql.NullInt64
@@ -320,7 +323,10 @@ SELECT
     t2.Email AS email,
     t2.FirstName AS first_name,
     t2.Surname AS surname,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    CASE 
+        WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
+        ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
+    END AS item_name,
     t1.PaymentAmount AS amount,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
@@ -345,7 +351,7 @@ type GetReportsRechargesSummaryRow struct {
 	Email       sql.NullString
 	FirstName   sql.NullString
 	Surname     sql.NullString
-	ItemName    string
+	ItemName    interface{}
 	Amount      sql.NullString
 	Successful  bool
 	ServiceID   sql.NullInt64
@@ -390,7 +396,10 @@ func (q *Queries) GetReportsRechargesSummary(ctx context.Context, poi string) ([
 const getReportsSummary = `-- name: GetReportsSummary :many
 SELECT
     t2.DateCreated AS date_created,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    CASE 
+        WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
+        ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
+    END AS item_name,
     t4.RadiusUsername AS radius_username,
 
     CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
@@ -440,7 +449,7 @@ ORDER BY
 
 type GetReportsSummaryRow struct {
 	DateCreated    sql.NullTime
-	ItemName       string
+	ItemName       interface{}
 	RadiusUsername sql.NullString
 	AmountGross    string
 	AmountFee      string
