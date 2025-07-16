@@ -14,6 +14,7 @@ import {
 import { capitalCase, constantCase } from 'change-case';
 import { toast } from 'sonner';
 
+import type { ErrorResponse } from '@/api-client';
 import { useAuthentication } from '@/components/providers/authentication-provider';
 import { useTheme } from '@/components/providers/theme-provider';
 import {
@@ -53,9 +54,9 @@ export default function UserNav() {
     ...postApiAuthenticationLogoutMutation({
       client: apiClient,
     }),
-    onError: (error) =>
-      toast.error('Failed', {
-        description: error.message,
+    onError: (error: ErrorResponse) =>
+      toast.error(error.error, {
+        description: error.details,
         duration: 2000,
       }),
     onSuccess: () => {
