@@ -150,7 +150,7 @@ func main() {
 		html, err := scalar.ApiReferenceHTML(&scalar.Options{
 			SpecURL: func() string {
 				if env.MODE == "production" {
-					return "https://one-staging.thusa.co.za/api/api-spec"
+					return "https://reports.core.zingfibre.co.za/api/api-spec"
 				}
 
 				return fmt.Sprintf("http://localhost:%s/api/api-spec", env.PORT)
@@ -159,7 +159,7 @@ func main() {
 			Layout: scalar.LayoutModern,
 			BaseServerURL: func() string {
 				if env.MODE == "production" {
-					return "https://one-staging.thusa.co.za"
+					return "https://reports.core.zingfibre.co.za"
 				}
 
 				return fmt.Sprintf("http://localhost:%s", env.PORT)
