@@ -1,4 +1,9 @@
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router';
+import {
+  ErrorComponent,
+  createFileRoute,
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router';
 import { CalendarIcon, SigmaIcon } from 'lucide-react';
 
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
@@ -6,10 +11,12 @@ import uniqolor from 'uniqolor';
 import z from 'zod';
 
 import {
+  type ErrorResponse,
   type RechargeTypeCounts,
   getApiAnalyticsRechargeTypeCounts,
 } from '@/api-client';
 import AuthenticationGuard from '@/components/guards/authentication-guard';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Card,
   CardContent,
@@ -46,6 +53,39 @@ export const Route = createFileRoute('/')({
     period: z.string().default('months'),
     poi: z.string().default(''),
   }),
+  pendingComponent: () => (
+    <div className="flex flex-col w-full h-full items-center justify-center">
+      <Label className="text-muted-foreground">Loading dashboard...</Label>
+    </div>
+  ),
+  errorComponent: ({ error }: { error: Error | ErrorResponse }) => {
+    if ('error' in error) {
+      // Render a custom error message
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.error}</AlertTitle>
+            <AlertDescription>{error.details}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    if ('name' in error) {
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.name}</AlertTitle>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    // Fallback to the default ErrorComponent
+    return <ErrorComponent error={error} />;
+  },
+  wrapInSuspense: true,
   loaderDeps: ({ search: { count, period, poi } }) => ({
     count: count ?? 1,
     period: period ?? 'months',
@@ -59,6 +99,7 @@ export const Route = createFileRoute('/')({
         period,
         poi,
       },
+      throwOnError: true,
     });
 
     const result = {

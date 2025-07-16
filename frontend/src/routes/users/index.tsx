@@ -1,4 +1,5 @@
 import {
+  ErrorComponent,
   Link,
   Navigate,
   createFileRoute,
@@ -9,10 +10,11 @@ import {
 import { capitalCase } from 'change-case';
 import { z } from 'zod';
 
-import { type User, getApiUsers } from '@/api-client';
+import { type ErrorResponse, type User, getApiUsers } from '@/api-client';
 import CreateUserDialog from '@/components/dialogs/users/create';
 import DeleteUserDialog from '@/components/dialogs/users/delete';
 import RoleGuard from '@/components/guards/role-guard';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { DebounceInput } from '@/components/ui/debounce-input';
 import { Label } from '@/components/ui/label';
@@ -24,6 +26,41 @@ export const Route = createFileRoute('/users/')({
     page: z.coerce.number().default(1),
     search: z.string().default(''),
   }),
+  pendingComponent: () => (
+    <div className="flex flex-col w-full h-full items-center justify-center">
+      <Label className="text-muted-foreground">
+        Loading customers report...
+      </Label>
+    </div>
+  ),
+  errorComponent: ({ error }: { error: Error | ErrorResponse }) => {
+    if ('error' in error) {
+      // Render a custom error message
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.error}</AlertTitle>
+            <AlertDescription>{error.details}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    if ('name' in error) {
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.name}</AlertTitle>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    // Fallback to the default ErrorComponent
+    return <ErrorComponent error={error} />;
+  },
+  wrapInSuspense: true,
   loaderDeps: ({ search: { page, search } }) => ({ page, search }),
   loader: async ({ deps: { page, search } }) => {
     const { data } = await getApiUsers({
@@ -32,6 +69,7 @@ export const Route = createFileRoute('/users/')({
         page,
         search,
       },
+      throwOnError: true,
     });
 
     return {

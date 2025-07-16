@@ -1,4 +1,5 @@
 import {
+  ErrorComponent,
   Link,
   Navigate,
   createFileRoute,
@@ -8,10 +9,15 @@ import {
 
 import { z } from 'zod';
 
-import { type PointOfInterest, getApiPois } from '@/api-client';
+import {
+  type ErrorResponse,
+  type PointOfInterest,
+  getApiPois,
+} from '@/api-client';
 import CreatePoiDialog from '@/components/dialogs/pois/create';
 import DeletePoiDialog from '@/components/dialogs/pois/delete';
 import RoleGuard from '@/components/guards/role-guard';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { DebounceInput } from '@/components/ui/debounce-input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +29,41 @@ export const Route = createFileRoute('/pois/')({
     page: z.coerce.number().default(1),
     search: z.string().default(''),
   }),
+  pendingComponent: () => (
+    <div className="flex flex-col w-full h-full items-center justify-center">
+      <Label className="text-muted-foreground">
+        Loading customers report...
+      </Label>
+    </div>
+  ),
+  errorComponent: ({ error }: { error: Error | ErrorResponse }) => {
+    if ('error' in error) {
+      // Render a custom error message
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.error}</AlertTitle>
+            <AlertDescription>{error.details}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    if ('name' in error) {
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.name}</AlertTitle>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    // Fallback to the default ErrorComponent
+    return <ErrorComponent error={error} />;
+  },
+  wrapInSuspense: true,
   loaderDeps: ({ search: { page, search } }) => ({ page, search }),
   loader: async ({ deps: { page, search } }) => {
     const { data } = await getApiPois({
@@ -31,6 +72,7 @@ export const Route = createFileRoute('/pois/')({
         page,
         search,
       },
+      throwOnError: true,
     });
 
     return {

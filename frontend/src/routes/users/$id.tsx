@@ -1,12 +1,18 @@
 import { putApiUsersByIdMutation } from '@/api-client/@tanstack/react-query.gen';
 import { useMutation } from '@tanstack/react-query';
-import { Link, createFileRoute, useParams } from '@tanstack/react-router';
+import {
+  ErrorComponent,
+  Link,
+  createFileRoute,
+  useParams,
+} from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
 import { type ErrorResponse, type User, getApiUsersById } from '@/api-client';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -30,12 +36,48 @@ import { apiClient } from '@/lib/utils';
 
 export const Route = createFileRoute('/users/$id')({
   component: () => <RouteComponent />,
+  pendingComponent: () => (
+    <div className="flex flex-col w-full h-full items-center justify-center">
+      <Label className="text-muted-foreground">
+        Loading customers report...
+      </Label>
+    </div>
+  ),
+  errorComponent: ({ error }: { error: Error | ErrorResponse }) => {
+    if ('error' in error) {
+      // Render a custom error message
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.error}</AlertTitle>
+            <AlertDescription>{error.details}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    if ('name' in error) {
+      return (
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <Alert variant="destructive" className="w-full max-w-lg">
+            <AlertTitle>{error.name}</AlertTitle>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+
+    // Fallback to the default ErrorComponent
+    return <ErrorComponent error={error} />;
+  },
+  wrapInSuspense: true,
   loader: async ({ params }) => {
     const { id } = params;
 
     const { data } = await getApiUsersById({
       client: apiClient,
       path: { id },
+      throwOnError: true,
     });
 
     return {
