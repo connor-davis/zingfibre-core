@@ -402,25 +402,25 @@ SELECT
     END AS item_name,
     t4.RadiusUsername AS radius_username,
 
-    CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
-        THEN JSON_VALUE(PaymentServicePayload, '$.amount_gross') 
-        ELSE '0' 
-    END AS amount_gross,
+    COALESCE(
+        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_gross')),
+        '0'
+    ) AS amount_gross,
 
-    CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
-        THEN JSON_VALUE(PaymentServicePayload, '$.amount_fee') 
-        ELSE '0.0' 
-    END AS amount_fee,
+    COALESCE(
+        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_fee')),
+        '0'
+    ) AS amount_fee,
+    
+    COALESCE(
+        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_net')),
+        '0'
+    ) AS amount_net,
 
-    CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
-        THEN JSON_VALUE(PaymentServicePayload, '$.amount_net') 
-        ELSE '0' 
-    END AS amount_net,
-
-    CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
-        THEN JSON_VALUE(PaymentServicePayload, '$.accountNumber') 
-        ELSE '0'
-    END AS cash_code,
+    COALESCE(
+        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.accountNumber')),
+        '0'
+    ) AS cash_code,
 
     CASE 
         WHEN
@@ -451,10 +451,10 @@ type GetReportsSummaryRow struct {
 	DateCreated    sql.NullTime
 	ItemName       interface{}
 	RadiusUsername sql.NullString
-	AmountGross    string
-	AmountFee      string
-	AmountNet      string
-	CashCode       string
+	AmountGross    interface{}
+	AmountFee      interface{}
+	AmountNet      interface{}
+	CashCode       interface{}
 	CashAmount     int32
 	ServiceID      sql.NullInt64
 	BuildName      sql.NullString
