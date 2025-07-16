@@ -43,8 +43,12 @@ ORDER BY
 
 -- name: GetReportsCustomers :many
 SELECT
-    t1.*,
-    t2.RadiusUsername AS t2_radius_username
+    t1.FirstName AS first_name,
+    t1.Surname AS surname,
+    t1.Email AS email,
+    t1.PhoneNumber AS phone_number,
+
+    t2.RadiusUsername AS radius_username
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
@@ -52,7 +56,12 @@ WHERE
 
 -- name: GetReportsExpiringCustomers :many
 SELECT
-    t1.*,
+    t1.FirstName AS first_name,
+    t1.Surname AS surname,
+    t1.Email AS email,
+    t1.PhoneNumber AS phone_number,
+    t4.RadiusUsername AS radius_username,
+    t4.Address AS address,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
     t4.RadiusUsername AS t4_radius_username,
@@ -77,11 +86,13 @@ WHERE
 
 -- name: GetReportsRecharges :many
 SELECT
-    t2.RadiusUsername AS radius_username,
     t1.DateCreated AS date_created,
+    t2.Email AS email,
+    t2.FirstName AS first_name,
+    t2.Surname AS surname,
     CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
-    t1.*,
-    t2.*,
+    t1.PaymentAmount AS amount,
+    t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
     t6.Name AS build_type
@@ -101,11 +112,13 @@ ORDER BY
 
 -- name: GetReportsRechargesSummary :many
 SELECT
-    t2.RadiusUsername AS radius_username,
     t1.DateCreated AS date_created,
-    CONCAT(t3.Category, ' ', t3.Name, ' Access') as item_name,
-    t1.*,
-    t2.*,
+    t2.Email AS email,
+    t2.FirstName AS first_name,
+    t2.Surname AS surname,
+    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    t1.PaymentAmount AS amount,
+    t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
     t6.Name AS build_type
@@ -124,13 +137,9 @@ ORDER BY
 
 -- name: GetReportsSummary :many
 SELECT
-    t1.RadiusUsername AS radius_username,
     t2.DateCreated AS date_created,
-
-    CASE WHEN JSON_VALID(PaymentServicePayload) = 1
-        THEN CONCAT(t3.Category, ' ', t3.Name, ' Access')
-        ELSE 'Intro Package'
-    END AS item_name,
+    CONCAT(t3.Category, ' ', t3.Name, ' Access') AS item_name,
+    t4.RadiusUsername AS radius_username,
 
     CASE WHEN JSON_VALID(PaymentServicePayload) = 1 
         THEN JSON_VALUE(PaymentServicePayload, '$.amount_gross') 
@@ -175,12 +184,3 @@ WHERE
     AND t2.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
     t2.DateCreated DESC;
-
--- name: GetReportsUnregisteredCustomers :many
-SELECT
-    t1.*
-FROM
-    Customers t1
-LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
-WHERE
-    TRIM(LOWER(t2.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))),'%');
