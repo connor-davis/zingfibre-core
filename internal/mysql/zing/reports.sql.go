@@ -700,3 +700,60 @@ func (q *Queries) GetReportsSummary(ctx context.Context, poi string) ([]GetRepor
 	}
 	return items, nil
 }
+
+const getReportsUnregisteredCustomers = `-- name: GetReportsUnregisteredCustomers :many
+SELECT
+    t1.id, t1.firstname, t1.surname, t1.password, t1.passwordsalt, t1.email, t1.phonenumber, t1.idnumber, t1.radiususername, t1.preferemailcommunication, t1.language, t1.registrationapproved, t1.registrationdeclined, t1.setownpassword, t1.subscriptiontoken, t1.proofofaddressdocumentid, t1.idbookdocumentid, t1.approvedbyuserid, t1.addressid, t1.potentialaddress, t1.salesagentid, t1.datecreated, t1.deleted
+FROM
+    Customers t1
+LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
+WHERE
+    TRIM(LOWER(t2.POP)) LIKE CONCAT(TRIM(LOWER(?)),'%')
+`
+
+func (q *Queries) GetReportsUnregisteredCustomers(ctx context.Context, poi string) ([]Customer, error) {
+	rows, err := q.db.QueryContext(ctx, getReportsUnregisteredCustomers, poi)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Customer
+	for rows.Next() {
+		var i Customer
+		if err := rows.Scan(
+			&i.ID,
+			&i.Firstname,
+			&i.Surname,
+			&i.Password,
+			&i.Passwordsalt,
+			&i.Email,
+			&i.Phonenumber,
+			&i.Idnumber,
+			&i.Radiususername,
+			&i.Preferemailcommunication,
+			&i.Language,
+			&i.Registrationapproved,
+			&i.Registrationdeclined,
+			&i.Setownpassword,
+			&i.Subscriptiontoken,
+			&i.Proofofaddressdocumentid,
+			&i.Idbookdocumentid,
+			&i.Approvedbyuserid,
+			&i.Addressid,
+			&i.Potentialaddress,
+			&i.Salesagentid,
+			&i.Datecreated,
+			&i.Deleted,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

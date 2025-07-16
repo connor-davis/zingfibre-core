@@ -174,4 +174,13 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t2.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
-    t2.DateCreated DESC
+    t2.DateCreated DESC;
+
+-- name: GetReportsUnregisteredCustomers :many
+SELECT
+    t1.*
+FROM
+    Customers t1
+LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
+WHERE
+    TRIM(LOWER(t2.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))),'%');
