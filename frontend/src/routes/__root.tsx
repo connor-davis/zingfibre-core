@@ -29,7 +29,13 @@ export const Route = createRootRoute({
                         <img
                           src="/zing-logo.png"
                           alt="Zing Logo"
-                          className="h-7 dark:invert"
+                          className="h-7 dark:hidden"
+                        />
+
+                        <img
+                          src="/zing-logo-dark.png"
+                          alt="Zing Logo"
+                          className="h-7 hidden dark:block"
                         />
                       </Link>
                     </div>

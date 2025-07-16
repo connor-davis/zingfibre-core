@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { toast } from 'sonner';
 
+import type { ErrorResponse } from '@/api-client';
 import { useAuthentication } from '@/components/providers/authentication-provider';
 import {
   InputOTP,
@@ -32,9 +33,9 @@ export default function EnableMfaForm() {
     ...postApiAuthenticationMfaVerifyMutation({
       client: apiClient,
     }),
-    onError: (error) =>
-      toast.error('Failed', {
-        description: error.message,
+    onError: (error: ErrorResponse) =>
+      toast.error(error.error, {
+        description: error.details,
         duration: 2000,
       }),
     onSuccess: () => {
@@ -55,6 +56,18 @@ export default function EnableMfaForm() {
     <div className="flex flex-col items-center justify-center w-screen h-screen p-3 bg-muted">
       <div className="flex flex-col w-full md:max-w-96 items-center justify-center gap-5 md:gap-10 p-5 md:p-10 m-5 md:m-10 border rounded-md bg-popover">
         <div className="flex flex-col space-y-3 text-center items-center justify-center">
+          <img
+            src="/zing-logo.png"
+            alt="Zing Logo"
+            className="w-52 dark:hidden"
+          />
+
+          <img
+            src="/zing-logo-dark.png"
+            alt="Zing Logo"
+            className="w-52 hidden dark:block"
+          />
+
           <Label className="text-sm">Welcome, {user.Email}!</Label>
 
           <Label className="text-sm text-muted-foreground">

@@ -106,12 +106,8 @@ function RouteComponent() {
               </div>
               <div className="flex items-center gap-3">
                 <RoleGuard value={['admin', 'staff']}>
-                  <Link
-                    to={`/pois/$id`}
-                    params={{ id: poi.ID! }}
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Edit
+                  <Link to={`/pois/$id`} params={{ id: poi.ID! }}>
+                    <Button variant="ghost">Edit</Button>
                   </Link>
                 </RoleGuard>
 

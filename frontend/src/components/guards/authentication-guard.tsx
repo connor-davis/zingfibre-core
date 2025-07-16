@@ -91,7 +91,13 @@ export default function AuthenticationGuard({
             <img
               src="/zing-logo.png"
               alt="Zing Logo"
-              className="w-52 dark:invert"
+              className="w-52 dark:hidden"
+            />
+
+            <img
+              src="/zing-logo-dark.png"
+              alt="Zing Logo"
+              className="w-52 hidden dark:block"
             />
 
             <p className="text-muted-foreground">

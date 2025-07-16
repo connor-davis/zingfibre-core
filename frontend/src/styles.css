@@ -122,23 +122,14 @@ body {
 }
 
 .zing,
-:root {
+:root,
+.dark {
   --primary: hsl(34, 83%, 56%);
   --primary-foreground: hsl(0, 0%, 100%);
   --ring: hsl(34, 83%, 56%);
   --sidebar-primary: hsl(34, 83%, 56%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
   --sidebar-ring: hsl(34, 83%, 56%);
-}
-
-.zing,
-.dark {
-  --primary: hsl(272, 49%, 51%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --ring: hsl(272, 49%, 51%);
-  --sidebar-primary: hsl(272, 49%, 51%);
-  --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-ring: hsl(272, 49%, 51%);
 }
 
 @theme inline {
