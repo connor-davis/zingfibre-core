@@ -8,6 +8,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pois"
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/reports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -41,12 +42,16 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	analytics := analytics.NewAnalyticsRouter(zing, middleware, sessions)
 	analyticsRoutes := analytics.RegisterRoutes()
 
+	reports := reports.NewReportsRouter(zing, radius, middleware, sessions)
+	reportsRoutes := reports.RegisterRoutes()
+
 	routes := []system.Route{}
 
 	routes = append(routes, authenticationRoutes...)
 	routes = append(routes, usersRoutes...)
 	routes = append(routes, poisRoutes...)
 	routes = append(routes, analyticsRoutes...)
+	routes = append(routes, reportsRoutes...)
 
 	return &HttpRouter{
 		Routes:     routes,
