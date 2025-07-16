@@ -158,7 +158,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				Description: "Development",
 			},
 			{
-				URL:         "https://api.example.com",
+				URL:         "https://reports.core.zingfibre.co.za",
 				Description: "Production",
 			},
 		},
