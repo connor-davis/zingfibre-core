@@ -6,6 +6,7 @@ import (
 
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/analytics"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/exports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pois"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/reports"
@@ -45,6 +46,9 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	reports := reports.NewReportsRouter(zing, radius, middleware, sessions)
 	reportsRoutes := reports.RegisterRoutes()
 
+	exports := exports.NewExportsRouter(zing, radius, middleware, sessions)
+	exportsRoutes := exports.RegisterRoutes()
+
 	routes := []system.Route{}
 
 	routes = append(routes, authenticationRoutes...)
@@ -52,6 +56,7 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	routes = append(routes, poisRoutes...)
 	routes = append(routes, analyticsRoutes...)
 	routes = append(routes, reportsRoutes...)
+	routes = append(routes, exportsRoutes...)
 
 	return &HttpRouter{
 		Routes:     routes,
@@ -177,6 +182,10 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 			{
 				Name:        "Reports",
 				Description: "Reports related endpoints",
+			},
+			{
+				Name:        "Exports",
+				Description: "Exports related endpoints",
 			},
 		},
 		Paths: paths,
