@@ -331,6 +331,7 @@ export const columns = [
 ] as ColumnDef<ReportRechargeSummary>[];
 
 function RouteComponent() {
+  const { poi } = Route.useLoaderDeps();
   const { expiringCustomers } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -390,6 +391,16 @@ function RouteComponent() {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button asChild>
+            <a
+              href={`${import.meta.env.VITE_API_URL}/api/exports/recharges-summary?poi=${poi}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Export
+            </a>
+          </Button>
         </div>
       </div>
       <div className="flex flex-col w-full h-full gap-3">
