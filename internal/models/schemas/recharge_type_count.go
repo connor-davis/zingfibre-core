@@ -8,8 +8,4 @@ var RechargeTypeCountSchema = openapi3.NewSchema().WithProperties(map[string]*op
 	"Period": openapi3.NewStringSchema(),
 }).NewRef()
 
-var RechargeTypeCountArraySchema = openapi3.NewArraySchema().WithProperties(map[string]*openapi3.Schema{
-	"Count":  openapi3.NewIntegerSchema(),
-	"Type":   openapi3.NewStringSchema(),
-	"Period": openapi3.NewStringSchema(),
-}).NewRef()
+var RechargeTypeCountArraySchema = openapi3.NewArraySchema().WithItems(RechargeTypeCountSchema.Value).NewRef()

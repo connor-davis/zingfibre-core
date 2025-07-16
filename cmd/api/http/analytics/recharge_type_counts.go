@@ -1,6 +1,8 @@
 package analytics
 
 import (
+	"strconv"
+
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -8,6 +10,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 )
 
 func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
@@ -16,29 +19,44 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 	parameters := []*openapi3.ParameterRef{
 		{
 			Value: &openapi3.Parameter{
-				Name:        "count",
-				In:          "query",
-				Description: "The number of weeks/months to look back for the report",
-				Required:    true,
-				Schema:      openapi3.NewSchemaRef("integer", nil),
+				Name:     "count",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
 			},
 		},
 		{
 			Value: &openapi3.Parameter{
-				Name:        "period",
-				In:          "query",
-				Description: "The period for the report (weeks/months)",
-				Required:    true,
-				Schema:      openapi3.NewSchemaRef("string", nil),
+				Name:     "period",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
 			},
 		},
 		{
 			Value: &openapi3.Parameter{
-				Name:        "poi",
-				In:          "query",
-				Description: "Point of interest for the report",
-				Required:    true,
-				Schema:      openapi3.NewSchemaRef("string", nil),
+				Name:     "poi",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -126,13 +144,26 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 			period := c.Query("period")
 			poi := c.Query("poi")
 
+			countParsed, err := strconv.Atoi(count)
+
+			if err != nil {
+				log.Errorf("🔥 Error converting count to int: %s", err.Error())
+
+				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+					"message": constants.BadRequestError,
+					"details": constants.BadRequestErrorDetails,
+				})
+			}
+
 			rows, err := r.Zing.GetRechargeTypeCounts(c.Context(), zing.GetRechargeTypeCountsParams{
 				Period: period,
-				Count:  count,
 				Poi:    poi,
+				Count:  countParsed,
 			})
 
 			if err != nil {
+				log.Errorf("🔥 Error retrieving recharge type counts: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"message": constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
@@ -145,7 +176,7 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 				data = append(data, system.RechargeTypeCount{
 					Count:  int(row.RechargeCount),
 					Type:   row.ProductName.String,
-					Period: row.Period.(string),
+					Period: string(row.Period.([]byte)),
 				})
 			}
 

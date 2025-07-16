@@ -12,13 +12,13 @@ import (
 
 const getRecharge = `-- name: GetRecharge :one
 SELECT
-  id, customerid, productid, method, paymentservicepaymentid, paymentservicepayload, paymentservicequeryparams, rechargesuccessful, failurereason, paymentamount, expirydate, previousrmexpirydate, userid, fromrmsvcid, tormsvcid, datecreated, deleted
+	id, customerid, productid, method, paymentservicepaymentid, paymentservicepayload, paymentservicequeryparams, rechargesuccessful, failurereason, paymentamount, expirydate, previousrmexpirydate, userid, fromrmsvcid, tormsvcid, datecreated, deleted
 FROM
-  Recharges
+	Recharges
 WHERE
-  id = ?
+	id = ?
 LIMIT
-  1
+	1
 `
 
 func (q *Queries) GetRecharge(ctx context.Context, id string) (Recharge, error) {
@@ -48,54 +48,54 @@ func (q *Queries) GetRecharge(ctx context.Context, id string) (Recharge, error) 
 
 const getRechargeTypeCounts = `-- name: GetRechargeTypeCounts :many
 SELECT
-  product_name, recharge_count, period, max_date
+	product_name, recharge_count, period, max_date
 FROM
-  (
-    SELECT
-      t3.Name AS product_name,
-      COUNT(*) AS recharge_count,
-      CASE
-        WHEN ? = 'weeks' THEN CONCAT(
-          FLOOR((DAY(t1.DateCreated) - 1) / 7) + 1,
-          '-',
-          MONTH(t1.DateCreated),
-          '-',
-          YEAR(t1.DateCreated)
-        )
-        WHEN ? = 'months' THEN CONCAT(MONTH(t1.DateCreated), '-', YEAR(t1.DateCreated))
-      END AS period,
-      MAX(t1.DateCreated) AS max_date
-    FROM
-      Recharges t1
-      LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
-      LEFT JOIN Products t3 ON t1.ProductId = t3.Id
-    WHERE
-      TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
-      AND (
-        (
-          ? = 'weeks'
-          AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL ? WEEK)
-        )
-        OR (
-          ? = 'months'
-          AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL ? MONTH)
-        )
-      )
-    GROUP BY
-      t3.Name,
-      CASE
-        WHEN sqlc.arg (period) = 'weeks' THEN CONCAT(
-          FLOOR((DAY(t1.DateCreated) - 1) / 7) + 1,
-          '-',
-          MONTH(t1.DateCreated),
-          '-',
-          YEAR(t1.DateCreated)
-        )
-        WHEN sqlc.arg (period) = 'months' THEN CONCAT(MONTH(t1.DateCreated), '-', YEAR(t1.DateCreated))
-      END
-  ) AS Sub
+	(
+		SELECT
+			t3.Name AS product_name,
+			COUNT(*) AS recharge_count,
+			CASE
+				WHEN ? = 'weeks' THEN CONCAT(
+					FLOOR((DAY(t1.DateCreated) - 1) / 7) + 1,
+					'-',
+					MONTH(t1.DateCreated),
+					'-',
+					YEAR(t1.DateCreated)
+				)
+				WHEN ? = 'months' THEN CONCAT(MONTH(t1.DateCreated), '-', YEAR(t1.DateCreated))
+			END AS period,
+			MAX(t1.DateCreated) AS max_date
+		FROM
+			Recharges t1
+			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
+			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+		WHERE
+			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+			AND(
+				(
+					? = 'weeks'
+					AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL ? WEEK)
+				)
+				OR(
+					? = 'months'
+					AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL ? MONTH)
+				)
+			)
+		GROUP BY
+			t3.Name,
+			CASE
+				WHEN ? = 'weeks' THEN CONCAT(
+					FLOOR((DAY(t1.DateCreated) - 1) / 7) + 1,
+					'-',
+					MONTH(t1.DateCreated),
+					'-',
+					YEAR(t1.DateCreated)
+				)
+				WHEN ? = 'months' THEN CONCAT(MONTH(t1.DateCreated), '-', YEAR(t1.DateCreated))
+			END
+	) AS sub
 ORDER BY
-  MaxDate ASC
+	max_date ASC
 `
 
 type GetRechargeTypeCountsParams struct {
@@ -120,6 +120,8 @@ func (q *Queries) GetRechargeTypeCounts(ctx context.Context, arg GetRechargeType
 		arg.Count,
 		arg.Period,
 		arg.Count,
+		arg.Period,
+		arg.Period,
 	)
 	if err != nil {
 		return nil, err
@@ -149,13 +151,13 @@ func (q *Queries) GetRechargeTypeCounts(ctx context.Context, arg GetRechargeType
 
 const getRecharges = `-- name: GetRecharges :many
 SELECT
-  id, customerid, productid, method, paymentservicepaymentid, paymentservicepayload, paymentservicequeryparams, rechargesuccessful, failurereason, paymentamount, expirydate, previousrmexpirydate, userid, fromrmsvcid, tormsvcid, datecreated, deleted
+	id, customerid, productid, method, paymentservicepaymentid, paymentservicepayload, paymentservicequeryparams, rechargesuccessful, failurereason, paymentamount, expirydate, previousrmexpirydate, userid, fromrmsvcid, tormsvcid, datecreated, deleted
 FROM
-  Recharges
+	Recharges
 LIMIT
-  ?
+	?
 OFFSET
-  ?
+	?
 `
 
 type GetRechargesParams struct {

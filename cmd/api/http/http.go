@@ -180,6 +180,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				"LoginRequest":          schemas.LoginRequestSchema,
 				"SuccessResponse":       schemas.SuccessResponseSchema,
 				"ErrorResponse":         schemas.ErrorResponseSchema,
+				"RechargeTypeCount":     schemas.RechargeTypeCountSchema,
 			},
 		},
 	}

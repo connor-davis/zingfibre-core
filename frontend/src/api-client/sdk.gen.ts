@@ -8,6 +8,9 @@ import type {
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdErrors,
   DeleteApiUsersByIdResponses,
+  GetApiAnalyticsRechargeTypeCountsData,
+  GetApiAnalyticsRechargeTypeCountsErrors,
+  GetApiAnalyticsRechargeTypeCountsResponses,
   GetApiAuthenticationCheckData,
   GetApiAuthenticationCheckErrors,
   GetApiAuthenticationCheckResponses,
@@ -70,6 +73,25 @@ export type Options<
    * used to access values that aren't defined as part of the SDK function.
    */
   meta?: Record<string, unknown>;
+};
+
+/**
+ * Recharge Type Counts
+ * Endpoint to retrieve recharge type counts over a specified date range
+ */
+export const getApiAnalyticsRechargeTypeCounts = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiAnalyticsRechargeTypeCountsData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiAnalyticsRechargeTypeCountsResponses,
+    GetApiAnalyticsRechargeTypeCountsErrors,
+    ThrowOnError
+  >({
+    url: '/api/analytics/recharge-type-counts',
+    ...options,
+  });
 };
 
 /**

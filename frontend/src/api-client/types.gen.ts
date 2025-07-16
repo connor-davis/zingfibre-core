@@ -27,6 +27,12 @@ export type PointOfInterest = {
   Name?: string;
 };
 
+export type RechargeTypeCount = {
+  Count?: number;
+  Period?: string;
+  Type?: string;
+};
+
 export type SuccessResponse = {
   data?:
     | {
@@ -41,8 +47,28 @@ export type SuccessResponse = {
         Key?: string;
         Name?: string;
       }
-    | Array<unknown>
-    | Array<unknown>;
+    | {
+        Count?: number;
+        Period?: string;
+        Type?: string;
+      }
+    | Array<{
+        Email?: string;
+        ID?: string;
+        MfaEnabled?: boolean;
+        MfaVerified?: boolean;
+        Role?: 'admin' | 'staff' | 'user';
+      }>
+    | Array<{
+        ID?: string;
+        Key?: string;
+        Name?: string;
+      }>
+    | Array<{
+        Count?: number;
+        Period?: string;
+        Type?: string;
+      }>;
   details?: string;
   message?: string;
   pages?: number;
@@ -65,6 +91,87 @@ export type User = {
   MfaVerified?: boolean;
   Role?: 'admin' | 'staff' | 'user';
 };
+
+export type GetApiAnalyticsRechargeTypeCountsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    count?: number;
+    period?: string;
+    poi?: string;
+  };
+  url: '/api/analytics/recharge-type-counts';
+};
+
+export type GetApiAnalyticsRechargeTypeCountsErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiAnalyticsRechargeTypeCountsError =
+  GetApiAnalyticsRechargeTypeCountsErrors[keyof GetApiAnalyticsRechargeTypeCountsErrors];
+
+export type GetApiAnalyticsRechargeTypeCountsResponses = {
+  /**
+   * The recharge type counts for the specified date range
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | {
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiAnalyticsRechargeTypeCountsResponse =
+  GetApiAnalyticsRechargeTypeCountsResponses[keyof GetApiAnalyticsRechargeTypeCountsResponses];
 
 export type GetApiAuthenticationCheckData = {
   body?: never;
@@ -105,8 +212,28 @@ export type GetApiAuthenticationCheckResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -172,8 +299,28 @@ export type PostApiAuthenticationLoginResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -229,8 +376,28 @@ export type PostApiAuthenticationLogoutResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -295,8 +462,28 @@ export type PostApiAuthenticationMfaDisableResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -393,8 +580,28 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -461,8 +668,28 @@ export type PostApiAuthenticationRegisterResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -527,8 +754,28 @@ export type GetApiPoisResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -599,8 +846,28 @@ export type PostApiPoisResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -672,8 +939,28 @@ export type DeleteApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -745,8 +1032,28 @@ export type GetApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -821,8 +1128,28 @@ export type PutApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -887,8 +1214,28 @@ export type GetApiUsersResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -961,8 +1308,28 @@ export type PostApiUsersResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1027,8 +1394,28 @@ export type DeleteApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1100,8 +1487,28 @@ export type GetApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;
@@ -1176,8 +1583,28 @@ export type PutApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | Array<unknown>
-      | Array<unknown>;
+      | {
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<{
+          ID?: string;
+          Key?: string;
+          Name?: string;
+        }>
+      | Array<{
+          Count?: number;
+          Period?: string;
+          Type?: string;
+        }>;
     details?: string;
     message?: string;
     pages?: number;

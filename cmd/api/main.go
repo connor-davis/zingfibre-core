@@ -20,6 +20,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"golang.org/x/crypto/bcrypt"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
