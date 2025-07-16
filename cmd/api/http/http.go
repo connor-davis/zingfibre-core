@@ -150,6 +150,10 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 		},
 		Tags: openapi3.Tags{
 			{
+				Name:        "Analytics",
+				Description: "Analytics related endpoints",
+			},
+			{
 				Name:        "Authentication",
 				Description: "Authentication related endpoints",
 			},

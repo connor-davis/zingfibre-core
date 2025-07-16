@@ -22,5 +22,9 @@ func NewAnalyticsRouter(postgres *postgres.Queries, middleware *middleware.Middl
 }
 
 func (r *AnalyticsRouter) RegisterRoutes() []system.Route {
-	return []system.Route{}
+	rechargeTypeCountsRoute := r.RechargeTypeCountsRoute()
+
+	return []system.Route{
+		rechargeTypeCountsRoute,
+	}
 }
