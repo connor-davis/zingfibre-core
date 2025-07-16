@@ -27,10 +27,12 @@ export type PointOfInterest = {
   Name?: string;
 };
 
-export type RechargeTypeCount = {
-  Count?: number;
-  Period?: string;
-  Type?: string;
+export type RechargeTypeCounts = {
+  Items?: Array<{
+    Period?: string;
+    [key: string]: number | string | undefined;
+  }>;
+  Types?: Array<string>;
 };
 
 export type SuccessResponse = {
@@ -47,11 +49,6 @@ export type SuccessResponse = {
         Key?: string;
         Name?: string;
       }
-    | {
-        Count?: number;
-        Period?: string;
-        Type?: string;
-      }
     | Array<{
         Email?: string;
         ID?: string;
@@ -64,11 +61,13 @@ export type SuccessResponse = {
         Key?: string;
         Name?: string;
       }>
-    | Array<{
-        Count?: number;
-        Period?: string;
-        Type?: string;
-      }>;
+    | {
+        Items?: Array<{
+          Period?: string;
+          [key: string]: number | string | undefined;
+        }>;
+        Types?: Array<string>;
+      };
   details?: string;
   message?: string;
   pages?: number;
@@ -142,11 +141,6 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -159,11 +153,13 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -212,11 +208,6 @@ export type GetApiAuthenticationCheckResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -229,11 +220,13 @@ export type GetApiAuthenticationCheckResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -299,11 +292,6 @@ export type PostApiAuthenticationLoginResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -316,11 +304,13 @@ export type PostApiAuthenticationLoginResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -376,11 +366,6 @@ export type PostApiAuthenticationLogoutResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -393,11 +378,13 @@ export type PostApiAuthenticationLogoutResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -462,11 +449,6 @@ export type PostApiAuthenticationMfaDisableResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -479,11 +461,13 @@ export type PostApiAuthenticationMfaDisableResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -580,11 +564,6 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -597,11 +576,13 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -668,11 +649,6 @@ export type PostApiAuthenticationRegisterResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -685,11 +661,13 @@ export type PostApiAuthenticationRegisterResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -754,11 +732,6 @@ export type GetApiPoisResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -771,11 +744,13 @@ export type GetApiPoisResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -846,11 +821,6 @@ export type PostApiPoisResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -863,11 +833,13 @@ export type PostApiPoisResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -939,11 +911,6 @@ export type DeleteApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -956,11 +923,13 @@ export type DeleteApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1032,11 +1001,6 @@ export type GetApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1049,11 +1013,13 @@ export type GetApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1128,11 +1094,6 @@ export type PutApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1145,11 +1106,13 @@ export type PutApiPoisByIdResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1214,11 +1177,6 @@ export type GetApiUsersResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1231,11 +1189,13 @@ export type GetApiUsersResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1308,11 +1268,6 @@ export type PostApiUsersResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1325,11 +1280,13 @@ export type PostApiUsersResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1394,11 +1351,6 @@ export type DeleteApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1411,11 +1363,13 @@ export type DeleteApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1487,11 +1441,6 @@ export type GetApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1504,11 +1453,13 @@ export type GetApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;
@@ -1583,11 +1534,6 @@ export type PutApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }
-      | {
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }
       | Array<{
           Email?: string;
           ID?: string;
@@ -1600,11 +1546,13 @@ export type PutApiUsersByIdResponses = {
           Key?: string;
           Name?: string;
         }>
-      | Array<{
-          Count?: number;
-          Period?: string;
-          Type?: string;
-        }>;
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        };
     details?: string;
     message?: string;
     pages?: number;

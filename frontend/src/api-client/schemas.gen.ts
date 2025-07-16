@@ -72,16 +72,27 @@ export const PointOfInterestSchema = {
   },
 } as const;
 
-export const RechargeTypeCountSchema = {
+export const RechargeTypeCountsSchema = {
   properties: {
-    Count: {
-      type: 'integer',
+    Items: {
+      items: {
+        additionalProperties: {
+          type: 'integer',
+        },
+        properties: {
+          Period: {
+            type: 'string',
+          },
+        },
+        type: 'object',
+      },
+      type: 'array',
     },
-    Period: {
-      type: 'string',
-    },
-    Type: {
-      type: 'string',
+    Types: {
+      items: {
+        type: 'string',
+      },
+      type: 'array',
     },
   },
 } as const;
@@ -123,19 +134,6 @@ export const SuccessResponseSchema = {
               type: 'string',
             },
             Name: {
-              type: 'string',
-            },
-          },
-        },
-        {
-          properties: {
-            Count: {
-              type: 'integer',
-            },
-            Period: {
-              type: 'string',
-            },
-            Type: {
               type: 'string',
             },
           },
@@ -184,20 +182,28 @@ export const SuccessResponseSchema = {
           type: 'array',
         },
         {
-          items: {
-            properties: {
-              Count: {
-                type: 'integer',
+          properties: {
+            Items: {
+              items: {
+                additionalProperties: {
+                  type: 'integer',
+                },
+                properties: {
+                  Period: {
+                    type: 'string',
+                  },
+                },
+                type: 'object',
               },
-              Period: {
+              type: 'array',
+            },
+            Types: {
+              items: {
                 type: 'string',
               },
-              Type: {
-                type: 'string',
-              },
+              type: 'array',
             },
           },
-          type: 'array',
         },
       ],
     },

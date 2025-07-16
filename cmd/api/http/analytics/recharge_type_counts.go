@@ -1,6 +1,7 @@
 package analytics
 
 import (
+	"slices"
 	"strconv"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
@@ -72,16 +73,18 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 					Example: map[string]any{
 						"message": constants.Success,
 						"details": constants.SuccessDetails,
-						"data": []system.RechargeTypeCount{
-							{
-								Count:  1,
-								Type:   "Example",
-								Period: "Weekly",
+						"data": map[string][]system.RechargeTypeCount{
+							"Weekly": {
+								{
+									Count:  1,
+									Period: "01-01-1990",
+								},
 							},
-							{
-								Count:  1,
-								Type:   "Example",
-								Period: "Monthly",
+							"Monthly": {
+								{
+									Count:  1,
+									Period: "01-1990",
+								},
 							},
 						},
 					},
@@ -158,7 +161,7 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 			rows, err := r.Zing.GetRechargeTypeCounts(c.Context(), zing.GetRechargeTypeCountsParams{
 				Period: period,
 				Poi:    poi,
-				Count:  countParsed,
+				Count:  countParsed + 1,
 			})
 
 			if err != nil {
@@ -170,20 +173,53 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 				})
 			}
 
-			data := []system.RechargeTypeCount{}
+			data := []map[string]interface{}{}
+			uniquePeriods := []string{}
+			uniqueTypes := []string{}
 
 			for _, row := range rows {
-				data = append(data, system.RechargeTypeCount{
-					Count:  int(row.RechargeCount),
-					Type:   row.ProductName.String,
-					Period: string(row.Period.([]byte)),
-				})
+				if !slices.Contains(uniquePeriods, string(row.Period.([]byte))) {
+					uniquePeriods = append(uniquePeriods, string(row.Period.([]byte)))
+					continue
+				}
+			}
+
+			for _, row := range rows {
+				if row.ProductName.String == "" {
+					row.ProductName.String = "Intro Package"
+				}
+
+				if !slices.Contains(uniqueTypes, row.ProductName.String) {
+					uniqueTypes = append(uniqueTypes, row.ProductName.String)
+					continue
+				}
+			}
+
+			for _, period := range uniquePeriods {
+				base := map[string]interface{}{
+					"Period": period,
+				}
+
+				for _, row := range rows {
+					if string(row.Period.([]byte)) == period {
+						if _, exists := base[row.ProductName.String]; !exists {
+							base[row.ProductName.String] = int(row.RechargeCount)
+						} else {
+							base[row.ProductName.String] = int(base[row.ProductName.String].(int64) + row.RechargeCount)
+						}
+					}
+				}
+
+				data = append(data, base)
 			}
 
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
-				"data":    data,
+				"data": &fiber.Map{
+					"Items": data,
+					"Types": uniqueTypes,
+				},
 			})
 		},
 	}

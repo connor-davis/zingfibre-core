@@ -8,10 +8,9 @@ var SuccessResponseSchema = openapi3.NewSchema().WithProperties(map[string]*open
 	"data": openapi3.NewOneOfSchema(
 		UserSchema.Value,
 		PointOfInterestSchema.Value,
-		RechargeTypeCountSchema.Value,
 		UserArraySchema.Value,
 		PointOfInterestArraySchema.Value,
-		RechargeTypeCountArraySchema.Value,
+		RechargeTypeCountsSchema.Value,
 	),
 	"pages": openapi3.NewIntegerSchema().WithDefault(1),
 }).NewRef()

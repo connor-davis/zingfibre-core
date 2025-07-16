@@ -2,10 +2,15 @@ package schemas
 
 import "github.com/getkin/kin-openapi/openapi3"
 
-var RechargeTypeCountSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-	"Count":  openapi3.NewIntegerSchema(),
-	"Type":   openapi3.NewStringSchema(),
-	"Period": openapi3.NewStringSchema(),
+var RechargeTypeCountsSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
+	"Items": openapi3.NewArraySchema().WithItems(
+		openapi3.NewObjectSchema().
+			WithProperties(map[string]*openapi3.Schema{
+				"Period": openapi3.NewStringSchema(),
+			}).
+			WithAdditionalProperties(openapi3.NewIntegerSchema()),
+	),
+	"Types": openapi3.NewArraySchema().WithItems(
+		openapi3.NewStringSchema(),
+	),
 }).NewRef()
-
-var RechargeTypeCountArraySchema = openapi3.NewArraySchema().WithItems(RechargeTypeCountSchema.Value).NewRef()
