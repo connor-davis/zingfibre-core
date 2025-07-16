@@ -11,6 +11,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
@@ -20,11 +21,12 @@ import (
 type HttpRouter struct {
 	Routes     []system.Route
 	Postgres   *postgres.Queries
+	Zing       *zing.Queries
 	Middleware *middleware.Middleware
 	Sessions   *session.Store
 }
 
-func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware, sessions *session.Store) *HttpRouter {
+func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, middleware *middleware.Middleware, sessions *session.Store) *HttpRouter {
 	authentication := authentication.NewAuthenticationRouter(postgres, middleware, sessions)
 	authenticationRoutes := authentication.RegisterRoutes()
 
@@ -34,7 +36,7 @@ func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware
 	pois := pois.NewPointOfInterestsRouter(postgres, middleware, sessions)
 	poisRoutes := pois.RegisterRoutes()
 
-	analytics := analytics.NewAnalyticsRouter(postgres, middleware, sessions)
+	analytics := analytics.NewAnalyticsRouter(zing, middleware, sessions)
 	analyticsRoutes := analytics.RegisterRoutes()
 
 	routes := []system.Route{}

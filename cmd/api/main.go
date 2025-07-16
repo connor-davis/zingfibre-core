@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/env"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/connor-davis/zingfibre-core/internal/sessions"
 	"github.com/goccy/go-json"
@@ -23,17 +25,43 @@ import (
 func main() {
 	context := context.Background()
 
+	log.Info("✅ Starting Zingfibre Reporting API...")
+	log.Info("🔃 Connecting to Zingfibre databases...")
+
+	zingConnection, err := sql.Open("mysql", string(env.ZING_DSN))
+
+	if err != nil {
+		log.Errorf("🔥 Failed to connect to Zing database: %s", err.Error())
+
+		return
+	}
+
+	defer zingConnection.Close()
+
+	if err := zingConnection.Ping(); err != nil {
+		log.Errorf("🔥 Failed to ping Zing database: %s", err.Error())
+
+		return
+	}
+
+	log.Info("✅ Connected to Zingfibre MySQL database successfully")
+
+	zingQueries := zing.New(zingConnection)
+
+	log.Info("🔃 Connecting to PostgreSQL database...")
+
 	postgresPoolConfig, err := pgxpool.ParseConfig(string(env.POSTGRES_DSN))
 
 	if err != nil {
-		log.Infof("🔥 Failed to parse PostgreSQL connection string: %v", err)
+		log.Infof("🔥 Failed to parse PostgreSQL connection string: %s", err.Error())
+
 		return
 	}
 
 	postgresPool, err := pgxpool.NewWithConfig(context, postgresPoolConfig)
 
 	if err != nil {
-		log.Infof("🔥 Failed to connect to PostgreSQL: %v", err)
+		log.Infof("🔥 Failed to connect to PostgreSQL: %s", err.Error())
 	}
 
 	defer postgresPool.Close()
@@ -49,7 +77,7 @@ func main() {
 	existingAdmin, err := postgresQueries.GetUserByEmail(context, string(env.ADMIN_EMAIL))
 
 	if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
-		log.Infof("🔥 Error checking for existing admin user: %v", err)
+		log.Infof("🔥 Error checking for existing admin user: %s", err.Error())
 		return
 	}
 
@@ -60,6 +88,7 @@ func main() {
 
 		if err != nil {
 			log.Errorf("🔥 Error hashing admin password: %s", err.Error())
+
 			return
 		}
 
@@ -69,6 +98,7 @@ func main() {
 			Role:     postgres.RoleTypeAdmin,
 		}); err != nil {
 			log.Errorf("🔥 Error creating admin user: %s", err.Error())
+
 			return
 		}
 
@@ -96,7 +126,7 @@ func main() {
 
 	middleware := middleware.NewMiddleware(postgresQueries, sessions)
 
-	httpRouter := http.NewHttpRouter(postgresQueries, middleware, sessions)
+	httpRouter := http.NewHttpRouter(postgresQueries, zingQueries, middleware, sessions)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 
@@ -136,9 +166,9 @@ func main() {
 
 	httpRouter.InitializeRoutes(api)
 
-	log.Info("Starting Zingfibre Reporting API on port 4000...")
+	log.Info("✅ Starting Zingfibre Reporting API on port 4000...")
 
 	if err := app.Listen(":4000"); err != nil {
-		log.Infof("Failed to start server: %v", err)
+		log.Errorf("🔥 Failed to start server: %v", err)
 	}
 }

@@ -3,19 +3,19 @@ package analytics
 import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
-	"github.com/connor-davis/zingfibre-core/internal/postgres"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
 type AnalyticsRouter struct {
-	Postgres   *postgres.Queries
+	Zing       *zing.Queries
 	Middleware *middleware.Middleware
 	Sessions   *session.Store
 }
 
-func NewAnalyticsRouter(postgres *postgres.Queries, middleware *middleware.Middleware, sessions *session.Store) *AnalyticsRouter {
+func NewAnalyticsRouter(zing *zing.Queries, middleware *middleware.Middleware, sessions *session.Store) *AnalyticsRouter {
 	return &AnalyticsRouter{
-		Postgres:   postgres,
+		Zing:       zing,
 		Middleware: middleware,
 		Sessions:   sessions,
 	}
