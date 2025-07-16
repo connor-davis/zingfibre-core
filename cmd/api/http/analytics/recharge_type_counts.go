@@ -161,7 +161,7 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 			rows, err := r.Zing.GetRechargeTypeCounts(c.Context(), zing.GetRechargeTypeCountsParams{
 				Period: period,
 				Poi:    poi,
-				Count:  countParsed + 1,
+				Count:  countParsed,
 			})
 
 			if err != nil {
