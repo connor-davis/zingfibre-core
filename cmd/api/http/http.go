@@ -11,6 +11,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -22,11 +23,12 @@ type HttpRouter struct {
 	Routes     []system.Route
 	Postgres   *postgres.Queries
 	Zing       *zing.Queries
+	Radius     *radius.Queries
 	Middleware *middleware.Middleware
 	Sessions   *session.Store
 }
 
-func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, middleware *middleware.Middleware, sessions *session.Store) *HttpRouter {
+func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radius.Queries, middleware *middleware.Middleware, sessions *session.Store) *HttpRouter {
 	authentication := authentication.NewAuthenticationRouter(postgres, middleware, sessions)
 	authenticationRoutes := authentication.RegisterRoutes()
 

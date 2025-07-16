@@ -10,6 +10,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/env"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/connor-davis/zingfibre-core/internal/sessions"
@@ -40,15 +41,22 @@ func main() {
 
 	defer zingConnection.Close()
 
-	if err := zingConnection.Ping(); err != nil {
-		log.Errorf("🔥 Failed to ping Zing database: %s", err.Error())
+	log.Info("✅ Connected to Zingfibre Zing database successfully")
+
+	radiusConnection, err := sql.Open("mysql", string(env.RADIUS_DSN))
+
+	if err != nil {
+		log.Errorf("🔥 Failed to connect to Radius database: %s", err.Error())
 
 		return
 	}
 
-	log.Info("✅ Connected to Zingfibre MySQL database successfully")
+	defer radiusConnection.Close()
+
+	log.Info("✅ Connected to Zingfibre Radius database successfully")
 
 	zingQueries := zing.New(zingConnection)
+	radiusQueries := radius.New(radiusConnection)
 
 	log.Info("🔃 Connecting to PostgreSQL database...")
 
@@ -128,7 +136,7 @@ func main() {
 
 	middleware := middleware.NewMiddleware(postgresQueries, sessions)
 
-	httpRouter := http.NewHttpRouter(postgresQueries, zingQueries, middleware, sessions)
+	httpRouter := http.NewHttpRouter(postgresQueries, zingQueries, radiusQueries, middleware, sessions)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 
