@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/analytics"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pois"
@@ -33,11 +34,15 @@ func NewHttpRouter(postgres *postgres.Queries, middleware *middleware.Middleware
 	pois := pois.NewPointOfInterestsRouter(postgres, middleware, sessions)
 	poisRoutes := pois.RegisterRoutes()
 
+	analytics := analytics.NewAnalyticsRouter(postgres, middleware, sessions)
+	analyticsRoutes := analytics.RegisterRoutes()
+
 	routes := []system.Route{}
 
 	routes = append(routes, authenticationRoutes...)
 	routes = append(routes, usersRoutes...)
 	routes = append(routes, poisRoutes...)
+	routes = append(routes, analyticsRoutes...)
 
 	return &HttpRouter{
 		Routes:     routes,
