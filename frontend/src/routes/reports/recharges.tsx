@@ -457,7 +457,7 @@ function RouteComponent() {
 
           <Button asChild>
             <a
-              href={`${import.meta.env.VITE_API_URL}/api/exports/recharges?poi=${poi}`}
+              href={`${import.meta.env.VITE_API_URL}/api/exports/recharges?poi=${poi}&startDate=${startDate}&endDate=${endDate}`}
               target="_blank"
               rel="noopener noreferrer"
             >
