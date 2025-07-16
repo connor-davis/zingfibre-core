@@ -43,7 +43,7 @@ var ReportRechargeSchema = openapi3.NewSchema().WithProperties(map[string]*opena
 	"ItemName":    openapi3.NewStringSchema(),
 	"Amount":      openapi3.NewFloat64Schema(),
 	"Successful":  openapi3.NewBoolSchema(),
-	"ServiceId":   openapi3.NewStringSchema(),
+	"ServiceId":   openapi3.NewInt64Schema(),
 	"BuildName":   openapi3.NewStringSchema(),
 	"BuildType":   openapi3.NewStringSchema(),
 }).NewRef()
@@ -59,7 +59,7 @@ var ReportRechargeSummarySchema = openapi3.NewSchema().WithProperties(map[string
 	"ItemName":    openapi3.NewStringSchema(),
 	"Amount":      openapi3.NewFloat64Schema(),
 	"Successful":  openapi3.NewBoolSchema(),
-	"ServiceId":   openapi3.NewStringSchema(),
+	"ServiceId":   openapi3.NewInt64Schema(),
 	"BuildName":   openapi3.NewStringSchema(),
 	"BuildType":   openapi3.NewStringSchema(),
 }).NewRef()

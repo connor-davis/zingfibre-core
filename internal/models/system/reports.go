@@ -35,7 +35,7 @@ type ReportRecharge struct {
 	ItemName    string  `json:"ItemName,omitempty"`
 	Amount      float64 `json:"Amount,omitempty"`
 	Successful  bool    `json:"Successful,omitempty"`
-	ServiceId   string  `json:"ServiceId,omitempty"`
+	ServiceId   int64   `json:"ServiceId,omitempty"`
 	BuildName   string  `json:"BuildName,omitempty"`
 	BuildType   string  `json:"BuildType,omitempty"`
 }
@@ -49,7 +49,7 @@ type ReportSummary struct {
 	AmountNet      string  `json:"AmountNet,omitempty"`
 	CashCode       string  `json:"CashCode,omitempty"`
 	CashAmount     float64 `json:"CashAmount,omitempty"`
-	ServiceId      string  `json:"ServiceId,omitempty"`
+	ServiceId      int64   `json:"ServiceId,omitempty"`
 	BuildName      string  `json:"BuildName,omitempty"`
 	BuildType      string  `json:"BuildType,omitempty"`
 }
