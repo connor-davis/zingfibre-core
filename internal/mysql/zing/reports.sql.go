@@ -70,7 +70,6 @@ SELECT
     t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
-    t4.RadiusUsername AS t4_radius_username,
     CONCAT(?) AS expiration,
     CONCAT(?) AS address
 FROM
@@ -105,7 +104,6 @@ type GetReportsExpiringCustomersRow struct {
 	RadiusUsername       sql.NullString
 	LastPurchaseDuration sql.NullString
 	LastPurchaseSpeed    sql.NullString
-	T4RadiusUsername     sql.NullString
 	Expiration           string
 	Address              string
 }
@@ -127,7 +125,6 @@ func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, arg GetReport
 			&i.RadiusUsername,
 			&i.LastPurchaseDuration,
 			&i.LastPurchaseSpeed,
-			&i.T4RadiusUsername,
 			&i.Expiration,
 			&i.Address,
 		); err != nil {

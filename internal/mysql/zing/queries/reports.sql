@@ -62,7 +62,6 @@ SELECT
     t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
-    t4.RadiusUsername AS t4_radius_username,
     CONCAT(sqlc.arg('expiration')) AS expiration,
     CONCAT(sqlc.arg('address')) AS address
 FROM
