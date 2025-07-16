@@ -49,8 +49,7 @@ export default function Header() {
       {!isLoadingPointsOfInterest && (
         <div className="flex items-center gap-3 p-3">
           <Select
-            defaultValue="--"
-            value={poi}
+            value={poi ?? '--'}
             onValueChange={(value) => {
               router.navigate({
                 to: routerState.location.pathname,
