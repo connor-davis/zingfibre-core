@@ -44,14 +44,14 @@ FROM
 		WHERE
 			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
 			AND(
-				(
-					sqlc.arg('period') = 'weeks'
-					AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL sqlc.arg('count') WEEK)
-				)
-				OR(
-					sqlc.arg('period') = 'months'
-					AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL sqlc.arg('count') MONTH)
-				)
+                (
+                    sqlc.arg('period') = 'weeks'
+                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (sqlc.arg('count') - 1) WEEK)
+                )
+                OR(
+                    sqlc.arg('period') = 'months'
+                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('count') - 1) MONTH)
+                )
 			)
 		GROUP BY
 			t3.Name,

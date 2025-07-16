@@ -72,14 +72,14 @@ FROM
 		WHERE
 			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
 			AND(
-				(
-					? = 'weeks'
-					AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL ? WEEK)
-				)
-				OR(
-					? = 'months'
-					AND t1.DateCreated >= DATE_SUB(NOW(), INTERVAL ? MONTH)
-				)
+                (
+                    ? = 'weeks'
+                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (? - 1) WEEK)
+                )
+                OR(
+                    ? = 'months'
+                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+                )
 			)
 		GROUP BY
 			t3.Name,
