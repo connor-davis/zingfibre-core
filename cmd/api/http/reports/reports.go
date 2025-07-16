@@ -26,6 +26,10 @@ func NewReportsRouter(zing *zing.Queries, radius *radius.Queries, middleware *mi
 
 func (r *ReportsRouter) RegisterRoutes() []system.Route {
 	customersRoute := r.CustomersRoute()
+	expiringCustomersRoute := r.ExpiringCustomersRoute()
 
-	return []system.Route{customersRoute}
+	return []system.Route{
+		customersRoute,
+		expiringCustomersRoute,
+	}
 }

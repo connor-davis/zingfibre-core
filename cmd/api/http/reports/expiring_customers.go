@@ -4,12 +4,15 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 )
 
-func (r *ReportsRouter) CustomersRoute() system.Route {
+func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 	responses := openapi3.NewResponses()
 
 	parameters := []*openapi3.ParameterRef{
@@ -34,19 +37,23 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 			WithJSONSchema(
 				schemas.SuccessResponseSchema.Value,
 			).
-			WithDescription("The zingfibre customers report").
+			WithDescription("The zingfibre expiring customers report").
 			WithContent(openapi3.Content{
 				"application/json": &openapi3.MediaType{
 					Example: map[string]any{
 						"message": constants.Success,
 						"details": constants.SuccessDetails,
-						"data": []system.ReportCustomer{
+						"data": []system.ReportExpiringCustomer{
 							{
-								FirstName:      "John",
-								Surname:        "Doe",
-								Email:          "john.doe@example.com",
-								PhoneNumber:    "123-456-7890",
-								RadiusUsername: "johnny",
+								FirstName:            "Jane",
+								Surname:              "Smith",
+								Email:                "jane.smith@example.com",
+								PhoneNumber:          "987-654-3210",
+								RadiusUsername:       "janesmith",
+								LastPurchaseDuration: "30 days",
+								LastPurchaseSpeed:    "100 Mbps",
+								Expiration:           "2023-12-31T23:59:59Z",
+								Address:              "123 Main St, Anytown, USA",
 							},
 						},
 					},
@@ -91,15 +98,15 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
-			Summary:     "Customers Report",
-			Description: "Endpoint to retrieve customers report",
+			Summary:     "Expiring Customers Report",
+			Description: "Endpoint to retrieve expiring customers report",
 			Tags:        []string{"Reports"},
 			Parameters:  parameters,
 			RequestBody: nil,
 			Responses:   responses,
 		},
 		Method: system.GetMethod,
-		Path:   "/reports/customers",
+		Path:   "/reports/expiring-customers",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
 			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
@@ -107,24 +114,54 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
 
-			customers, err := r.Zing.GetReportsCustomers(c.Context(), poi)
+			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context(), poi)
 
 			if err != nil {
+				log.Errorf("🔥 Error fetching expiring customers from Radius: %s", err.Error())
+
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
 					"details": constants.InternalServerErrorDetails,
 				})
 			}
 
-			data := []system.ReportCustomer{}
+			expiringCustomers, err := r.Zing.GetReportsExpiringCustomers(c.Context(), zing.GetReportsExpiringCustomersParams{
+				Expiration: "",
+				Address:    "",
+				Poi:        poi,
+			})
 
-			for _, customer := range customers {
-				data = append(data, system.ReportCustomer{
-					FirstName:      customer.FirstName.String,
-					Surname:        customer.Surname.String,
-					Email:          customer.Email.String,
-					PhoneNumber:    customer.PhoneNumber.String,
-					RadiusUsername: customer.RadiusUsername.String,
+			if err != nil {
+				log.Errorf("🔥 Error fetching expiring customers from Zing: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			data := []system.ReportExpiringCustomer{}
+
+			for _, expiringCustomer := range expiringCustomers {
+				expiringCustomerRadius := &radius.GetReportsExpiringCustomersRow{}
+
+				for _, radiusCustomer := range expiringCustomersRadius {
+					if radiusCustomer.Username == expiringCustomer.RadiusUsername.String {
+						expiringCustomerRadius = &radiusCustomer
+						break
+					}
+				}
+
+				data = append(data, system.ReportExpiringCustomer{
+					FirstName:            expiringCustomer.FirstName.String,
+					Surname:              expiringCustomer.Surname.String,
+					Email:                expiringCustomer.Email.String,
+					PhoneNumber:          expiringCustomer.PhoneNumber.String,
+					RadiusUsername:       expiringCustomer.RadiusUsername.String,
+					LastPurchaseDuration: expiringCustomer.LastPurchaseDuration.String,
+					LastPurchaseSpeed:    expiringCustomer.LastPurchaseSpeed.String,
+					Expiration:           expiringCustomerRadius.Expiration.Time.Format("2006-01-02T15:04:05Z07:00"),
+					Address:              expiringCustomerRadius.Address,
 				})
 			}
 
