@@ -178,19 +178,19 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 			uniqueTypes := []string{}
 
 			for _, row := range rows {
-				if !slices.Contains(uniquePeriods, string(row.Period.([]byte))) {
-					uniquePeriods = append(uniquePeriods, string(row.Period.([]byte)))
+				if !slices.Contains(uniquePeriods, string(row.RechargePeriod.([]byte))) {
+					uniquePeriods = append(uniquePeriods, string(row.RechargePeriod.([]byte)))
 					continue
 				}
 			}
 
 			for _, row := range rows {
-				if row.ProductName.String == "" {
-					row.ProductName.String = "Intro Package"
+				if row.RechargeName.String == "" {
+					row.RechargeName.String = "Intro Package"
 				}
 
-				if !slices.Contains(uniqueTypes, row.ProductName.String) {
-					uniqueTypes = append(uniqueTypes, row.ProductName.String)
+				if !slices.Contains(uniqueTypes, row.RechargeName.String) {
+					uniqueTypes = append(uniqueTypes, row.RechargeName.String)
 					continue
 				}
 			}
@@ -201,15 +201,15 @@ func (r *AnalyticsRouter) RechargeTypeCountsRoute() system.Route {
 				}
 
 				for _, row := range rows {
-					if string(row.Period.([]byte)) == period {
-						if row.ProductName.String == "" {
-							row.ProductName.String = "Intro Package"
+					if string(row.RechargePeriod.([]byte)) == period {
+						if row.RechargeName.String == "" {
+							row.RechargeName.String = "Intro Package"
 						}
 
-						if _, exists := base[row.ProductName.String]; !exists {
-							base[row.ProductName.String] = int(row.RechargeCount)
+						if _, exists := base[row.RechargeName.String]; !exists {
+							base[row.RechargeName.String] = int(row.RechargeCount)
 						} else {
-							base[row.ProductName.String] = int(base[row.ProductName.String].(int64) + row.RechargeCount)
+							base[row.RechargeName.String] = int(base[row.RechargeName.String].(int64) + row.RechargeCount)
 						}
 					}
 				}

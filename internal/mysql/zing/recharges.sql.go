@@ -48,34 +48,45 @@ func (q *Queries) GetRecharge(ctx context.Context, id string) (Recharge, error) 
 
 const getRechargeTypeCounts = `-- name: GetRechargeTypeCounts :many
 SELECT
-  t3.Name AS product_name,
-  COUNT(*) AS recharge_count,
-  CASE
-    WHEN ? = 'weeks' THEN DATE_FORMAT(t1.DateCreated, '%u-%Y')
-    WHEN ? = 'months' THEN DATE_FORMAT(t1.DateCreated, '%m-%Y')
-  END AS period,
-  MAX(t1.DateCreated) AS max_date
+	recharge_name, recharge_count, recharge_period, recharge_max_date
 FROM
-  Recharges t1
-  LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
-  LEFT JOIN Products t3 ON t1.ProductId = t3.Id
-WHERE
-  TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
-  AND(
-        (
-            ? = 'weeks'
-            AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (? - 1) WEEK)
-        )
-        OR(
-            ? = 'months'
-            AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
-        )
-    )
-GROUP BY
-  t3.Name,
-  period
+	(
+		SELECT
+			t3.Name AS recharge_name,
+			COUNT(*) AS recharge_count,
+			CASE
+				WHEN ? = 'weeks' THEN CONCAT(
+					FLOOR((DAY(t1.DateCreated) - 1) / 7) + 1,
+					'-',
+					MONTH(t1.DateCreated),
+					'-',
+					YEAR(t1.DateCreated)
+				)
+				WHEN ? = 'months' THEN CONCAT(MONTH(t1.DateCreated), '-', YEAR(t1.DateCreated))
+			END AS recharge_period,
+			MAX(t1.DateCreated) AS recharge_max_date
+		FROM
+			Recharges t1
+			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
+			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+		WHERE
+			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+			AND(
+                (
+                    ? = 'weeks'
+                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (? - 1) WEEK)
+                )
+                OR(
+                    ? = 'months'
+                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+                )
+			)
+		GROUP BY
+			recharge_name,
+			recharge_period
+	) AS sub
 ORDER BY
-  max_date ASC
+	recharge_max_date ASC
 `
 
 type GetRechargeTypeCountsParams struct {
@@ -85,10 +96,10 @@ type GetRechargeTypeCountsParams struct {
 }
 
 type GetRechargeTypeCountsRow struct {
-	ProductName   sql.NullString
-	RechargeCount int64
-	Period        interface{}
-	MaxDate       interface{}
+	RechargeName    sql.NullString
+	RechargeCount   int64
+	RechargePeriod  interface{}
+	RechargeMaxDate interface{}
 }
 
 func (q *Queries) GetRechargeTypeCounts(ctx context.Context, arg GetRechargeTypeCountsParams) ([]GetRechargeTypeCountsRow, error) {
@@ -109,10 +120,10 @@ func (q *Queries) GetRechargeTypeCounts(ctx context.Context, arg GetRechargeType
 	for rows.Next() {
 		var i GetRechargeTypeCountsRow
 		if err := rows.Scan(
-			&i.ProductName,
+			&i.RechargeName,
 			&i.RechargeCount,
-			&i.Period,
-			&i.MaxDate,
+			&i.RechargePeriod,
+			&i.RechargeMaxDate,
 		); err != nil {
 			return nil, err
 		}

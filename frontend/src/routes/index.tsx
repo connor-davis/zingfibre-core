@@ -1,6 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router';
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import uniqolor from 'uniqolor';
 import z from 'zod';
 
 import {
@@ -16,11 +17,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { DebounceIncrementorInput } from '@/components/ui/debounce-incrementor';
 import { Label } from '@/components/ui/label';
 import { apiClient } from '@/lib/utils';
 
@@ -66,26 +67,10 @@ export const Route = createFileRoute('/')({
   },
 });
 
-const chartConfig = {
-  'one-month': {
-    label: '1 Month',
-    color: 'var(--chart-1)',
-  },
-  'one-week': {
-    label: '1 Week',
-    color: 'var(--chart-2)',
-  },
-  'one-day': {
-    label: '1 Day',
-    color: 'var(--chart-3)',
-  },
-  intro: {
-    label: 'Intro Package',
-    color: 'var(--chart-4)',
-  },
-} satisfies ChartConfig;
-
 function App() {
+  const { count } = useSearch({ from: '/' });
+  const router = useRouter();
+
   const { items, types } = Route.useLoaderData();
 
   return (
@@ -94,8 +79,26 @@ function App() {
         <div className="flex items-center gap-3">
           <Label className="text-lg">Dashboard</Label>
         </div>
-        <div className="flex items-center gap-3"></div>
+        <div className="flex items-center gap-3">
+          <DebounceIncrementorInput
+            className="w-24"
+            min={1}
+            defaultValue={count}
+            onChange={(value) => {
+              console.log(value);
+
+              router.navigate({
+                to: '/',
+                search: (previous) => ({
+                  ...previous,
+                  count: value.target.valueAsNumber,
+                }),
+              });
+            }}
+          />
+        </div>
       </div>
+
       <Card className="pt-0 w-full h-full bg-background">
         <CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
           <div className="grid flex-1 gap-1">
@@ -108,61 +111,8 @@ function App() {
           <div className="flex items-center gap-1"></div>
         </CardHeader>
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 w-full h-full">
-          <ChartContainer
-            config={chartConfig}
-            className="aspect-auto w-full h-full"
-          >
-            <AreaChart data={items ?? []}>
-              <defs>
-                <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-one-month)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-one-month)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-                <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-one-week)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-one-week)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-                <linearGradient id="fillTablet" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-one-day)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-one-day)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-                <linearGradient id="fillIntro" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-intro)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-intro)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-              </defs>
+          <ChartContainer config={{}} className="aspect-auto w-full h-full">
+            <LineChart data={items ?? []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Period" />
               <YAxis />
@@ -172,9 +122,9 @@ function App() {
               />
 
               {[...(types ?? [])].map((type) => (
-                <Area key={type} dataKey={type} />
+                <Line key={type} dataKey={type} stroke={uniqolor(type).color} />
               ))}
-            </AreaChart>
+            </LineChart>
           </ChartContainer>
         </CardContent>
       </Card>
