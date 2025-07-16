@@ -133,12 +133,12 @@ export type ReportSummaries = Array<{
   AmountNet?: string;
   BuildName?: string;
   BuildType?: string;
-  CashAmount?: number;
+  CashAmount?: string;
   CashCode?: string;
   DateCreated?: string;
   ItemName?: string;
   RadiusUsername?: string;
-  ServiceId?: string;
+  ServiceId?: number;
 }>;
 
 export type ReportSummary = {
@@ -147,12 +147,12 @@ export type ReportSummary = {
   AmountNet?: string;
   BuildName?: string;
   BuildType?: string;
-  CashAmount?: number;
+  CashAmount?: string;
   CashCode?: string;
   DateCreated?: string;
   ItemName?: string;
   RadiusUsername?: string;
-  ServiceId?: string;
+  ServiceId?: number;
 };
 
 export type SuccessResponse = {
@@ -284,12 +284,12 @@ export type SuccessResponse = {
         AmountNet?: string;
         BuildName?: string;
         BuildType?: string;
-        CashAmount?: number;
+        CashAmount?: string;
         CashCode?: string;
         DateCreated?: string;
         ItemName?: string;
         RadiusUsername?: string;
-        ServiceId?: string;
+        ServiceId?: number;
       }
     | Array<{
         AmountFee?: string;
@@ -297,12 +297,12 @@ export type SuccessResponse = {
         AmountNet?: string;
         BuildName?: string;
         BuildType?: string;
-        CashAmount?: number;
+        CashAmount?: string;
         CashCode?: string;
         DateCreated?: string;
         ItemName?: string;
         RadiusUsername?: string;
-        ServiceId?: string;
+        ServiceId?: number;
       }>;
   details?: string;
   message?: string;
@@ -492,12 +492,12 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -505,12 +505,12 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -675,12 +675,12 @@ export type GetApiAuthenticationCheckResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -688,12 +688,12 @@ export type GetApiAuthenticationCheckResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -875,12 +875,12 @@ export type PostApiAuthenticationLoginResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -888,12 +888,12 @@ export type PostApiAuthenticationLoginResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -1065,12 +1065,12 @@ export type PostApiAuthenticationLogoutResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -1078,12 +1078,12 @@ export type PostApiAuthenticationLogoutResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -1264,12 +1264,12 @@ export type PostApiAuthenticationMfaDisableResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -1277,12 +1277,12 @@ export type PostApiAuthenticationMfaDisableResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -1495,12 +1495,12 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -1508,12 +1508,12 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -1696,12 +1696,12 @@ export type PostApiAuthenticationRegisterResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -1709,12 +1709,12 @@ export type PostApiAuthenticationRegisterResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -1724,6 +1724,178 @@ export type PostApiAuthenticationRegisterResponses = {
 
 export type PostApiAuthenticationRegisterResponse =
   PostApiAuthenticationRegisterResponses[keyof PostApiAuthenticationRegisterResponses];
+
+export type GetApiExportsCustomersData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/exports/customers';
+};
+
+export type GetApiExportsCustomersErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiExportsCustomersError =
+  GetApiExportsCustomersErrors[keyof GetApiExportsCustomersErrors];
+
+export type GetApiExportsCustomersResponses = {
+  200: unknown;
+};
+
+export type GetApiExportsExpiringCustomersData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/exports/expiring-customers';
+};
+
+export type GetApiExportsExpiringCustomersErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiExportsExpiringCustomersError =
+  GetApiExportsExpiringCustomersErrors[keyof GetApiExportsExpiringCustomersErrors];
+
+export type GetApiExportsExpiringCustomersResponses = {
+  200: unknown;
+};
+
+export type GetApiExportsRechargesData = {
+  body?: never;
+  path?: never;
+  query: {
+    poi?: string;
+    startDate: string;
+    endDate: string;
+  };
+  url: '/api/exports/recharges';
+};
+
+export type GetApiExportsRechargesErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiExportsRechargesError =
+  GetApiExportsRechargesErrors[keyof GetApiExportsRechargesErrors];
+
+export type GetApiExportsRechargesResponses = {
+  200: unknown;
+};
+
+export type GetApiExportsRechargesSummaryData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/exports/recharges-summary';
+};
+
+export type GetApiExportsRechargesSummaryErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiExportsRechargesSummaryError =
+  GetApiExportsRechargesSummaryErrors[keyof GetApiExportsRechargesSummaryErrors];
+
+export type GetApiExportsRechargesSummaryResponses = {
+  200: unknown;
+};
+
+export type GetApiExportsSummaryData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/exports/summary';
+};
+
+export type GetApiExportsSummaryErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiExportsSummaryError =
+  GetApiExportsSummaryErrors[keyof GetApiExportsSummaryErrors];
+
+export type GetApiExportsSummaryResponses = {
+  200: unknown;
+};
 
 export type GetApiPoisData = {
   body?: never;
@@ -1895,12 +2067,12 @@ export type GetApiPoisResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -1908,12 +2080,12 @@ export type GetApiPoisResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -2100,12 +2272,12 @@ export type PostApiPoisResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -2113,12 +2285,12 @@ export type PostApiPoisResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -2306,12 +2478,12 @@ export type DeleteApiPoisByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -2319,12 +2491,12 @@ export type DeleteApiPoisByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -2512,12 +2684,12 @@ export type GetApiPoisByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -2525,12 +2697,12 @@ export type GetApiPoisByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -2721,12 +2893,12 @@ export type PutApiPoisByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -2734,12 +2906,12 @@ export type PutApiPoisByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -2913,12 +3085,12 @@ export type GetApiReportsCustomersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -2926,12 +3098,12 @@ export type GetApiReportsCustomersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -3105,12 +3277,12 @@ export type GetApiReportsExpiringCustomersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -3118,12 +3290,12 @@ export type GetApiReportsExpiringCustomersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -3299,12 +3471,12 @@ export type GetApiReportsRechargesResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -3312,12 +3484,12 @@ export type GetApiReportsRechargesResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -3491,12 +3663,12 @@ export type GetApiReportsRechargesSummaryResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -3504,12 +3676,12 @@ export type GetApiReportsRechargesSummaryResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -3683,12 +3855,12 @@ export type GetApiReportsSummaryResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -3696,12 +3868,12 @@ export type GetApiReportsSummaryResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -3882,12 +4054,12 @@ export type GetApiUsersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -3895,12 +4067,12 @@ export type GetApiUsersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -4089,12 +4261,12 @@ export type PostApiUsersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -4102,12 +4274,12 @@ export type PostApiUsersResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -4288,12 +4460,12 @@ export type DeleteApiUsersByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -4301,12 +4473,12 @@ export type DeleteApiUsersByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -4494,12 +4666,12 @@ export type GetApiUsersByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -4507,12 +4679,12 @@ export type GetApiUsersByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;
@@ -4703,12 +4875,12 @@ export type PutApiUsersByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }
       | Array<{
           AmountFee?: string;
@@ -4716,12 +4888,12 @@ export type PutApiUsersByIdResponses = {
           AmountNet?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: number;
+          CashAmount?: string;
           CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
           RadiusUsername?: string;
-          ServiceId?: string;
+          ServiceId?: number;
         }>;
     details?: string;
     message?: string;

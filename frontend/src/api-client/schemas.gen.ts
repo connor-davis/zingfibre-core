@@ -388,7 +388,7 @@ export const ReportSummariesSchema = {
         type: 'string',
       },
       CashAmount: {
-        type: 'number',
+        type: 'string',
       },
       CashCode: {
         type: 'string',
@@ -404,7 +404,8 @@ export const ReportSummariesSchema = {
         type: 'string',
       },
       ServiceId: {
-        type: 'string',
+        format: 'int64',
+        type: 'integer',
       },
     },
   },
@@ -429,7 +430,7 @@ export const ReportSummarySchema = {
       type: 'string',
     },
     CashAmount: {
-      type: 'number',
+      type: 'string',
     },
     CashCode: {
       type: 'string',
@@ -445,7 +446,8 @@ export const ReportSummarySchema = {
       type: 'string',
     },
     ServiceId: {
-      type: 'string',
+      format: 'int64',
+      type: 'integer',
     },
   },
 } as const;
@@ -860,7 +862,7 @@ export const SuccessResponseSchema = {
               type: 'string',
             },
             CashAmount: {
-              type: 'number',
+              type: 'string',
             },
             CashCode: {
               type: 'string',
@@ -876,7 +878,8 @@ export const SuccessResponseSchema = {
               type: 'string',
             },
             ServiceId: {
-              type: 'string',
+              format: 'int64',
+              type: 'integer',
             },
           },
         },
@@ -899,7 +902,7 @@ export const SuccessResponseSchema = {
                 type: 'string',
               },
               CashAmount: {
-                type: 'number',
+                type: 'string',
               },
               CashCode: {
                 type: 'string',
@@ -915,7 +918,8 @@ export const SuccessResponseSchema = {
                 type: 'string',
               },
               ServiceId: {
-                type: 'string',
+                format: 'int64',
+                type: 'integer',
               },
             },
           },

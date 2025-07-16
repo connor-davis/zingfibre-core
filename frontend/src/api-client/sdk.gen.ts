@@ -17,6 +17,21 @@ import type {
   GetApiAuthenticationMfaEnableData,
   GetApiAuthenticationMfaEnableErrors,
   GetApiAuthenticationMfaEnableResponses,
+  GetApiExportsCustomersData,
+  GetApiExportsCustomersErrors,
+  GetApiExportsCustomersResponses,
+  GetApiExportsExpiringCustomersData,
+  GetApiExportsExpiringCustomersErrors,
+  GetApiExportsExpiringCustomersResponses,
+  GetApiExportsRechargesData,
+  GetApiExportsRechargesErrors,
+  GetApiExportsRechargesResponses,
+  GetApiExportsRechargesSummaryData,
+  GetApiExportsRechargesSummaryErrors,
+  GetApiExportsRechargesSummaryResponses,
+  GetApiExportsSummaryData,
+  GetApiExportsSummaryErrors,
+  GetApiExportsSummaryResponses,
   GetApiPoisByIdData,
   GetApiPoisByIdErrors,
   GetApiPoisByIdResponses,
@@ -253,6 +268,95 @@ export const postApiAuthenticationRegister = <
       'Content-Type': 'application/json',
       ...options?.headers,
     },
+  });
+};
+
+/**
+ * Customers Report Export
+ * Endpoint to retrieve customers report export in CSV format.
+ */
+export const getApiExportsCustomers = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiExportsCustomersData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiExportsCustomersResponses,
+    GetApiExportsCustomersErrors,
+    ThrowOnError
+  >({
+    url: '/api/exports/customers',
+    ...options,
+  });
+};
+
+/**
+ * Expiring Customers Report Export
+ * Endpoint to retrieve expiring customers report export in CSV format.
+ */
+export const getApiExportsExpiringCustomers = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiExportsExpiringCustomersData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiExportsExpiringCustomersResponses,
+    GetApiExportsExpiringCustomersErrors,
+    ThrowOnError
+  >({
+    url: '/api/exports/expiring-customers',
+    ...options,
+  });
+};
+
+/**
+ * Recharges Report Export
+ * Endpoint to retrieve recharges report export in CSV format.
+ */
+export const getApiExportsRecharges = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiExportsRechargesData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetApiExportsRechargesResponses,
+    GetApiExportsRechargesErrors,
+    ThrowOnError
+  >({
+    url: '/api/exports/recharges',
+    ...options,
+  });
+};
+
+/**
+ * Recharges Summary Report Export
+ * Endpoint to retrieve recharges summary report export in CSV format.
+ */
+export const getApiExportsRechargesSummary = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiExportsRechargesSummaryData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiExportsRechargesSummaryResponses,
+    GetApiExportsRechargesSummaryErrors,
+    ThrowOnError
+  >({
+    url: '/api/exports/recharges-summary',
+    ...options,
+  });
+};
+
+/**
+ * Summary Report Export
+ * Endpoint to retrieve summary report export in CSV format.
+ */
+export const getApiExportsSummary = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiExportsSummaryData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiExportsSummaryResponses,
+    GetApiExportsSummaryErrors,
+    ThrowOnError
+  >({
+    url: '/api/exports/summary',
+    ...options,
   });
 };
 
