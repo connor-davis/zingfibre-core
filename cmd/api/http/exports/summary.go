@@ -109,7 +109,7 @@ func (r *ExportsRouter) SummaryRoute() system.Route {
 
 			now := time.Now()
 
-			disposition := fmt.Sprintf(`attachment; filename="customers_report_%s.csv"`, now.Format(time.DateOnly))
+			disposition := fmt.Sprintf(`attachment; filename="summary_report_%s.csv"`, now.Format(time.DateOnly))
 
 			c.Set(fiber.HeaderContentType, "text/csv")
 			c.Set(fiber.HeaderContentDisposition, disposition)
@@ -128,8 +128,6 @@ func (r *ExportsRouter) SummaryRoute() system.Route {
 			}
 
 			for _, summary := range summaries {
-				log.Infof("Summary: %+v", summary)
-
 				record := []string{
 					summary.DateCreated.Time.Format(time.DateTime),
 					string(summary.ItemName.([]byte)),

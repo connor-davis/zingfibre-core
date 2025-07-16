@@ -169,7 +169,7 @@ func (r *ExportsRouter) RechargesRoute() system.Route {
 
 			now := time.Now()
 
-			disposition := fmt.Sprintf(`attachment; filename="customers_report_%s.csv"`, now.Format(time.DateOnly))
+			disposition := fmt.Sprintf(`attachment; filename="recharges_report_%s.csv"`, now.Format(time.DateOnly))
 
 			c.Set(fiber.HeaderContentType, "text/csv")
 			c.Set(fiber.HeaderContentDisposition, disposition)
