@@ -174,6 +174,10 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				Name:        "Points Of Interest",
 				Description: "Points Of Interest related endpoints",
 			},
+			{
+				Name:        "Reports",
+				Description: "Reports related endpoints",
+			},
 		},
 		Paths: paths,
 		Components: &openapi3.Components{
@@ -188,6 +192,8 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				"SuccessResponse":       schemas.SuccessResponseSchema,
 				"ErrorResponse":         schemas.ErrorResponseSchema,
 				"RechargeTypeCounts":    schemas.RechargeTypeCountsSchema,
+				"ReportCustomer":        schemas.ReportCustomerSchema,
+				"ReportCustomers":       schemas.ReportCustomersSchema,
 			},
 		},
 	}
