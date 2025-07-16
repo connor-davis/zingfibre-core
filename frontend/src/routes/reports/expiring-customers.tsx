@@ -14,6 +14,9 @@ import {
 import { ArrowUpDown, ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 
+import { format, parseISO } from 'date-fns';
+import z from 'zod';
+
 import {
   type ErrorResponse,
   type ReportExpiringCustomer,
@@ -28,7 +31,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Table,
@@ -42,6 +44,9 @@ import { apiClient } from '@/lib/utils';
 
 export const Route = createFileRoute('/reports/expiring-customers')({
   component: RouteComponent,
+  validateSearch: z.object({
+    poi: z.string().default(''),
+  }),
   pendingComponent: () => (
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Label className="text-muted-foreground">
@@ -111,61 +116,59 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.getValue('Expires On')}</div>,
+    cell: ({ row }) => (
+      <div>{format(parseISO(row.getValue('Expires On')), 'PPP')}</div>
+    ),
   },
   {
     id: 'First Name',
     accessorKey: 'FirstName',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="First Name"
-            value={
-              (table.getColumn('First Name')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('First Name')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          First Name
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('First Name')}</div>,
     footer: (props) => props.column.id,
   },
   {
+    id: 'Last Name',
+    accessorKey: 'Surname',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          First Name
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue('Last Name')}</div>,
+    footer: (props) => props.column.id,
+  },
+  {
     id: 'Email',
     accessorKey: 'Email',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Email"
-            value={(table.getColumn('Email')?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
-              table.getColumn('Email')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Email
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
@@ -173,28 +176,16 @@ export const columns = [
   {
     id: 'Username',
     accessorKey: 'RadiusUsername',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Username"
-            value={
-              (table.getColumn('Username')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('Username')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Username
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Username')}</div>,
@@ -202,31 +193,16 @@ export const columns = [
   {
     id: 'Phone Number',
     accessorKey: 'PhoneNumber',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Phone Number"
-            value={
-              (table.getColumn('Phone Number')?.getFilterValue() as string) ??
-              ''
-            }
-            onChange={(event) =>
-              table
-                .getColumn('Phone Number')
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Phone Number
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Phone Number')}</div>,
@@ -234,28 +210,16 @@ export const columns = [
   {
     id: 'Address',
     accessorKey: 'Address',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Address"
-            value={
-              (table.getColumn('Address')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('Address')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Address
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Address')}</div>,
@@ -263,31 +227,16 @@ export const columns = [
   {
     id: 'Last Duration',
     accessorKey: 'LastPurchaseDuration',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Last Duration"
-            value={
-              (table.getColumn('Last Duration')?.getFilterValue() as string) ??
-              ''
-            }
-            onChange={(event) =>
-              table
-                .getColumn('Last Duration')
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Last Duration
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Last Duration')}</div>,
@@ -295,28 +244,16 @@ export const columns = [
   {
     id: 'Last Speed',
     accessorKey: 'LastPurchaseSpeed',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Last Speed"
-            value={
-              (table.getColumn('Last Speed')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('Last Speed')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Last Speed
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Last Speed')}</div>,

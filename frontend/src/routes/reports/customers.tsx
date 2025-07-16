@@ -14,6 +14,8 @@ import {
 import { ArrowUpDown, ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 
+import z from 'zod';
+
 import {
   type ErrorResponse,
   type ReportCustomers,
@@ -27,7 +29,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Table,
@@ -41,6 +42,9 @@ import { apiClient } from '@/lib/utils';
 
 export const Route = createFileRoute('/reports/customers')({
   component: RouteComponent,
+  validateSearch: z.object({
+    poi: z.string().default(''),
+  }),
   pendingComponent: () => (
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Label className="text-muted-foreground">
@@ -98,28 +102,16 @@ export const columns = [
   {
     id: 'First Name',
     accessorKey: 'FirstName',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="First Name"
-            value={
-              (table.getColumn('First Name')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('First Name')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          First Name
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('First Name')}</div>,
@@ -128,28 +120,16 @@ export const columns = [
   {
     id: 'Last Name',
     accessorKey: 'Surname',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Last Name"
-            value={
-              (table.getColumn('Last Name')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('Last Name')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Last Name
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Last Name')}</div>,
@@ -158,26 +138,16 @@ export const columns = [
   {
     id: 'Email',
     accessorKey: 'Email',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Email"
-            value={(table.getColumn('Email')?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
-              table.getColumn('Email')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Email
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
@@ -185,32 +155,16 @@ export const columns = [
   {
     id: 'Radius Username',
     accessorKey: 'RadiusUsername',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Radius Username"
-            value={
-              (table
-                .getColumn('Radius Username')
-                ?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table
-                .getColumn('Radius Username')
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Radius Username
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Radius Username')}</div>,
@@ -218,31 +172,16 @@ export const columns = [
   {
     id: 'Phone Number',
     accessorKey: 'PhoneNumber',
-    header: ({ table, column }) => {
+    header: ({ column }) => {
       return (
-        <div className="flex items-center space-x-2">
-          <Input
-            placeholder="Phone Number"
-            value={
-              (table.getColumn('Phone Number')?.getFilterValue() as string) ??
-              ''
-            }
-            onChange={(event) =>
-              table
-                .getColumn('Phone Number')
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="p-0 hover:bg-transparent"
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Phone Number
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
       );
     },
     cell: ({ row }) => <div>{row.getValue('Phone Number')}</div>,
