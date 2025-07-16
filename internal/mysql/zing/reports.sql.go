@@ -411,7 +411,7 @@ SELECT
         JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_fee')),
         '0'
     ) AS amount_fee,
-    
+
     COALESCE(
         JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_net')),
         '0'
@@ -422,13 +422,9 @@ SELECT
         '0'
     ) AS cash_code,
 
-    CASE 
-        WHEN
-            JSON_VALID(PaymentServicePayload) = 1 
-            AND JSON_VALUE(PaymentServicePayload, '$.tenders[0].amount') REGEXP '^[0-9]+(\\.[0-9]+)?$'
-        THEN 
-            CAST(JSON_VALUE(PaymentServicePayload, '$.tenders[0].amount') AS DECIMAL(10,2)) / 100
-        ELSE 0
+    CASE
+        WHEN JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
+        ELSE JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.tenders[0].amount'))
     END AS cash_amount,
 
     t4.ServiceId AS service_id,
@@ -455,7 +451,7 @@ type GetReportsSummaryRow struct {
 	AmountFee      interface{}
 	AmountNet      interface{}
 	CashCode       interface{}
-	CashAmount     int32
+	CashAmount     interface{}
 	ServiceID      sql.NullInt64
 	BuildName      sql.NullString
 	BuildType      sql.NullString

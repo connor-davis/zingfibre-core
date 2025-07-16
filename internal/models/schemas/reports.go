@@ -74,8 +74,8 @@ var ReportSummarySchema = openapi3.NewSchema().WithProperties(map[string]*openap
 	"AmountFee":      openapi3.NewStringSchema(),
 	"AmountNet":      openapi3.NewStringSchema(),
 	"CashCode":       openapi3.NewStringSchema(),
-	"CashAmount":     openapi3.NewFloat64Schema(),
-	"ServiceId":      openapi3.NewStringSchema(),
+	"CashAmount":     openapi3.NewStringSchema(),
+	"ServiceId":      openapi3.NewInt64Schema(),
 	"BuildName":      openapi3.NewStringSchema(),
 	"BuildType":      openapi3.NewStringSchema(),
 }).NewRef()

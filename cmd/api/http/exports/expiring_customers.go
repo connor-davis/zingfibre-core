@@ -155,7 +155,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 				}
 
 				record := []string{
-					expiringCustomerRadius.Expiration.Time.Format(time.DateOnly),
+					expiringCustomerRadius.Expiration.Time.Format(time.DateTime),
 					expiringCustomer.FirstName.String,
 					expiringCustomer.Surname.String,
 					expiringCustomer.Email.String,

@@ -41,15 +41,15 @@ type ReportRecharge struct {
 }
 
 type ReportSummary struct {
-	DateCreated    string  `json:"DateCreated,omitempty"`
-	ItemName       string  `json:"ItemName,omitempty"`
-	RadiusUsername string  `json:"RadiusUsername,omitempty"`
-	AmountGross    string  `json:"AmountGross,omitempty"`
-	AmountFee      string  `json:"AmountFee,omitempty"`
-	AmountNet      string  `json:"AmountNet,omitempty"`
-	CashCode       string  `json:"CashCode,omitempty"`
-	CashAmount     float64 `json:"CashAmount,omitempty"`
-	ServiceId      int64   `json:"ServiceId,omitempty"`
-	BuildName      string  `json:"BuildName,omitempty"`
-	BuildType      string  `json:"BuildType,omitempty"`
+	DateCreated    string `json:"DateCreated,omitempty"`
+	ItemName       string `json:"ItemName,omitempty"`
+	RadiusUsername string `json:"RadiusUsername,omitempty"`
+	AmountGross    string `json:"AmountGross,omitempty"`
+	AmountFee      string `json:"AmountFee,omitempty"`
+	AmountNet      string `json:"AmountNet,omitempty"`
+	CashCode       string `json:"CashCode,omitempty"`
+	CashAmount     string `json:"CashAmount,omitempty"`
+	ServiceId      int64  `json:"ServiceId,omitempty"`
+	BuildName      string `json:"BuildName,omitempty"`
+	BuildType      string `json:"BuildType,omitempty"`
 }

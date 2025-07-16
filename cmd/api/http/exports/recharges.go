@@ -197,7 +197,7 @@ func (r *ExportsRouter) RechargesRoute() system.Route {
 				}
 
 				record := []string{
-					recharge.DateCreated.Format(time.RFC3339),
+					recharge.DateCreated.Format(time.DateTime),
 					recharge.Email.String,
 					recharge.FirstName.String,
 					recharge.Surname.String,
@@ -355,7 +355,7 @@ func (r *ExportsRouter) RechargesSummaryRoute() system.Route {
 				}
 
 				record := []string{
-					rechargeSummary.DateCreated.Format(time.RFC3339),
+					rechargeSummary.DateCreated.Format(time.DateTime),
 					rechargeSummary.Email.String,
 					rechargeSummary.FirstName.String,
 					rechargeSummary.Surname.String,
