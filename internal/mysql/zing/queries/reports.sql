@@ -343,7 +343,7 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
-    AND t1.DateCreated >= 
+    AND t2.DateCreated >= 
         CASE 
             WHEN sqlc.arg('months') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
             ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('months') - 1) MONTH), '%Y-%m-01 00:00:00')
@@ -372,7 +372,7 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
-    AND t1.DateCreated >= 
+    AND t2.DateCreated >= 
         CASE 
             WHEN sqlc.arg('months') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
             ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('months') - 1) MONTH), '%Y-%m-01 00:00:00')
