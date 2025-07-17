@@ -133,7 +133,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 
 			writer := csv.NewWriter(c.Response().BodyWriter())
 
-			header := []string{"Expires On", "First Name", "Surname", "Email", "Phone Number", "Radius Username", "Last Purchase Duration", "Last Purchase Speed", "Address"}
+			header := []string{"Expires On", "Full Name", "Email", "Phone Number", "Radius Username", "Last Purchase Duration", "Last Purchase Speed", "Address"}
 
 			if err := writer.Write(header); err != nil {
 				log.Errorf("🔥 Error writing CSV header: %s", err.Error())
@@ -156,8 +156,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 
 				record := []string{
 					expiringCustomerRadius.Expiration.Time.Format(time.DateTime),
-					expiringCustomer.FirstName.String,
-					expiringCustomer.Surname.String,
+					expiringCustomer.FullName,
 					expiringCustomer.Email.String,
 					expiringCustomer.PhoneNumber.String,
 					expiringCustomer.RadiusUsername.String,

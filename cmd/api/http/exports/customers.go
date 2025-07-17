@@ -116,7 +116,7 @@ func (r *ExportsRouter) CustomersRoute() system.Route {
 
 			writer := csv.NewWriter(c.Response().BodyWriter())
 
-			header := []string{"First Name", "Surname", "Email", "Phone Number", "Radius Username"}
+			header := []string{"Full Name", "Email", "Phone Number", "Radius Username"}
 
 			if err := writer.Write(header); err != nil {
 				log.Errorf("🔥 Error writing CSV header: %s", err.Error())
@@ -129,8 +129,7 @@ func (r *ExportsRouter) CustomersRoute() system.Route {
 
 			for _, customer := range customers {
 				record := []string{
-					customer.FirstName.String,
-					customer.Surname.String,
+					customer.FullName,
 					customer.Email.String,
 					customer.PhoneNumber.String,
 					customer.RadiusUsername.String,

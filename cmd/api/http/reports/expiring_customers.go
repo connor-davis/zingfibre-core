@@ -45,8 +45,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 						"details": constants.SuccessDetails,
 						"data": []system.ReportExpiringCustomer{
 							{
-								FirstName:            "Jane",
-								Surname:              "Smith",
+								FullName:             "Jane Smith",
 								Email:                "jane.smith@example.com",
 								PhoneNumber:          "987-654-3210",
 								RadiusUsername:       "janesmith",
@@ -153,8 +152,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				}
 
 				data = append(data, system.ReportExpiringCustomer{
-					FirstName:            expiringCustomer.FirstName.String,
-					Surname:              expiringCustomer.Surname.String,
+					FullName:             expiringCustomer.FullName,
 					Email:                expiringCustomer.Email.String,
 					PhoneNumber:          expiringCustomer.PhoneNumber.String,
 					RadiusUsername:       expiringCustomer.RadiusUsername.String,

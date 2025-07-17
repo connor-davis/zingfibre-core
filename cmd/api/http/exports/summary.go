@@ -3,11 +3,13 @@ package exports
 import (
 	"encoding/csv"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
+	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
@@ -95,8 +97,23 @@ func (r *ExportsRouter) SummaryRoute() system.Route {
 		},
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
+			months := c.Query("months")
 
-			summaries, err := r.Zing.GetReportsSummary(c.Context(), poi)
+			monthsInt, err := strconv.Atoi(months)
+
+			if err != nil {
+				log.Errorf("🔥 Error converting months query parameter to integer: %s", err.Error())
+
+				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+					"error":   constants.BadRequestError,
+					"details": constants.BadRequestErrorDetails,
+				})
+			}
+
+			summaries, err := r.Zing.GetReportsSummary(c.Context(), zing.GetReportsSummaryParams{
+				Poi:    poi,
+				Months: monthsInt,
+			})
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching summaries from Zing: %s", err.Error())

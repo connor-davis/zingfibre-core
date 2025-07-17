@@ -13,20 +13,21 @@ import (
 
 const getReportsCustomers = `-- name: GetReportsCustomers :many
 SELECT
-    t1.FirstName AS first_name,
-    t1.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     t1.Email AS email,
     t2.RadiusUsername AS radius_username,
     t1.PhoneNumber AS phone_number
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
-    TRIM(LOWER(t2.POP)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+    TRIM(LOWER(t2.POP)) = TRIM(LOWER(?))
+ORDER BY
+    t1.RadiusUsername ASC,
+    t1.Email ASC
 `
 
 type GetReportsCustomersRow struct {
-	FirstName      sql.NullString
-	Surname        sql.NullString
+	FullName       string
 	Email          sql.NullString
 	RadiusUsername sql.NullString
 	PhoneNumber    sql.NullString
@@ -42,8 +43,7 @@ func (q *Queries) GetReportsCustomers(ctx context.Context, poi string) ([]GetRep
 	for rows.Next() {
 		var i GetReportsCustomersRow
 		if err := rows.Scan(
-			&i.FirstName,
-			&i.Surname,
+			&i.FullName,
 			&i.Email,
 			&i.RadiusUsername,
 			&i.PhoneNumber,
@@ -63,8 +63,7 @@ func (q *Queries) GetReportsCustomers(ctx context.Context, poi string) ([]GetRep
 
 const getReportsExpiringCustomers = `-- name: GetReportsExpiringCustomers :many
 SELECT
-    t1.FirstName AS first_name,
-    t1.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     t1.Email AS email,
     t1.PhoneNumber AS phone_number,
     t4.RadiusUsername AS radius_username,
@@ -87,7 +86,10 @@ LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_
 LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(?)),'%')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+ORDER BY
+    t4.RadiusUsername ASC,
+    t1.Email ASC
 `
 
 type GetReportsExpiringCustomersParams struct {
@@ -97,8 +99,7 @@ type GetReportsExpiringCustomersParams struct {
 }
 
 type GetReportsExpiringCustomersRow struct {
-	FirstName            sql.NullString
-	Surname              sql.NullString
+	FullName             string
 	Email                sql.NullString
 	PhoneNumber          sql.NullString
 	RadiusUsername       sql.NullString
@@ -118,8 +119,7 @@ func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, arg GetReport
 	for rows.Next() {
 		var i GetReportsExpiringCustomersRow
 		if err := rows.Scan(
-			&i.FirstName,
-			&i.Surname,
+			&i.FullName,
 			&i.Email,
 			&i.PhoneNumber,
 			&i.RadiusUsername,
@@ -164,8 +164,9 @@ FROM
 			Recharges t1
 			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+            LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 		WHERE
-			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+			TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
 			AND(
                 (
                     ? = 'weeks'
@@ -238,8 +239,7 @@ const getReportsRecharges = `-- name: GetReportsRecharges :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
-    t2.FirstName AS first_name,
-    t2.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     CASE 
         WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
@@ -257,7 +257,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
 ORDER BY
@@ -273,8 +273,7 @@ type GetReportsRechargesParams struct {
 type GetReportsRechargesRow struct {
 	DateCreated time.Time
 	Email       sql.NullString
-	FirstName   sql.NullString
-	Surname     sql.NullString
+	FullName    string
 	ItemName    interface{}
 	Amount      sql.NullString
 	Successful  bool
@@ -295,8 +294,7 @@ func (q *Queries) GetReportsRecharges(ctx context.Context, arg GetReportsRecharg
 		if err := rows.Scan(
 			&i.DateCreated,
 			&i.Email,
-			&i.FirstName,
-			&i.Surname,
+			&i.FullName,
 			&i.ItemName,
 			&i.Amount,
 			&i.Successful,
@@ -321,8 +319,7 @@ const getReportsRechargesSummary = `-- name: GetReportsRechargesSummary :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
-    t2.FirstName AS first_name,
-    t2.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     CASE 
         WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
@@ -340,7 +337,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
     t1.DateCreated DESC
@@ -349,8 +346,7 @@ ORDER BY
 type GetReportsRechargesSummaryRow struct {
 	DateCreated time.Time
 	Email       sql.NullString
-	FirstName   sql.NullString
-	Surname     sql.NullString
+	FullName    string
 	ItemName    interface{}
 	Amount      sql.NullString
 	Successful  bool
@@ -371,8 +367,7 @@ func (q *Queries) GetReportsRechargesSummary(ctx context.Context, poi string) ([
 		if err := rows.Scan(
 			&i.DateCreated,
 			&i.Email,
-			&i.FirstName,
-			&i.Surname,
+			&i.FullName,
 			&i.ItemName,
 			&i.Amount,
 			&i.Successful,
@@ -437,11 +432,16 @@ LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(?)), '%')
-    AND t2.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
 ORDER BY
     t2.DateCreated DESC
 `
+
+type GetReportsSummaryParams struct {
+	Poi    string
+	Months interface{}
+}
 
 type GetReportsSummaryRow struct {
 	DateCreated    sql.NullTime
@@ -457,8 +457,8 @@ type GetReportsSummaryRow struct {
 	BuildType      sql.NullString
 }
 
-func (q *Queries) GetReportsSummary(ctx context.Context, poi string) ([]GetReportsSummaryRow, error) {
-	rows, err := q.db.QueryContext(ctx, getReportsSummary, poi)
+func (q *Queries) GetReportsSummary(ctx context.Context, arg GetReportsSummaryParams) ([]GetReportsSummaryRow, error) {
+	rows, err := q.db.QueryContext(ctx, getReportsSummary, arg.Poi, arg.Months)
 	if err != nil {
 		return nil, err
 	}

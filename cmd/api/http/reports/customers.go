@@ -42,8 +42,7 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 						"details": constants.SuccessDetails,
 						"data": []system.ReportCustomer{
 							{
-								FirstName:      "John",
-								Surname:        "Doe",
+								FullName:       "John Doe",
 								Email:          "john.doe@example.com",
 								PhoneNumber:    "123-456-7890",
 								RadiusUsername: "johnny",
@@ -120,8 +119,7 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 
 			for _, customer := range customers {
 				data = append(data, system.ReportCustomer{
-					FirstName:      customer.FirstName.String,
-					Surname:        customer.Surname.String,
+					FullName:       customer.FullName,
 					Email:          customer.Email.String,
 					PhoneNumber:    customer.PhoneNumber.String,
 					RadiusUsername: customer.RadiusUsername.String,

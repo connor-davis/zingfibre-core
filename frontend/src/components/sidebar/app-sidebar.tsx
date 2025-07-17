@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import {
   CircleDotIcon,
   LayoutDashboardIcon,
-  MapPinIcon,
   RefreshCcwDotIcon,
   RefreshCcwIcon,
   SpeechIcon,
@@ -107,14 +106,6 @@ export default function AppSidebar() {
             <SidebarGroupLabel>System</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/pois">
-                      <MapPinIcon />
-                      <span>Points of Interest</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
                 <RoleGuard value={['admin']}>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>

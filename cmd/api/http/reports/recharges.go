@@ -79,8 +79,7 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 							{
 								DateCreated: "2023-01-01T12:00:00Z",
 								Email:       "john.doe@example.com",
-								FirstName:   "John",
-								Surname:     "Doe",
+								FullName:    "John Doe",
 								ItemName:    "Monthly Subscription",
 								Amount:      29.99,
 								Successful:  true,
@@ -200,8 +199,7 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				data = append(data, system.ReportRecharge{
 					DateCreated: recharge.DateCreated.Format(time.RFC3339),
 					Email:       recharge.Email.String,
-					FirstName:   recharge.FirstName.String,
-					Surname:     recharge.Surname.String,
+					FullName:    recharge.FullName,
 					ItemName:    string(recharge.ItemName.([]byte)),
 					Amount:      amount,
 					Successful:  recharge.Successful,
@@ -255,8 +253,7 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 							{
 								DateCreated: "2023-01-01T12:00:00Z",
 								Email:       "john.doe@example.com",
-								FirstName:   "John",
-								Surname:     "Doe",
+								FullName:    "John Doe",
 								ItemName:    "Monthly Subscription",
 								Amount:      29.99,
 								Successful:  true,
@@ -348,8 +345,7 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 				data = append(data, system.ReportRecharge{
 					DateCreated: rechargeSummary.DateCreated.Format(time.RFC3339),
 					Email:       rechargeSummary.Email.String,
-					FirstName:   rechargeSummary.FirstName.String,
-					Surname:     rechargeSummary.Surname.String,
+					FullName:    rechargeSummary.FullName,
 					ItemName:    string(rechargeSummary.ItemName.([]byte)),
 					Amount:      amount,
 					Successful:  rechargeSummary.Successful,

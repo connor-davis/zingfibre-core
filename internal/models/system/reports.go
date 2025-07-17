@@ -1,8 +1,7 @@
 package system
 
 type ReportCustomer struct {
-	FirstName      string `json:"FirstName,omitempty"`
-	Surname        string `json:"Surname,omitempty"`
+	FullName       string `json:"FullName,omitempty"`
 	Email          string `json:"Email,omitempty"`
 	PhoneNumber    string `json:"PhoneNumber,omitempty"`
 	RadiusUsername string `json:"RadiusUsername,omitempty"`
@@ -16,8 +15,7 @@ type ReportRechargeTypeCount struct {
 }
 
 type ReportExpiringCustomer struct {
-	FirstName            string `json:"FirstName,omitempty"`
-	Surname              string `json:"Surname,omitempty"`
+	FullName             string `json:"FullName,omitempty"`
 	Email                string `json:"Email,omitempty"`
 	PhoneNumber          string `json:"PhoneNumber,omitempty"`
 	RadiusUsername       string `json:"RadiusUsername,omitempty"`
@@ -30,8 +28,7 @@ type ReportExpiringCustomer struct {
 type ReportRecharge struct {
 	DateCreated string  `json:"DateCreated,omitempty"`
 	Email       string  `json:"Email,omitempty"`
-	FirstName   string  `json:"FirstName,omitempty"`
-	Surname     string  `json:"Surname,omitempty"`
+	FullName    string  `json:"FullName,omitempty"`
 	ItemName    string  `json:"ItemName,omitempty"`
 	Amount      float64 `json:"Amount,omitempty"`
 	Successful  bool    `json:"Successful,omitempty"`

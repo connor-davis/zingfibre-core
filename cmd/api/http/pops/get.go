@@ -93,10 +93,16 @@ func (r *POPsRouter) GetPOPsRoute() system.Route {
 				})
 			}
 
+			data := system.PointsOfPresence{}
+
+			for _, pop := range pops {
+				data = append(data, pop.String)
+			}
+
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
-				"data":    pops,
+				"data":    data,
 			})
 		},
 	}

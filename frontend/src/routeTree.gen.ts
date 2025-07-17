@@ -11,14 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
-import { Route as PoisIndexRouteImport } from './routes/pois/index'
 import { Route as UsersIdRouteImport } from './routes/users/$id'
 import { Route as ReportsSummaryRouteImport } from './routes/reports/summary'
 import { Route as ReportsRechargesSummaryRouteImport } from './routes/reports/recharges-summary'
 import { Route as ReportsRechargesRouteImport } from './routes/reports/recharges'
 import { Route as ReportsExpiringCustomersRouteImport } from './routes/reports/expiring-customers'
 import { Route as ReportsCustomersRouteImport } from './routes/reports/customers'
-import { Route as PoisIdRouteImport } from './routes/pois/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,11 +26,6 @@ const IndexRoute = IndexRouteImport.update({
 const UsersIndexRoute = UsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PoisIndexRoute = PoisIndexRouteImport.update({
-  id: '/pois/',
-  path: '/pois/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsersIdRoute = UsersIdRouteImport.update({
@@ -66,98 +59,79 @@ const ReportsCustomersRoute = ReportsCustomersRouteImport.update({
   path: '/reports/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PoisIdRoute = PoisIdRouteImport.update({
-  id: '/pois/$id',
-  path: '/pois/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/pois/$id': typeof PoisIdRoute
   '/reports/customers': typeof ReportsCustomersRoute
   '/reports/expiring-customers': typeof ReportsExpiringCustomersRoute
   '/reports/recharges': typeof ReportsRechargesRoute
   '/reports/recharges-summary': typeof ReportsRechargesSummaryRoute
   '/reports/summary': typeof ReportsSummaryRoute
   '/users/$id': typeof UsersIdRoute
-  '/pois': typeof PoisIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/pois/$id': typeof PoisIdRoute
   '/reports/customers': typeof ReportsCustomersRoute
   '/reports/expiring-customers': typeof ReportsExpiringCustomersRoute
   '/reports/recharges': typeof ReportsRechargesRoute
   '/reports/recharges-summary': typeof ReportsRechargesSummaryRoute
   '/reports/summary': typeof ReportsSummaryRoute
   '/users/$id': typeof UsersIdRoute
-  '/pois': typeof PoisIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/pois/$id': typeof PoisIdRoute
   '/reports/customers': typeof ReportsCustomersRoute
   '/reports/expiring-customers': typeof ReportsExpiringCustomersRoute
   '/reports/recharges': typeof ReportsRechargesRoute
   '/reports/recharges-summary': typeof ReportsRechargesSummaryRoute
   '/reports/summary': typeof ReportsSummaryRoute
   '/users/$id': typeof UsersIdRoute
-  '/pois/': typeof PoisIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/pois/$id'
     | '/reports/customers'
     | '/reports/expiring-customers'
     | '/reports/recharges'
     | '/reports/recharges-summary'
     | '/reports/summary'
     | '/users/$id'
-    | '/pois'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/pois/$id'
     | '/reports/customers'
     | '/reports/expiring-customers'
     | '/reports/recharges'
     | '/reports/recharges-summary'
     | '/reports/summary'
     | '/users/$id'
-    | '/pois'
     | '/users'
   id:
     | '__root__'
     | '/'
-    | '/pois/$id'
     | '/reports/customers'
     | '/reports/expiring-customers'
     | '/reports/recharges'
     | '/reports/recharges-summary'
     | '/reports/summary'
     | '/users/$id'
-    | '/pois/'
     | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PoisIdRoute: typeof PoisIdRoute
   ReportsCustomersRoute: typeof ReportsCustomersRoute
   ReportsExpiringCustomersRoute: typeof ReportsExpiringCustomersRoute
   ReportsRechargesRoute: typeof ReportsRechargesRoute
   ReportsRechargesSummaryRoute: typeof ReportsRechargesSummaryRoute
   ReportsSummaryRoute: typeof ReportsSummaryRoute
   UsersIdRoute: typeof UsersIdRoute
-  PoisIndexRoute: typeof PoisIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
 
@@ -175,13 +149,6 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof UsersIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pois/': {
-      id: '/pois/'
-      path: '/pois'
-      fullPath: '/pois'
-      preLoaderRoute: typeof PoisIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/users/$id': {
@@ -226,26 +193,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsCustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pois/$id': {
-      id: '/pois/$id'
-      path: '/pois/$id'
-      fullPath: '/pois/$id'
-      preLoaderRoute: typeof PoisIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PoisIdRoute: PoisIdRoute,
   ReportsCustomersRoute: ReportsCustomersRoute,
   ReportsExpiringCustomersRoute: ReportsExpiringCustomersRoute,
   ReportsRechargesRoute: ReportsRechargesRoute,
   ReportsRechargesSummaryRoute: ReportsRechargesSummaryRoute,
   ReportsSummaryRoute: ReportsSummaryRoute,
   UsersIdRoute: UsersIdRoute,
-  PoisIndexRoute: PoisIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport

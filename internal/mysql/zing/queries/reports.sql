@@ -21,8 +21,9 @@ FROM
 			Recharges t1
 			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+            LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 		WHERE
-			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
+			TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
 			AND(
                 (
                     sqlc.arg('period') = 'weeks'
@@ -43,20 +44,21 @@ ORDER BY
 
 -- name: GetReportsCustomers :many
 SELECT
-    t1.FirstName AS first_name,
-    t1.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     t1.Email AS email,
     t2.RadiusUsername AS radius_username,
     t1.PhoneNumber AS phone_number
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
-    TRIM(LOWER(t2.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%');
+    TRIM(LOWER(t2.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+ORDER BY
+    t1.RadiusUsername ASC,
+    t1.Email ASC;
 
 -- name: GetReportsExpiringCustomers :many
 SELECT
-    t1.FirstName AS first_name,
-    t1.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     t1.Email AS email,
     t1.PhoneNumber AS phone_number,
     t4.RadiusUsername AS radius_username,
@@ -79,14 +81,16 @@ LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_
 LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))),'%');
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+ORDER BY
+    t4.RadiusUsername ASC,
+    t1.Email ASC;
 
 -- name: GetReportsRecharges :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
-    t2.FirstName AS first_name,
-    t2.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     CASE 
         WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
@@ -104,7 +108,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
     AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
     AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
 ORDER BY
@@ -114,8 +118,7 @@ ORDER BY
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
-    t2.FirstName AS first_name,
-    t2.Surname AS surname,
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     CASE 
         WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
@@ -133,7 +136,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
     t1.DateCreated DESC;
@@ -182,7 +185,7 @@ LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
-    TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
-    AND t2.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
 ORDER BY
     t2.DateCreated DESC;

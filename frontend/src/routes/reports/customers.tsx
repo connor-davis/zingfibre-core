@@ -21,6 +21,7 @@ import {
   type ReportCustomers,
   getApiReportsCustomers,
 } from '@/api-client';
+import Pagination from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -314,26 +315,8 @@ function RouteComponent() {
             </Table>
           </div>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+
+        <Pagination pages={1} />
       </div>
     </div>
   );
