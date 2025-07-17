@@ -31,6 +31,7 @@ type ReportRecharge struct {
 	FullName    string  `json:"FullName,omitempty"`
 	ItemName    string  `json:"ItemName,omitempty"`
 	Amount      float64 `json:"Amount,omitempty"`
+	Method      string  `json:"Method,omitempty"`
 	Successful  bool    `json:"Successful,omitempty"`
 	ServiceId   int64   `json:"ServiceId,omitempty"`
 	BuildName   string  `json:"BuildName,omitempty"`
@@ -41,6 +42,7 @@ type ReportSummary struct {
 	DateCreated    string `json:"DateCreated,omitempty"`
 	ItemName       string `json:"ItemName,omitempty"`
 	RadiusUsername string `json:"RadiusUsername,omitempty"`
+	Method         string `json:"Method,omitempty"`
 	AmountGross    string `json:"AmountGross,omitempty"`
 	AmountFee      string `json:"AmountFee,omitempty"`
 	AmountNet      string `json:"AmountNet,omitempty"`

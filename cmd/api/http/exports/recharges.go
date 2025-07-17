@@ -176,7 +176,7 @@ func (r *ExportsRouter) RechargesRoute() system.Route {
 
 			writer := csv.NewWriter(c.Response().BodyWriter())
 
-			header := []string{"Created On", "Email", "Full Name", "Item Name", "Amount", "Successful", "Service ID", "Build Name", "Build Type"}
+			header := []string{"Created On", "Email", "Full Name", "Item Name", "Amount", "Method", "Successful", "Service ID", "Build Name", "Build Type"}
 
 			if err := writer.Write(header); err != nil {
 				log.Errorf("🔥 Error writing CSV header: %s", err.Error())
@@ -202,6 +202,7 @@ func (r *ExportsRouter) RechargesRoute() system.Route {
 					recharge.FullName,
 					string(recharge.ItemName.([]byte)),
 					fmt.Sprintf("%.2f", amount),
+					recharge.Method.String,
 					fmt.Sprintf("%t", recharge.Successful),
 					fmt.Sprintf("%d", recharge.ServiceID.Int64),
 					recharge.BuildName.String,
@@ -333,7 +334,7 @@ func (r *ExportsRouter) RechargesSummaryRoute() system.Route {
 
 			writer := csv.NewWriter(c.Response().BodyWriter())
 
-			header := []string{"Created On", "Email", "Full Name", "Item Name", "Amount", "Successful", "Service ID", "Build Name", "Build Type"}
+			header := []string{"Created On", "Email", "Full Name", "Item Name", "Amount", "Method", "Successful", "Service ID", "Build Name", "Build Type"}
 
 			if err := writer.Write(header); err != nil {
 				log.Errorf("🔥 Error writing CSV header: %s", err.Error())
@@ -359,6 +360,7 @@ func (r *ExportsRouter) RechargesSummaryRoute() system.Route {
 					rechargeSummary.FullName,
 					string(rechargeSummary.ItemName.([]byte)),
 					fmt.Sprintf("%.2f", amount),
+					rechargeSummary.Method.String,
 					fmt.Sprintf("%t", rechargeSummary.Successful),
 					fmt.Sprintf("%d", rechargeSummary.ServiceID.Int64),
 					rechargeSummary.BuildName.String,

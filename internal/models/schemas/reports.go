@@ -12,8 +12,7 @@ var ReportRechargeTypeCountSchema = openapi3.NewSchema().WithProperties(map[stri
 var ReportRechargeTypeCountsSchema = openapi3.NewArraySchema().WithItems(ReportRechargeTypeCountSchema.Value).NewRef()
 
 var ReportCustomerSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-	"FirstName":      openapi3.NewStringSchema(),
-	"Surname":        openapi3.NewStringSchema(),
+	"FullName":       openapi3.NewStringSchema(),
 	"Email":          openapi3.NewStringSchema().WithFormat("email"),
 	"PhoneNumber":    openapi3.NewStringSchema(),
 	"RadiusUsername": openapi3.NewStringSchema(),
@@ -22,8 +21,7 @@ var ReportCustomerSchema = openapi3.NewSchema().WithProperties(map[string]*opena
 var ReportCustomersSchema = openapi3.NewArraySchema().WithItems(ReportCustomerSchema.Value).NewRef()
 
 var ReportExpiringCustomerSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-	"FirstName":            openapi3.NewStringSchema(),
-	"Surname":              openapi3.NewStringSchema(),
+	"FullName":             openapi3.NewStringSchema(),
 	"Email":                openapi3.NewStringSchema().WithFormat("email"),
 	"PhoneNumber":          openapi3.NewStringSchema(),
 	"RadiusUsername":       openapi3.NewStringSchema(),
@@ -38,10 +36,10 @@ var ReportExpiringCustomersSchema = openapi3.NewArraySchema().WithItems(ReportEx
 var ReportRechargeSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 	"DateCreated": openapi3.NewStringSchema().WithFormat("date-time"),
 	"Email":       openapi3.NewStringSchema().WithFormat("email"),
-	"FirstName":   openapi3.NewStringSchema(),
-	"Surname":     openapi3.NewStringSchema(),
+	"FullName":    openapi3.NewStringSchema(),
 	"ItemName":    openapi3.NewStringSchema(),
 	"Amount":      openapi3.NewFloat64Schema(),
+	"Method":      openapi3.NewStringSchema(), // New field for payment method
 	"Successful":  openapi3.NewBoolSchema(),
 	"ServiceId":   openapi3.NewInt64Schema(),
 	"BuildName":   openapi3.NewStringSchema(),
@@ -54,10 +52,10 @@ var ReportRechargesSchema = openapi3.NewArraySchema().WithItems(ReportRechargeSc
 var ReportRechargeSummarySchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
 	"DateCreated": openapi3.NewStringSchema().WithFormat("date-time"),
 	"Email":       openapi3.NewStringSchema().WithFormat("email"),
-	"FirstName":   openapi3.NewStringSchema(),
-	"Surname":     openapi3.NewStringSchema(),
+	"FullName":    openapi3.NewStringSchema(),
 	"ItemName":    openapi3.NewStringSchema(),
 	"Amount":      openapi3.NewFloat64Schema(),
+	"Method":      openapi3.NewStringSchema(), // New field for payment method
 	"Successful":  openapi3.NewBoolSchema(),
 	"ServiceId":   openapi3.NewInt64Schema(),
 	"BuildName":   openapi3.NewStringSchema(),
@@ -70,6 +68,7 @@ var ReportSummarySchema = openapi3.NewSchema().WithProperties(map[string]*openap
 	"DateCreated":    openapi3.NewStringSchema().WithFormat("date-time"),
 	"ItemName":       openapi3.NewStringSchema(),
 	"RadiusUsername": openapi3.NewStringSchema(),
+	"Method":         openapi3.NewStringSchema(),
 	"AmountGross":    openapi3.NewStringSchema(),
 	"AmountFee":      openapi3.NewStringSchema(),
 	"AmountNet":      openapi3.NewStringSchema(),

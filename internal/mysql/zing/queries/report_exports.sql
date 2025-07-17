@@ -61,6 +61,7 @@ SELECT
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
     END AS item_name,
     t1.PaymentAmount AS amount,
+    t1.Method AS method,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
@@ -89,6 +90,7 @@ SELECT
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
     END AS item_name,
     t1.PaymentAmount AS amount,
+    t1.Method AS method,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
@@ -114,6 +116,7 @@ SELECT
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
     END AS item_name,
     t4.RadiusUsername AS radius_username,
+    t2.Method AS method,
 
     COALESCE(
         JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_gross')),

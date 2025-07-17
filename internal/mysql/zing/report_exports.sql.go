@@ -172,6 +172,7 @@ SELECT
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
     END AS item_name,
     t1.PaymentAmount AS amount,
+    t1.Method AS method,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
@@ -203,6 +204,7 @@ type GetReportExportsRechargesRow struct {
 	FullName    string
 	ItemName    interface{}
 	Amount      sql.NullString
+	Method      sql.NullString
 	Successful  bool
 	ServiceID   sql.NullInt64
 	BuildName   sql.NullString
@@ -224,6 +226,7 @@ func (q *Queries) GetReportExportsRecharges(ctx context.Context, arg GetReportEx
 			&i.FullName,
 			&i.ItemName,
 			&i.Amount,
+			&i.Method,
 			&i.Successful,
 			&i.ServiceID,
 			&i.BuildName,
@@ -252,6 +255,7 @@ SELECT
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
     END AS item_name,
     t1.PaymentAmount AS amount,
+    t1.Method AS method,
     t1.RechargeSuccessful AS successful,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
@@ -276,6 +280,7 @@ type GetReportExportsRechargesSummaryRow struct {
 	FullName    string
 	ItemName    interface{}
 	Amount      sql.NullString
+	Method      sql.NullString
 	Successful  bool
 	ServiceID   sql.NullInt64
 	BuildName   sql.NullString
@@ -297,6 +302,7 @@ func (q *Queries) GetReportExportsRechargesSummary(ctx context.Context, poi stri
 			&i.FullName,
 			&i.ItemName,
 			&i.Amount,
+			&i.Method,
 			&i.Successful,
 			&i.ServiceID,
 			&i.BuildName,
@@ -323,30 +329,31 @@ SELECT
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
     END AS item_name,
     t4.RadiusUsername AS radius_username,
+    t2.Method AS method,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_gross')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_gross')),
         '0'
     ) AS amount_gross,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_fee')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_fee')),
         '0'
     ) AS amount_fee,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_net')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_net')),
         '0'
     ) AS amount_net,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.accountNumber')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.accountNumber')),
         '0'
     ) AS cash_code,
 
     CASE
-        WHEN JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
-        ELSE JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.tenders[0].amount'))
+        WHEN JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
+        ELSE JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount'))
     END AS cash_amount,
 
     t4.ServiceId AS service_id,
@@ -361,6 +368,7 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+    AND t2.RechargeSuccessful = 1
 ORDER BY
     t2.DateCreated DESC
 `
@@ -374,6 +382,7 @@ type GetReportExportsSummaryRow struct {
 	DateCreated    sql.NullTime
 	ItemName       interface{}
 	RadiusUsername sql.NullString
+	Method         sql.NullString
 	AmountGross    interface{}
 	AmountFee      interface{}
 	AmountNet      interface{}
@@ -397,6 +406,7 @@ func (q *Queries) GetReportExportsSummary(ctx context.Context, arg GetReportExpo
 			&i.DateCreated,
 			&i.ItemName,
 			&i.RadiusUsername,
+			&i.Method,
 			&i.AmountGross,
 			&i.AmountFee,
 			&i.AmountNet,
