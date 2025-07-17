@@ -116,28 +116,28 @@ SELECT
     t4.RadiusUsername AS radius_username,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_gross')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_gross')),
         '0'
     ) AS amount_gross,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_fee')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_fee')),
         '0'
     ) AS amount_fee,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.amount_net')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_net')),
         '0'
     ) AS amount_net,
 
     COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.accountNumber')),
+        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.accountNumber')),
         '0'
     ) AS cash_code,
 
     CASE
-        WHEN JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
-        ELSE JSON_UNQUOTE(JSON_EXTRACT(PaymentServicePayload, '$.tenders[0].amount'))
+        WHEN JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
+        ELSE JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount'))
     END AS cash_amount,
 
     t4.ServiceId AS service_id,
