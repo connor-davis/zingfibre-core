@@ -7,6 +7,7 @@ package zing
 
 import (
 	"context"
+	"database/sql"
 )
 
 const getAddress = `-- name: GetAddress :one
@@ -100,6 +101,42 @@ func (q *Queries) GetAddresses(ctx context.Context, arg GetAddressesParams) ([]A
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPOPs = `-- name: GetPOPs :many
+SELECT
+    POP AS pop
+FROM
+    Addresses
+WHERE
+    POP IS NOT NULL
+GROUP BY
+    POP
+ORDER BY
+    pop ASC
+`
+
+func (q *Queries) GetPOPs(ctx context.Context) ([]sql.NullString, error) {
+	rows, err := q.db.QueryContext(ctx, getPOPs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []sql.NullString
+	for rows.Next() {
+		var pop sql.NullString
+		if err := rows.Scan(&pop); err != nil {
+			return nil, err
+		}
+		items = append(items, pop)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

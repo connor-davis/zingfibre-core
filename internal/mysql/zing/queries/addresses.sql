@@ -17,3 +17,15 @@ LIMIT
     ?
 OFFSET
     ?;
+
+-- name: GetPOPs :many
+SELECT
+    POP AS pop
+FROM
+    Addresses
+WHERE
+    POP IS NOT NULL
+GROUP BY
+    POP
+ORDER BY
+    pop ASC
