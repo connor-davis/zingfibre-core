@@ -108,11 +108,7 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 								ItemName:       "Intro Package",
 								RadiusUsername: "johnny",
 								Method:         "Credit Card",
-								AmountGross:    "100.00",
-								AmountFee:      "5.00",
-								AmountNet:      "95.00",
-								CashCode:       "ABC123",
-								CashAmount:     "95.00",
+								Amount:         "100.00",
 								ServiceId:      1,
 								BuildName:      "Zing Build",
 								BuildType:      "Standard",
@@ -241,22 +237,12 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 			data := []system.ReportSummary{}
 
 			for _, summary := range summaries {
-				cashAmount := summary.CashAmount
-
-				if cashAmount == nil {
-					cashAmount = new(float64)
-				}
-
 				data = append(data, system.ReportSummary{
 					DateCreated:    summary.DateCreated.Time.Format(time.RFC3339),
 					ItemName:       string(summary.ItemName.([]byte)),
 					RadiusUsername: summary.RadiusUsername.String,
 					Method:         summary.Method.String,
-					AmountGross:    string(summary.AmountGross.([]byte)),
-					AmountFee:      string(summary.AmountFee.([]byte)),
-					AmountNet:      string(summary.AmountNet.([]byte)),
-					CashCode:       string(summary.CashCode.([]byte)),
-					CashAmount:     string(summary.CashAmount.([]byte)),
+					Amount:         summary.Amount.String,
 					ServiceId:      summary.ServiceID.Int64,
 					BuildName:      summary.BuildName.String,
 					BuildType:      summary.BuildType.String,

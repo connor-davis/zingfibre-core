@@ -133,7 +133,7 @@ func (r *ExportsRouter) SummaryRoute() system.Route {
 
 			writer := csv.NewWriter(c.Response().BodyWriter())
 
-			header := []string{"Created On", "Item Name", "Radius Username", "Method", "Amount Gross", "Amount Fee", "Amount Net", "Cash Code", "Cash Amount", "Service ID", "Build Name", "Build Type"}
+			header := []string{"Created On", "Item Name", "Radius Username", "Method", "Amount", "Service ID", "Build Name", "Build Type"}
 
 			if err := writer.Write(header); err != nil {
 				log.Errorf("🔥 Error writing CSV header: %s", err.Error())
@@ -150,11 +150,7 @@ func (r *ExportsRouter) SummaryRoute() system.Route {
 					string(summary.ItemName.([]byte)),
 					summary.RadiusUsername.String,
 					summary.Method.String,
-					string(summary.AmountGross.([]byte)),
-					string(summary.AmountFee.([]byte)),
-					string(summary.AmountNet.([]byte)),
-					string(summary.CashCode.([]byte)),
-					string(summary.CashAmount.([]byte)),
+					summary.Amount.String,
 					fmt.Sprintf("%d", summary.ServiceID.Int64),
 					summary.BuildName.String,
 					summary.BuildType.String,

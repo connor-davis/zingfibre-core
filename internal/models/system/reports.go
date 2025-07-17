@@ -43,11 +43,7 @@ type ReportSummary struct {
 	ItemName       string `json:"ItemName,omitempty"`
 	RadiusUsername string `json:"RadiusUsername,omitempty"`
 	Method         string `json:"Method,omitempty"`
-	AmountGross    string `json:"AmountGross,omitempty"`
-	AmountFee      string `json:"AmountFee,omitempty"`
-	AmountNet      string `json:"AmountNet,omitempty"`
-	CashCode       string `json:"CashCode,omitempty"`
-	CashAmount     string `json:"CashAmount,omitempty"`
+	Amount         string `json:"Amount,omitempty"`
 	ServiceId      int64  `json:"ServiceId,omitempty"`
 	BuildName      string `json:"BuildName,omitempty"`
 	BuildType      string `json:"BuildType,omitempty"`
