@@ -30,42 +30,38 @@ export type RechargeTypeCounts = {
 
 export type ReportCustomer = {
   Email?: string;
-  FirstName?: string;
+  FullName?: string;
   PhoneNumber?: string;
   RadiusUsername?: string;
-  Surname?: string;
 };
 
 export type ReportCustomers = Array<{
   Email?: string;
-  FirstName?: string;
+  FullName?: string;
   PhoneNumber?: string;
   RadiusUsername?: string;
-  Surname?: string;
 }>;
 
 export type ReportExpiringCustomer = {
   Address?: string;
   Email?: string;
   Expiration?: string;
-  FirstName?: string;
+  FullName?: string;
   LastPurchaseDuration?: string;
   LastPurchaseSpeed?: string;
   PhoneNumber?: string;
   RadiusUsername?: string;
-  Surname?: string;
 };
 
 export type ReportExpiringCustomers = Array<{
   Address?: string;
   Email?: string;
   Expiration?: string;
-  FirstName?: string;
+  FullName?: string;
   LastPurchaseDuration?: string;
   LastPurchaseSpeed?: string;
   PhoneNumber?: string;
   RadiusUsername?: string;
-  Surname?: string;
 }>;
 
 export type ReportRecharge = {
@@ -74,11 +70,11 @@ export type ReportRecharge = {
   BuildType?: string;
   DateCreated?: string;
   Email?: string;
-  FirstName?: string;
+  FullName?: string;
   ItemName?: string;
+  Method?: string;
   ServiceId?: number;
   Successful?: boolean;
-  Surname?: string;
 };
 
 export type ReportRechargeSummaries = Array<{
@@ -87,11 +83,11 @@ export type ReportRechargeSummaries = Array<{
   BuildType?: string;
   DateCreated?: string;
   Email?: string;
-  FirstName?: string;
+  FullName?: string;
   ItemName?: string;
+  Method?: string;
   ServiceId?: number;
   Successful?: boolean;
-  Surname?: string;
 }>;
 
 export type ReportRechargeSummary = {
@@ -100,11 +96,11 @@ export type ReportRechargeSummary = {
   BuildType?: string;
   DateCreated?: string;
   Email?: string;
-  FirstName?: string;
+  FullName?: string;
   ItemName?: string;
+  Method?: string;
   ServiceId?: number;
   Successful?: boolean;
-  Surname?: string;
 };
 
 export type ReportRecharges = Array<{
@@ -113,37 +109,31 @@ export type ReportRecharges = Array<{
   BuildType?: string;
   DateCreated?: string;
   Email?: string;
-  FirstName?: string;
+  FullName?: string;
   ItemName?: string;
+  Method?: string;
   ServiceId?: number;
   Successful?: boolean;
-  Surname?: string;
 }>;
 
 export type ReportSummaries = Array<{
-  AmountFee?: string;
-  AmountGross?: string;
-  AmountNet?: string;
+  Amount?: string;
   BuildName?: string;
   BuildType?: string;
-  CashAmount?: string;
-  CashCode?: string;
   DateCreated?: string;
   ItemName?: string;
+  Method?: string;
   RadiusUsername?: string;
   ServiceId?: number;
 }>;
 
 export type ReportSummary = {
-  AmountFee?: string;
-  AmountGross?: string;
-  AmountNet?: string;
+  Amount?: string;
   BuildName?: string;
   BuildType?: string;
-  CashAmount?: string;
-  CashCode?: string;
   DateCreated?: string;
   ItemName?: string;
+  Method?: string;
   RadiusUsername?: string;
   ServiceId?: number;
 };
@@ -181,39 +171,35 @@ export type SuccessResponse = {
       }>
     | {
         Email?: string;
-        FirstName?: string;
+        FullName?: string;
         PhoneNumber?: string;
         RadiusUsername?: string;
-        Surname?: string;
       }
     | Array<{
         Email?: string;
-        FirstName?: string;
+        FullName?: string;
         PhoneNumber?: string;
         RadiusUsername?: string;
-        Surname?: string;
       }>
     | {
         Address?: string;
         Email?: string;
         Expiration?: string;
-        FirstName?: string;
+        FullName?: string;
         LastPurchaseDuration?: string;
         LastPurchaseSpeed?: string;
         PhoneNumber?: string;
         RadiusUsername?: string;
-        Surname?: string;
       }
     | Array<{
         Address?: string;
         Email?: string;
         Expiration?: string;
-        FirstName?: string;
+        FullName?: string;
         LastPurchaseDuration?: string;
         LastPurchaseSpeed?: string;
         PhoneNumber?: string;
         RadiusUsername?: string;
-        Surname?: string;
       }>
     | {
         Amount?: number;
@@ -221,11 +207,11 @@ export type SuccessResponse = {
         BuildType?: string;
         DateCreated?: string;
         Email?: string;
-        FirstName?: string;
+        FullName?: string;
         ItemName?: string;
+        Method?: string;
         ServiceId?: number;
         Successful?: boolean;
-        Surname?: string;
       }
     | Array<{
         Amount?: number;
@@ -233,11 +219,11 @@ export type SuccessResponse = {
         BuildType?: string;
         DateCreated?: string;
         Email?: string;
-        FirstName?: string;
+        FullName?: string;
         ItemName?: string;
+        Method?: string;
         ServiceId?: number;
         Successful?: boolean;
-        Surname?: string;
       }>
     | {
         Amount?: number;
@@ -245,11 +231,11 @@ export type SuccessResponse = {
         BuildType?: string;
         DateCreated?: string;
         Email?: string;
-        FirstName?: string;
+        FullName?: string;
         ItemName?: string;
+        Method?: string;
         ServiceId?: number;
         Successful?: boolean;
-        Surname?: string;
       }
     | Array<{
         Amount?: number;
@@ -257,35 +243,29 @@ export type SuccessResponse = {
         BuildType?: string;
         DateCreated?: string;
         Email?: string;
-        FirstName?: string;
+        FullName?: string;
         ItemName?: string;
+        Method?: string;
         ServiceId?: number;
         Successful?: boolean;
-        Surname?: string;
       }>
     | {
-        AmountFee?: string;
-        AmountGross?: string;
-        AmountNet?: string;
+        Amount?: string;
         BuildName?: string;
         BuildType?: string;
-        CashAmount?: string;
-        CashCode?: string;
         DateCreated?: string;
         ItemName?: string;
+        Method?: string;
         RadiusUsername?: string;
         ServiceId?: number;
       }
     | Array<{
-        AmountFee?: string;
-        AmountGross?: string;
-        AmountNet?: string;
+        Amount?: string;
         BuildName?: string;
         BuildType?: string;
-        CashAmount?: string;
-        CashCode?: string;
         DateCreated?: string;
         ItemName?: string;
+        Method?: string;
         RadiusUsername?: string;
         ServiceId?: number;
       }>;
@@ -376,39 +356,35 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -416,11 +392,11 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -428,11 +404,11 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -440,11 +416,11 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -452,35 +428,29 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -551,39 +521,35 @@ export type GetApiAuthenticationCheckResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -591,11 +557,11 @@ export type GetApiAuthenticationCheckResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -603,11 +569,11 @@ export type GetApiAuthenticationCheckResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -615,11 +581,11 @@ export type GetApiAuthenticationCheckResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -627,35 +593,29 @@ export type GetApiAuthenticationCheckResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -743,39 +703,35 @@ export type PostApiAuthenticationLoginResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -783,11 +739,11 @@ export type PostApiAuthenticationLoginResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -795,11 +751,11 @@ export type PostApiAuthenticationLoginResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -807,11 +763,11 @@ export type PostApiAuthenticationLoginResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -819,35 +775,29 @@ export type PostApiAuthenticationLoginResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -925,39 +875,35 @@ export type PostApiAuthenticationLogoutResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -965,11 +911,11 @@ export type PostApiAuthenticationLogoutResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -977,11 +923,11 @@ export type PostApiAuthenticationLogoutResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -989,11 +935,11 @@ export type PostApiAuthenticationLogoutResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1001,35 +947,29 @@ export type PostApiAuthenticationLogoutResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -1116,39 +1056,35 @@ export type PostApiAuthenticationMfaDisableResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1156,11 +1092,11 @@ export type PostApiAuthenticationMfaDisableResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1168,11 +1104,11 @@ export type PostApiAuthenticationMfaDisableResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1180,11 +1116,11 @@ export type PostApiAuthenticationMfaDisableResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1192,35 +1128,29 @@ export type PostApiAuthenticationMfaDisableResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -1339,39 +1269,35 @@ export type PostApiAuthenticationMfaVerifyResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1379,11 +1305,11 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1391,11 +1317,11 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1403,11 +1329,11 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1415,35 +1341,29 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -1532,39 +1452,35 @@ export type PostApiAuthenticationRegisterResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1572,11 +1488,11 @@ export type PostApiAuthenticationRegisterResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1584,11 +1500,11 @@ export type PostApiAuthenticationRegisterResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1596,11 +1512,11 @@ export type PostApiAuthenticationRegisterResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1608,35 +1524,29 @@ export type PostApiAuthenticationRegisterResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -1885,39 +1795,35 @@ export type GetApiPopsResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1925,11 +1831,11 @@ export type GetApiPopsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1937,11 +1843,11 @@ export type GetApiPopsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -1949,11 +1855,11 @@ export type GetApiPopsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -1961,35 +1867,29 @@ export type GetApiPopsResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -2071,39 +1971,35 @@ export type GetApiReportsCustomersResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2111,11 +2007,11 @@ export type GetApiReportsCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2123,11 +2019,11 @@ export type GetApiReportsCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2135,11 +2031,11 @@ export type GetApiReportsCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2147,35 +2043,29 @@ export type GetApiReportsCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -2258,39 +2148,35 @@ export type GetApiReportsExpiringCustomersResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2298,11 +2184,11 @@ export type GetApiReportsExpiringCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2310,11 +2196,11 @@ export type GetApiReportsExpiringCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2322,11 +2208,11 @@ export type GetApiReportsExpiringCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2334,35 +2220,29 @@ export type GetApiReportsExpiringCustomersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -2447,39 +2327,35 @@ export type GetApiReportsRechargesResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2487,11 +2363,11 @@ export type GetApiReportsRechargesResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2499,11 +2375,11 @@ export type GetApiReportsRechargesResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2511,11 +2387,11 @@ export type GetApiReportsRechargesResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2523,35 +2399,29 @@ export type GetApiReportsRechargesResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -2634,39 +2504,35 @@ export type GetApiReportsRechargesSummaryResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2674,11 +2540,11 @@ export type GetApiReportsRechargesSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2686,11 +2552,11 @@ export type GetApiReportsRechargesSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2698,11 +2564,11 @@ export type GetApiReportsRechargesSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2710,35 +2576,29 @@ export type GetApiReportsRechargesSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -2822,39 +2682,35 @@ export type GetApiReportsSummaryResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2862,11 +2718,11 @@ export type GetApiReportsSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2874,11 +2730,11 @@ export type GetApiReportsSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -2886,11 +2742,11 @@ export type GetApiReportsSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -2898,35 +2754,29 @@ export type GetApiReportsSummaryResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -3013,39 +2863,35 @@ export type GetApiUsersResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3053,11 +2899,11 @@ export type GetApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3065,11 +2911,11 @@ export type GetApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3077,11 +2923,11 @@ export type GetApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3089,35 +2935,29 @@ export type GetApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -3212,39 +3052,35 @@ export type PostApiUsersResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3252,11 +3088,11 @@ export type PostApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3264,11 +3100,11 @@ export type PostApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3276,11 +3112,11 @@ export type PostApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3288,35 +3124,29 @@ export type PostApiUsersResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -3403,39 +3233,35 @@ export type DeleteApiUsersByIdResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3443,11 +3269,11 @@ export type DeleteApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3455,11 +3281,11 @@ export type DeleteApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3467,11 +3293,11 @@ export type DeleteApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3479,35 +3305,29 @@ export type DeleteApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -3601,39 +3421,35 @@ export type GetApiUsersByIdResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3641,11 +3457,11 @@ export type GetApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3653,11 +3469,11 @@ export type GetApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3665,11 +3481,11 @@ export type GetApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3677,35 +3493,29 @@ export type GetApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;
@@ -3802,39 +3612,35 @@ export type PutApiUsersByIdResponses = {
         }>
       | {
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }
       | Array<{
           Address?: string;
           Email?: string;
           Expiration?: string;
-          FirstName?: string;
+          FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3842,11 +3648,11 @@ export type PutApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3854,11 +3660,11 @@ export type PutApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
           Amount?: number;
@@ -3866,11 +3672,11 @@ export type PutApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }
       | Array<{
           Amount?: number;
@@ -3878,35 +3684,29 @@ export type PutApiUsersByIdResponses = {
           BuildType?: string;
           DateCreated?: string;
           Email?: string;
-          FirstName?: string;
+          FullName?: string;
           ItemName?: string;
+          Method?: string;
           ServiceId?: number;
           Successful?: boolean;
-          Surname?: string;
         }>
       | {
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }
       | Array<{
-          AmountFee?: string;
-          AmountGross?: string;
-          AmountNet?: string;
+          Amount?: string;
           BuildName?: string;
           BuildType?: string;
-          CashAmount?: string;
-          CashCode?: string;
           DateCreated?: string;
           ItemName?: string;
+          Method?: string;
           RadiusUsername?: string;
           ServiceId?: number;
         }>;

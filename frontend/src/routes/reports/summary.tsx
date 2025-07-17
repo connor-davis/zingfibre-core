@@ -199,7 +199,7 @@ export const columns = [
   },
   {
     id: 'Amount',
-    accessorKey: 'AmountGross',
+    accessorKey: 'Amount',
     header: ({ column }) => {
       return (
         <Button
@@ -212,16 +212,7 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const rowString = JSON.stringify(row);
-      const rowJson = JSON.parse(rowString);
-
-      const hasGrossAmount = rowJson['original']['AmountGross'] !== 'N/F';
-      const grossAmount = rowJson['original']['AmountGross'];
-      const cashAmount = rowJson['original']['CashAmount'];
-
-      return <div>R {hasGrossAmount ? grossAmount : cashAmount}</div>;
-    },
+    cell: ({ row }) => <div>{row.getValue('Amount')}</div>,
   },
   {
     id: 'Service Id',

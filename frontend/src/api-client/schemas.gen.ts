@@ -88,16 +88,13 @@ export const ReportCustomerSchema = {
       format: 'email',
       type: 'string',
     },
-    FirstName: {
+    FullName: {
       type: 'string',
     },
     PhoneNumber: {
       type: 'string',
     },
     RadiusUsername: {
-      type: 'string',
-    },
-    Surname: {
       type: 'string',
     },
   },
@@ -110,16 +107,13 @@ export const ReportCustomersSchema = {
         format: 'email',
         type: 'string',
       },
-      FirstName: {
+      FullName: {
         type: 'string',
       },
       PhoneNumber: {
         type: 'string',
       },
       RadiusUsername: {
-        type: 'string',
-      },
-      Surname: {
         type: 'string',
       },
     },
@@ -139,7 +133,7 @@ export const ReportExpiringCustomerSchema = {
     Expiration: {
       type: 'string',
     },
-    FirstName: {
+    FullName: {
       type: 'string',
     },
     LastPurchaseDuration: {
@@ -152,9 +146,6 @@ export const ReportExpiringCustomerSchema = {
       type: 'string',
     },
     RadiusUsername: {
-      type: 'string',
-    },
-    Surname: {
       type: 'string',
     },
   },
@@ -173,7 +164,7 @@ export const ReportExpiringCustomersSchema = {
       Expiration: {
         type: 'string',
       },
-      FirstName: {
+      FullName: {
         type: 'string',
       },
       LastPurchaseDuration: {
@@ -186,9 +177,6 @@ export const ReportExpiringCustomersSchema = {
         type: 'string',
       },
       RadiusUsername: {
-        type: 'string',
-      },
-      Surname: {
         type: 'string',
       },
     },
@@ -215,10 +203,13 @@ export const ReportRechargeSchema = {
       format: 'email',
       type: 'string',
     },
-    FirstName: {
+    FullName: {
       type: 'string',
     },
     ItemName: {
+      type: 'string',
+    },
+    Method: {
       type: 'string',
     },
     ServiceId: {
@@ -227,9 +218,6 @@ export const ReportRechargeSchema = {
     },
     Successful: {
       type: 'boolean',
-    },
-    Surname: {
-      type: 'string',
     },
   },
 } as const;
@@ -254,10 +242,13 @@ export const ReportRechargeSummariesSchema = {
         format: 'email',
         type: 'string',
       },
-      FirstName: {
+      FullName: {
         type: 'string',
       },
       ItemName: {
+        type: 'string',
+      },
+      Method: {
         type: 'string',
       },
       ServiceId: {
@@ -266,9 +257,6 @@ export const ReportRechargeSummariesSchema = {
       },
       Successful: {
         type: 'boolean',
-      },
-      Surname: {
-        type: 'string',
       },
     },
   },
@@ -294,10 +282,13 @@ export const ReportRechargeSummarySchema = {
       format: 'email',
       type: 'string',
     },
-    FirstName: {
+    FullName: {
       type: 'string',
     },
     ItemName: {
+      type: 'string',
+    },
+    Method: {
       type: 'string',
     },
     ServiceId: {
@@ -306,9 +297,6 @@ export const ReportRechargeSummarySchema = {
     },
     Successful: {
       type: 'boolean',
-    },
-    Surname: {
-      type: 'string',
     },
   },
 } as const;
@@ -333,10 +321,13 @@ export const ReportRechargesSchema = {
         format: 'email',
         type: 'string',
       },
-      FirstName: {
+      FullName: {
         type: 'string',
       },
       ItemName: {
+        type: 'string',
+      },
+      Method: {
         type: 'string',
       },
       ServiceId: {
@@ -346,9 +337,6 @@ export const ReportRechargesSchema = {
       Successful: {
         type: 'boolean',
       },
-      Surname: {
-        type: 'string',
-      },
     },
   },
   type: 'array',
@@ -357,13 +345,7 @@ export const ReportRechargesSchema = {
 export const ReportSummariesSchema = {
   items: {
     properties: {
-      AmountFee: {
-        type: 'string',
-      },
-      AmountGross: {
-        type: 'string',
-      },
-      AmountNet: {
+      Amount: {
         type: 'string',
       },
       BuildName: {
@@ -372,17 +354,14 @@ export const ReportSummariesSchema = {
       BuildType: {
         type: 'string',
       },
-      CashAmount: {
-        type: 'string',
-      },
-      CashCode: {
-        type: 'string',
-      },
       DateCreated: {
         format: 'date-time',
         type: 'string',
       },
       ItemName: {
+        type: 'string',
+      },
+      Method: {
         type: 'string',
       },
       RadiusUsername: {
@@ -399,13 +378,7 @@ export const ReportSummariesSchema = {
 
 export const ReportSummarySchema = {
   properties: {
-    AmountFee: {
-      type: 'string',
-    },
-    AmountGross: {
-      type: 'string',
-    },
-    AmountNet: {
+    Amount: {
       type: 'string',
     },
     BuildName: {
@@ -414,17 +387,14 @@ export const ReportSummarySchema = {
     BuildType: {
       type: 'string',
     },
-    CashAmount: {
-      type: 'string',
-    },
-    CashCode: {
-      type: 'string',
-    },
     DateCreated: {
       format: 'date-time',
       type: 'string',
     },
     ItemName: {
+      type: 'string',
+    },
+    Method: {
       type: 'string',
     },
     RadiusUsername: {
@@ -549,16 +519,13 @@ export const SuccessResponseSchema = {
               format: 'email',
               type: 'string',
             },
-            FirstName: {
+            FullName: {
               type: 'string',
             },
             PhoneNumber: {
               type: 'string',
             },
             RadiusUsername: {
-              type: 'string',
-            },
-            Surname: {
               type: 'string',
             },
           },
@@ -570,16 +537,13 @@ export const SuccessResponseSchema = {
                 format: 'email',
                 type: 'string',
               },
-              FirstName: {
+              FullName: {
                 type: 'string',
               },
               PhoneNumber: {
                 type: 'string',
               },
               RadiusUsername: {
-                type: 'string',
-              },
-              Surname: {
                 type: 'string',
               },
             },
@@ -598,7 +562,7 @@ export const SuccessResponseSchema = {
             Expiration: {
               type: 'string',
             },
-            FirstName: {
+            FullName: {
               type: 'string',
             },
             LastPurchaseDuration: {
@@ -611,9 +575,6 @@ export const SuccessResponseSchema = {
               type: 'string',
             },
             RadiusUsername: {
-              type: 'string',
-            },
-            Surname: {
               type: 'string',
             },
           },
@@ -631,7 +592,7 @@ export const SuccessResponseSchema = {
               Expiration: {
                 type: 'string',
               },
-              FirstName: {
+              FullName: {
                 type: 'string',
               },
               LastPurchaseDuration: {
@@ -646,8 +607,82 @@ export const SuccessResponseSchema = {
               RadiusUsername: {
                 type: 'string',
               },
-              Surname: {
+            },
+          },
+          type: 'array',
+        },
+        {
+          properties: {
+            Amount: {
+              type: 'number',
+            },
+            BuildName: {
+              type: 'string',
+            },
+            BuildType: {
+              type: 'string',
+            },
+            DateCreated: {
+              format: 'date-time',
+              type: 'string',
+            },
+            Email: {
+              format: 'email',
+              type: 'string',
+            },
+            FullName: {
+              type: 'string',
+            },
+            ItemName: {
+              type: 'string',
+            },
+            Method: {
+              type: 'string',
+            },
+            ServiceId: {
+              format: 'int64',
+              type: 'integer',
+            },
+            Successful: {
+              type: 'boolean',
+            },
+          },
+        },
+        {
+          items: {
+            properties: {
+              Amount: {
+                type: 'number',
+              },
+              BuildName: {
                 type: 'string',
+              },
+              BuildType: {
+                type: 'string',
+              },
+              DateCreated: {
+                format: 'date-time',
+                type: 'string',
+              },
+              Email: {
+                format: 'email',
+                type: 'string',
+              },
+              FullName: {
+                type: 'string',
+              },
+              ItemName: {
+                type: 'string',
+              },
+              Method: {
+                type: 'string',
+              },
+              ServiceId: {
+                format: 'int64',
+                type: 'integer',
+              },
+              Successful: {
+                type: 'boolean',
               },
             },
           },
@@ -672,10 +707,13 @@ export const SuccessResponseSchema = {
               format: 'email',
               type: 'string',
             },
-            FirstName: {
+            FullName: {
               type: 'string',
             },
             ItemName: {
+              type: 'string',
+            },
+            Method: {
               type: 'string',
             },
             ServiceId: {
@@ -684,9 +722,6 @@ export const SuccessResponseSchema = {
             },
             Successful: {
               type: 'boolean',
-            },
-            Surname: {
-              type: 'string',
             },
           },
         },
@@ -710,10 +745,13 @@ export const SuccessResponseSchema = {
                 format: 'email',
                 type: 'string',
               },
-              FirstName: {
+              FullName: {
                 type: 'string',
               },
               ItemName: {
+                type: 'string',
+              },
+              Method: {
                 type: 'string',
               },
               ServiceId: {
@@ -722,9 +760,6 @@ export const SuccessResponseSchema = {
               },
               Successful: {
                 type: 'boolean',
-              },
-              Surname: {
-                type: 'string',
               },
             },
           },
@@ -733,7 +768,7 @@ export const SuccessResponseSchema = {
         {
           properties: {
             Amount: {
-              type: 'number',
+              type: 'string',
             },
             BuildName: {
               type: 'string',
@@ -745,96 +780,10 @@ export const SuccessResponseSchema = {
               format: 'date-time',
               type: 'string',
             },
-            Email: {
-              format: 'email',
-              type: 'string',
-            },
-            FirstName: {
-              type: 'string',
-            },
             ItemName: {
               type: 'string',
             },
-            ServiceId: {
-              format: 'int64',
-              type: 'integer',
-            },
-            Successful: {
-              type: 'boolean',
-            },
-            Surname: {
-              type: 'string',
-            },
-          },
-        },
-        {
-          items: {
-            properties: {
-              Amount: {
-                type: 'number',
-              },
-              BuildName: {
-                type: 'string',
-              },
-              BuildType: {
-                type: 'string',
-              },
-              DateCreated: {
-                format: 'date-time',
-                type: 'string',
-              },
-              Email: {
-                format: 'email',
-                type: 'string',
-              },
-              FirstName: {
-                type: 'string',
-              },
-              ItemName: {
-                type: 'string',
-              },
-              ServiceId: {
-                format: 'int64',
-                type: 'integer',
-              },
-              Successful: {
-                type: 'boolean',
-              },
-              Surname: {
-                type: 'string',
-              },
-            },
-          },
-          type: 'array',
-        },
-        {
-          properties: {
-            AmountFee: {
-              type: 'string',
-            },
-            AmountGross: {
-              type: 'string',
-            },
-            AmountNet: {
-              type: 'string',
-            },
-            BuildName: {
-              type: 'string',
-            },
-            BuildType: {
-              type: 'string',
-            },
-            CashAmount: {
-              type: 'string',
-            },
-            CashCode: {
-              type: 'string',
-            },
-            DateCreated: {
-              format: 'date-time',
-              type: 'string',
-            },
-            ItemName: {
+            Method: {
               type: 'string',
             },
             RadiusUsername: {
@@ -849,13 +798,7 @@ export const SuccessResponseSchema = {
         {
           items: {
             properties: {
-              AmountFee: {
-                type: 'string',
-              },
-              AmountGross: {
-                type: 'string',
-              },
-              AmountNet: {
+              Amount: {
                 type: 'string',
               },
               BuildName: {
@@ -864,17 +807,14 @@ export const SuccessResponseSchema = {
               BuildType: {
                 type: 'string',
               },
-              CashAmount: {
-                type: 'string',
-              },
-              CashCode: {
-                type: 'string',
-              },
               DateCreated: {
                 format: 'date-time',
                 type: 'string',
               },
               ItemName: {
+                type: 'string',
+              },
+              Method: {
                 type: 'string',
               },
               RadiusUsername: {
