@@ -340,6 +340,7 @@ WHERE
         OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
     )
+    AND t2.RechargeSuccessful = 1
 ORDER BY
     t2.DateCreated DESC
 LIMIT ?
@@ -364,6 +365,7 @@ WHERE
         OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
     )
+    AND t2.RechargeSuccessful = 1
 ORDER BY
     t2.DateCreated DESC
 LIMIT 1;

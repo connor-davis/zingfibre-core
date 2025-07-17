@@ -152,5 +152,6 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
+    AND t2.RechargeSuccessful = 1
 ORDER BY
     t2.DateCreated DESC;
