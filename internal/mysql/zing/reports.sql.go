@@ -521,32 +521,7 @@ SELECT
     END AS item_name,
     t4.RadiusUsername AS radius_username,
     t2.Method AS method,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_gross')),
-        '0'
-    ) AS amount_gross,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_fee')),
-        '0'
-    ) AS amount_fee,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_net')),
-        '0'
-    ) AS amount_net,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.accountNumber')),
-        '0'
-    ) AS cash_code,
-
-    CASE
-        WHEN JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
-        ELSE JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount'))
-    END AS cash_amount,
-
+    t2.PaymentAmount AS amount,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
     t6.Name AS build_type
@@ -590,11 +565,7 @@ type GetReportsSummaryRow struct {
 	ItemName       interface{}
 	RadiusUsername sql.NullString
 	Method         sql.NullString
-	AmountGross    interface{}
-	AmountFee      interface{}
-	AmountNet      interface{}
-	CashCode       interface{}
-	CashAmount     interface{}
+	Amount         sql.NullString
 	ServiceID      sql.NullInt64
 	BuildName      sql.NullString
 	BuildType      sql.NullString
@@ -625,11 +596,7 @@ func (q *Queries) GetReportsSummary(ctx context.Context, arg GetReportsSummaryPa
 			&i.ItemName,
 			&i.RadiusUsername,
 			&i.Method,
-			&i.AmountGross,
-			&i.AmountFee,
-			&i.AmountNet,
-			&i.CashCode,
-			&i.CashAmount,
+			&i.Amount,
 			&i.ServiceID,
 			&i.BuildName,
 			&i.BuildType,

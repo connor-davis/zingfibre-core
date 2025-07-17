@@ -330,32 +330,7 @@ SELECT
     END AS item_name,
     t4.RadiusUsername AS radius_username,
     t2.Method AS method,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_gross')),
-        '0'
-    ) AS amount_gross,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_fee')),
-        '0'
-    ) AS amount_fee,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.amount_net')),
-        '0'
-    ) AS amount_net,
-
-    COALESCE(
-        JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.accountNumber')),
-        '0'
-    ) AS cash_code,
-
-    CASE
-        WHEN JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount')) IS NULL THEN '0'
-        ELSE JSON_UNQUOTE(JSON_EXTRACT(t2.PaymentServicePayload, '$.tenders[0].amount'))
-    END AS cash_amount,
-
+    t2.PaymentAmount AS amount,
     t4.ServiceId AS service_id,
     t5.Name AS build_name,
     t6.Name AS build_type
@@ -367,7 +342,11 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+    AND t2.DateCreated >= 
+        CASE 
+            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) MONTH), '%Y-%m-01 00:00:00')
+        END
     AND t2.RechargeSuccessful = 1
 ORDER BY
     t2.DateCreated DESC
@@ -383,18 +362,14 @@ type GetReportExportsSummaryRow struct {
 	ItemName       interface{}
 	RadiusUsername sql.NullString
 	Method         sql.NullString
-	AmountGross    interface{}
-	AmountFee      interface{}
-	AmountNet      interface{}
-	CashCode       interface{}
-	CashAmount     interface{}
+	Amount         sql.NullString
 	ServiceID      sql.NullInt64
 	BuildName      sql.NullString
 	BuildType      sql.NullString
 }
 
 func (q *Queries) GetReportExportsSummary(ctx context.Context, arg GetReportExportsSummaryParams) ([]GetReportExportsSummaryRow, error) {
-	rows, err := q.db.QueryContext(ctx, getReportExportsSummary, arg.Poi, arg.Months)
+	rows, err := q.db.QueryContext(ctx, getReportExportsSummary, arg.Poi, arg.Months, arg.Months)
 	if err != nil {
 		return nil, err
 	}
@@ -407,11 +382,7 @@ func (q *Queries) GetReportExportsSummary(ctx context.Context, arg GetReportExpo
 			&i.ItemName,
 			&i.RadiusUsername,
 			&i.Method,
-			&i.AmountGross,
-			&i.AmountFee,
-			&i.AmountNet,
-			&i.CashCode,
-			&i.CashAmount,
+			&i.Amount,
 			&i.ServiceID,
 			&i.BuildName,
 			&i.BuildType,
