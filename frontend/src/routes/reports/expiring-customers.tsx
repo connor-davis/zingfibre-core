@@ -1,4 +1,9 @@
-import { ErrorComponent, createFileRoute } from '@tanstack/react-router';
+import {
+  ErrorComponent,
+  createFileRoute,
+  useRouter,
+  useRouterState,
+} from '@tanstack/react-router';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -26,6 +31,7 @@ import {
 import Pagination from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { DebounceInput } from '@/components/ui/debounce-input';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -47,6 +53,7 @@ export const Route = createFileRoute('/reports/expiring-customers')({
   component: RouteComponent,
   validateSearch: z.object({
     poi: z.string().default(''),
+    search: z.string().default(''),
     page: z.coerce.number().default(1),
     pageSize: z.coerce.number().default(10),
   }),
@@ -85,16 +92,18 @@ export const Route = createFileRoute('/reports/expiring-customers')({
     return <ErrorComponent error={error} />;
   },
   wrapInSuspense: true,
-  loaderDeps: ({ search: { poi, page, pageSize } }) => ({
+  loaderDeps: ({ search: { poi, search, page, pageSize } }) => ({
     poi,
+    search,
     page,
     pageSize,
   }),
-  loader: async ({ deps: { poi, page, pageSize } }) => {
+  loader: async ({ deps: { poi, search, page, pageSize } }) => {
     const { data } = await getApiReportsExpiringCustomers({
       client: apiClient,
       query: {
         poi,
+        search,
         page,
         pageSize,
       },
@@ -254,7 +263,10 @@ export const columns = [
 ] as ColumnDef<ReportExpiringCustomer>[];
 
 function RouteComponent() {
-  const { poi } = Route.useLoaderDeps();
+  const routerState = useRouterState();
+  const router = useRouter();
+
+  const { poi, search } = Route.useLoaderDeps();
   const { expiringCustomers, pages } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -289,6 +301,22 @@ function RouteComponent() {
           <Label className="text-lg">Expiring Customers Report</Label>
         </div>
         <div className="flex items-center gap-3">
+          <DebounceInput
+            type="text"
+            className="w-64"
+            placeholder="Search for expiring customer"
+            defaultValue={search}
+            onChange={(value) => {
+              router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  search: value.target.value,
+                }),
+              });
+            }}
+          />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

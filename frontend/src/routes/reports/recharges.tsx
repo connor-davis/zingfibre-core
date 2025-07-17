@@ -2,6 +2,7 @@ import {
   ErrorComponent,
   createFileRoute,
   useRouter,
+  useRouterState,
 } from '@tanstack/react-router';
 import {
   type ColumnDef,
@@ -31,6 +32,7 @@ import Pagination from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { DebounceInput } from '@/components/ui/debounce-input';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -57,6 +59,7 @@ export const Route = createFileRoute('/reports/recharges')({
   component: RouteComponent,
   validateSearch: z.object({
     poi: z.string().default(''),
+    search: z.string().default(''),
     startDate: z.string().default(subDays(new Date(), 7).toISOString()),
     endDate: z.string().default(new Date().toISOString()),
     page: z.coerce.number().default(1),
@@ -97,18 +100,24 @@ export const Route = createFileRoute('/reports/recharges')({
     return <ErrorComponent error={error} />;
   },
   wrapInSuspense: true,
-  loaderDeps: ({ search: { poi, startDate, endDate, page, pageSize } }) => ({
+  loaderDeps: ({
+    search: { poi, search, startDate, endDate, page, pageSize },
+  }) => ({
     poi,
+    search,
     startDate,
     endDate,
     page,
     pageSize,
   }),
-  loader: async ({ deps: { poi, startDate, endDate, page, pageSize } }) => {
+  loader: async ({
+    deps: { poi, search, startDate, endDate, page, pageSize },
+  }) => {
     const { data } = await getApiReportsRecharges({
       client: apiClient,
       query: {
         poi,
+        search,
         startDate,
         endDate,
         page,
@@ -291,9 +300,10 @@ export const columns = [
 ] as ColumnDef<ReportRecharge>[];
 
 function RouteComponent() {
+  const routerState = useRouterState();
   const router = useRouter();
 
-  const { poi, startDate, endDate } = Route.useLoaderDeps();
+  const { poi, search, startDate, endDate } = Route.useLoaderDeps();
   const { expiringCustomers, pages } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -328,6 +338,22 @@ function RouteComponent() {
           <Label className="text-lg">Recharges Report</Label>
         </div>
         <div className="flex items-center gap-3">
+          <DebounceInput
+            type="text"
+            className="w-64"
+            placeholder="Search for recharge"
+            defaultValue={search}
+            onChange={(value) => {
+              router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  search: value.target.value,
+                }),
+              });
+            }}
+          />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
