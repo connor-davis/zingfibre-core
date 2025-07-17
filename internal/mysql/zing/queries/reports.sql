@@ -185,8 +185,8 @@ WHERE
     AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
     AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t2.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
@@ -213,8 +213,8 @@ WHERE
     AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
     AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
@@ -250,8 +250,8 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t2.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
@@ -277,8 +277,8 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t2.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
