@@ -1,6 +1,7 @@
 package reports
 
 import (
+	"math"
 	"strconv"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
@@ -152,6 +153,17 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 				pageSizeInt = 10
 			}
 
+			totalCustomers, err := r.Zing.GetReportsTotalCustomers(c.Context(), poi)
+
+			if err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			pages := int32(math.Ceil(float64(totalCustomers) / float64(pageSizeInt)))
+
 			customers, err := r.Zing.GetReportsCustomers(c.Context(), zing.GetReportsCustomersParams{
 				Poi:    poi,
 				Limit:  int32(pageSizeInt),
@@ -180,6 +192,7 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
 				"data":    data,
+				"pages":   pages,
 			})
 		},
 	}

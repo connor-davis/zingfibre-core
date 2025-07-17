@@ -58,6 +58,18 @@ ORDER BY
 LIMIT ?
 OFFSET ?;
 
+-- name: GetReportsTotalCustomers :one
+SELECT
+    COUNT(*) AS total_customers
+FROM Customers t1
+LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
+WHERE
+    TRIM(LOWER(t2.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+ORDER BY
+    t1.RadiusUsername ASC,
+    t1.Email ASC
+LIMIT 1;
+
 -- name: GetReportsExpiringCustomers :many
 SELECT
     CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
@@ -90,6 +102,30 @@ ORDER BY
 LIMIT ?
 OFFSET ?;
 
+-- name: GetReportsTotalExpiringCustomers :one
+SELECT
+    COUNT(*) AS total_expiring_customers
+FROM
+    Customers t1
+LEFT JOIN (
+    SELECT
+        CustomerID,
+        MAX(DateCreated) AS LastRechargeDate
+    FROM
+        Recharges
+    GROUP BY
+        CustomerID
+) AS latest_recharge ON t1.Id = latest_recharge.CustomerID
+LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_recharge.LastRechargeDate = t2.DateCreated
+LEFT JOIN Products t3 ON t2.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
+WHERE
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+ORDER BY
+    t4.RadiusUsername ASC,
+    t1.Email ASC
+LIMIT 1;
+
 -- name: GetReportsRecharges :many
 SELECT
     t1.DateCreated AS date_created,
@@ -120,6 +156,24 @@ ORDER BY
 LIMIT ?
 OFFSET ?;
 
+-- name: GetReportsTotalRecharges :one
+SELECT
+    COUNT(*) AS total_recharges
+FROM
+    Recharges t1
+LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
+LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
+LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
+LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
+WHERE
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+    AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
+    AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
+ORDER BY
+    t1.DateCreated DESC
+LIMIT 1;
+
 -- name: GetReportsRechargesSummary :many
 SELECT
     t1.DateCreated AS date_created,
@@ -148,6 +202,23 @@ ORDER BY
     t1.DateCreated DESC
 LIMIT ?
 OFFSET ?;
+
+-- name: GetReportsTotalRechargeSummaries :one
+SELECT
+    COUNT(*) AS total_recharge_summaries
+FROM
+    Recharges t1
+LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
+LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
+LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
+LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
+WHERE
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+    AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+ORDER BY
+    t1.DateCreated DESC
+LIMIT 1;
 
 -- name: GetReportsSummary :many
 SELECT
@@ -199,3 +270,19 @@ ORDER BY
     t2.DateCreated DESC
 LIMIT ?
 OFFSET ?;
+
+-- name: GetReportsTotalSummaries :one
+SELECT
+    COUNT(*) AS total_summaries
+FROM Customers t1
+LEFT JOIN Recharges t2 ON t1.Id = t2.CustomerID
+LEFT JOIN Products t3 ON t2.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
+LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
+LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
+WHERE 
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
+    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
+ORDER BY
+    t2.DateCreated DESC
+LIMIT 1;

@@ -1,6 +1,7 @@
 package reports
 
 import (
+	"math"
 	"strconv"
 	"time"
 
@@ -185,6 +186,23 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				pageSizeInt = 10
 			}
 
+			totalRecharges, err := r.Zing.GetReportsTotalRecharges(c.Context(), zing.GetReportsTotalRechargesParams{
+				Poi:       poi,
+				StartDate: startDateParsed,
+				EndDate:   endDateParsed,
+			})
+
+			if err != nil {
+				log.Errorf("🔥 Error fetching total recharges from Zing: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			pages := int32(math.Ceil(float64(totalRecharges) / 10))
+
 			recharges, err := r.Zing.GetReportsRecharges(c.Context(), zing.GetReportsRechargesParams{
 				Poi:       poi,
 				StartDate: startDateParsed,
@@ -230,6 +248,7 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
 				"data":    data,
+				"pages":   pages,
 			})
 		},
 	}
@@ -380,6 +399,19 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 				pageSizeInt = 10
 			}
 
+			totalRechargeSummaries, err := r.Zing.GetReportsTotalRechargeSummaries(c.Context(), poi)
+
+			if err != nil {
+				log.Errorf("🔥 Error fetching total recharges summary from Zing: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			pages := int32(math.Ceil(float64(totalRechargeSummaries) / 10))
+
 			rechargeSummaries, err := r.Zing.GetReportsRechargesSummary(c.Context(), zing.GetReportsRechargesSummaryParams{
 				Poi:    poi,
 				Limit:  int32(pageSizeInt),
@@ -423,6 +455,7 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
 				"data":    data,
+				"pages":   pages,
 			})
 		},
 	}

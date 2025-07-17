@@ -1,6 +1,7 @@
 package reports
 
 import (
+	"math"
 	"strconv"
 	"time"
 
@@ -129,6 +130,22 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 				})
 			}
 
+			totalSummaries, err := r.Zing.GetReportsTotalSummaries(c.Context(), zing.GetReportsTotalSummariesParams{
+				Poi:    poi,
+				Months: monthsInt,
+			})
+
+			if err != nil {
+				log.Errorf("🔥 Error fetching total summaries from Zing: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			pages := int32(math.Ceil(float64(totalSummaries) / 10))
+
 			summaries, err := r.Zing.GetReportsSummary(c.Context(), zing.GetReportsSummaryParams{
 				Poi:    poi,
 				Months: monthsInt,
@@ -171,6 +188,7 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
 				"data":    data,
+				"pages":   pages,
 			})
 		},
 	}

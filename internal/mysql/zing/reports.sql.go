@@ -536,3 +536,141 @@ func (q *Queries) GetReportsSummary(ctx context.Context, arg GetReportsSummaryPa
 	}
 	return items, nil
 }
+
+const getReportsTotalCustomers = `-- name: GetReportsTotalCustomers :one
+SELECT
+    COUNT(*) AS total_customers
+FROM Customers t1
+LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
+WHERE
+    TRIM(LOWER(t2.POP)) = TRIM(LOWER(?))
+ORDER BY
+    t1.RadiusUsername ASC,
+    t1.Email ASC
+LIMIT 1
+`
+
+func (q *Queries) GetReportsTotalCustomers(ctx context.Context, poi string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalCustomers, poi)
+	var total_customers int64
+	err := row.Scan(&total_customers)
+	return total_customers, err
+}
+
+const getReportsTotalExpiringCustomers = `-- name: GetReportsTotalExpiringCustomers :one
+SELECT
+    COUNT(*) AS total_expiring_customers
+FROM
+    Customers t1
+LEFT JOIN (
+    SELECT
+        CustomerID,
+        MAX(DateCreated) AS LastRechargeDate
+    FROM
+        Recharges
+    GROUP BY
+        CustomerID
+) AS latest_recharge ON t1.Id = latest_recharge.CustomerID
+LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_recharge.LastRechargeDate = t2.DateCreated
+LEFT JOIN Products t3 ON t2.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
+WHERE
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+ORDER BY
+    t4.RadiusUsername ASC,
+    t1.Email ASC
+LIMIT 1
+`
+
+func (q *Queries) GetReportsTotalExpiringCustomers(ctx context.Context, poi string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalExpiringCustomers, poi)
+	var total_expiring_customers int64
+	err := row.Scan(&total_expiring_customers)
+	return total_expiring_customers, err
+}
+
+const getReportsTotalRechargeSummaries = `-- name: GetReportsTotalRechargeSummaries :one
+SELECT
+    COUNT(*) AS total_recharge_summaries
+FROM
+    Recharges t1
+LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
+LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
+LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
+LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
+WHERE
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+ORDER BY
+    t1.DateCreated DESC
+LIMIT 1
+`
+
+func (q *Queries) GetReportsTotalRechargeSummaries(ctx context.Context, poi string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalRechargeSummaries, poi)
+	var total_recharge_summaries int64
+	err := row.Scan(&total_recharge_summaries)
+	return total_recharge_summaries, err
+}
+
+const getReportsTotalRecharges = `-- name: GetReportsTotalRecharges :one
+SELECT
+    COUNT(*) AS total_recharges
+FROM
+    Recharges t1
+LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
+LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
+LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
+LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
+WHERE
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    AND CAST(t1.DateCreated AS DATE) >= ?
+    AND CAST(t1.DateCreated AS DATE) <= ?
+ORDER BY
+    t1.DateCreated DESC
+LIMIT 1
+`
+
+type GetReportsTotalRechargesParams struct {
+	Poi       string
+	StartDate time.Time
+	EndDate   time.Time
+}
+
+func (q *Queries) GetReportsTotalRecharges(ctx context.Context, arg GetReportsTotalRechargesParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalRecharges, arg.Poi, arg.StartDate, arg.EndDate)
+	var total_recharges int64
+	err := row.Scan(&total_recharges)
+	return total_recharges, err
+}
+
+const getReportsTotalSummaries = `-- name: GetReportsTotalSummaries :one
+SELECT
+    COUNT(*) AS total_summaries
+FROM Customers t1
+LEFT JOIN Recharges t2 ON t1.Id = t2.CustomerID
+LEFT JOIN Products t3 ON t2.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
+LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
+LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
+WHERE 
+    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+ORDER BY
+    t2.DateCreated DESC
+LIMIT 1
+`
+
+type GetReportsTotalSummariesParams struct {
+	Poi    string
+	Months interface{}
+}
+
+func (q *Queries) GetReportsTotalSummaries(ctx context.Context, arg GetReportsTotalSummariesParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalSummaries, arg.Poi, arg.Months)
+	var total_summaries int64
+	err := row.Scan(&total_summaries)
+	return total_summaries, err
+}
