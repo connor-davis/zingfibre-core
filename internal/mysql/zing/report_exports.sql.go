@@ -87,6 +87,15 @@ LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
@@ -96,6 +105,7 @@ type GetReportExportsExpiringCustomersParams struct {
 	Expiration interface{}
 	Address    interface{}
 	Poi        string
+	Search     string
 }
 
 type GetReportExportsExpiringCustomersRow struct {
@@ -110,7 +120,18 @@ type GetReportExportsExpiringCustomersRow struct {
 }
 
 func (q *Queries) GetReportExportsExpiringCustomers(ctx context.Context, arg GetReportExportsExpiringCustomersParams) ([]GetReportExportsExpiringCustomersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getReportExportsExpiringCustomers, arg.Expiration, arg.Address, arg.Poi)
+	rows, err := q.db.QueryContext(ctx, getReportExportsExpiringCustomers,
+		arg.Expiration,
+		arg.Address,
+		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+	)
 	if err != nil {
 		return nil, err
 	}

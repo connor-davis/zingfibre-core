@@ -60,6 +60,20 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{
@@ -138,6 +152,7 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 		},
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
+			search := c.Query("search")
 
 			page := c.Query("page")
 			pageSize := c.Query("pageSize")
@@ -154,7 +169,10 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 				pageSizeInt = 10
 			}
 
-			totalCustomers, err := r.Zing.GetReportsTotalCustomers(c.Context(), poi)
+			totalCustomers, err := r.Zing.GetReportsTotalCustomers(c.Context(), zing.GetReportsTotalCustomersParams{
+				Poi:    poi,
+				Search: search,
+			})
 
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
@@ -169,6 +187,7 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 
 			customers, err := r.Zing.GetReportsCustomers(c.Context(), zing.GetReportsCustomersParams{
 				Poi:    poi,
+				Search: search,
 				Limit:  int32(pageSizeInt),
 				Offset: int32((pageInt - 1) * pageSizeInt),
 			})

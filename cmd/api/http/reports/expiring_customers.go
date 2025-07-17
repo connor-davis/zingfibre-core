@@ -61,6 +61,20 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{
@@ -143,6 +157,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 		},
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
+			search := c.Query("search")
 
 			page := c.Query("page")
 			pageSize := c.Query("pageSize")
@@ -163,6 +178,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				Expiration: "",
 				Address:    "",
 				Poi:        poi,
+				Search:     search,
 			})
 
 			if err != nil {
@@ -189,6 +205,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				Expiration: "",
 				Address:    "",
 				Poi:        poi,
+				Search:     search,
 				Limit:      int32(pageSizeInt),
 				Offset:     int32((pageInt - 1) * pageSizeInt),
 			})

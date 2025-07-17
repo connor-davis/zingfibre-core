@@ -38,6 +38,15 @@ LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC;

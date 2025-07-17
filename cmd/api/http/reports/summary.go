@@ -75,6 +75,20 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{
@@ -160,6 +174,8 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 		},
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
+			search := c.Query("search")
+
 			months := c.Query("months")
 
 			monthsInt, err := strconv.Atoi(months)
@@ -189,6 +205,7 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 
 			totalSummaries, err := r.Zing.GetReportsTotalSummaries(c.Context(), zing.GetReportsTotalSummariesParams{
 				Poi:    poi,
+				Search: search,
 				Months: monthsInt,
 			})
 
@@ -205,6 +222,7 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 
 			summaries, err := r.Zing.GetReportsSummary(c.Context(), zing.GetReportsSummaryParams{
 				Poi:    poi,
+				Search: search,
 				Months: monthsInt,
 				Limit:  int32(pageSizeInt),
 				Offset: int32((pageInt - 1) * pageSizeInt),

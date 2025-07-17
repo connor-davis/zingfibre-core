@@ -52,6 +52,13 @@ FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
     TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
@@ -65,6 +72,13 @@ FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
     TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t1.RadiusUsername ASC,
     t1.Email ASC
@@ -96,6 +110,15 @@ LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
@@ -121,6 +144,15 @@ LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t4.RadiusUsername ASC,
     t1.Email ASC
@@ -151,6 +183,15 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
     AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT ?
@@ -170,6 +211,14 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
     AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT 1;
@@ -198,6 +247,15 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT ?
@@ -216,6 +274,15 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT 1;
@@ -266,6 +333,13 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
+    AND (
+        CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t2.DateCreated DESC
 LIMIT ?
@@ -283,6 +357,13 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
+    AND (
+        CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+    )
 ORDER BY
     t2.DateCreated DESC
 LIMIT 1;

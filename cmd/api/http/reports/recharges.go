@@ -91,6 +91,20 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{
@@ -174,6 +188,8 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 		},
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
+			search := c.Query("search")
+
 			startDate := c.Query("startDate")
 			endDate := c.Query("endDate")
 
@@ -216,6 +232,7 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 
 			totalRecharges, err := r.Zing.GetReportsTotalRecharges(c.Context(), zing.GetReportsTotalRechargesParams{
 				Poi:       poi,
+				Search:    search,
 				StartDate: startDateParsed,
 				EndDate:   endDateParsed,
 			})
@@ -233,6 +250,7 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 
 			recharges, err := r.Zing.GetReportsRecharges(c.Context(), zing.GetReportsRechargesParams{
 				Poi:       poi,
+				Search:    search,
 				StartDate: startDateParsed,
 				EndDate:   endDateParsed,
 				Limit:     int32(pageSizeInt),
@@ -328,6 +346,20 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "search",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{
@@ -411,6 +443,7 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 		},
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
+			search := c.Query("search")
 
 			page := c.Query("page")
 			pageSize := c.Query("pageSize")
@@ -427,7 +460,10 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 				pageSizeInt = 10
 			}
 
-			totalRechargeSummaries, err := r.Zing.GetReportsTotalRechargeSummaries(c.Context(), poi)
+			totalRechargeSummaries, err := r.Zing.GetReportsTotalRechargeSummaries(c.Context(), zing.GetReportsTotalRechargeSummariesParams{
+				Poi:    poi,
+				Search: search,
+			})
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching total recharges summary from Zing: %s", err.Error())
@@ -442,6 +478,7 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 
 			rechargeSummaries, err := r.Zing.GetReportsRechargesSummary(c.Context(), zing.GetReportsRechargesSummaryParams{
 				Poi:    poi,
+				Search: search,
 				Limit:  int32(pageSizeInt),
 				Offset: int32((pageInt - 1) * pageSizeInt),
 			})

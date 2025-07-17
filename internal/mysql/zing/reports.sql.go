@@ -21,6 +21,13 @@ FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
     TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
@@ -30,6 +37,7 @@ OFFSET ?
 
 type GetReportsCustomersParams struct {
 	Poi    string
+	Search string
 	Limit  int32
 	Offset int32
 }
@@ -42,7 +50,16 @@ type GetReportsCustomersRow struct {
 }
 
 func (q *Queries) GetReportsCustomers(ctx context.Context, arg GetReportsCustomersParams) ([]GetReportsCustomersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getReportsCustomers, arg.Poi, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, getReportsCustomers,
+		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -95,6 +112,15 @@ LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
@@ -106,6 +132,7 @@ type GetReportsExpiringCustomersParams struct {
 	Expiration interface{}
 	Address    interface{}
 	Poi        string
+	Search     string
 	Limit      int32
 	Offset     int32
 }
@@ -126,6 +153,13 @@ func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, arg GetReport
 		arg.Expiration,
 		arg.Address,
 		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
 		arg.Limit,
 		arg.Offset,
 	)
@@ -278,6 +312,15 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT ?
@@ -288,6 +331,7 @@ type GetReportsRechargesParams struct {
 	Poi       string
 	StartDate time.Time
 	EndDate   time.Time
+	Search    string
 	Limit     int32
 	Offset    int32
 }
@@ -309,6 +353,13 @@ func (q *Queries) GetReportsRecharges(ctx context.Context, arg GetReportsRecharg
 		arg.Poi,
 		arg.StartDate,
 		arg.EndDate,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
 		arg.Limit,
 		arg.Offset,
 	)
@@ -367,6 +418,15 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT ?
@@ -375,6 +435,7 @@ OFFSET ?
 
 type GetReportsRechargesSummaryParams struct {
 	Poi    string
+	Search string
 	Limit  int32
 	Offset int32
 }
@@ -392,7 +453,18 @@ type GetReportsRechargesSummaryRow struct {
 }
 
 func (q *Queries) GetReportsRechargesSummary(ctx context.Context, arg GetReportsRechargesSummaryParams) ([]GetReportsRechargesSummaryRow, error) {
-	rows, err := q.db.QueryContext(ctx, getReportsRechargesSummary, arg.Poi, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, getReportsRechargesSummary,
+		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -470,6 +542,13 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+    AND (
+        CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t2.DateCreated DESC
 LIMIT ?
@@ -479,6 +558,7 @@ OFFSET ?
 type GetReportsSummaryParams struct {
 	Poi    string
 	Months interface{}
+	Search string
 	Limit  int32
 	Offset int32
 }
@@ -501,6 +581,11 @@ func (q *Queries) GetReportsSummary(ctx context.Context, arg GetReportsSummaryPa
 	rows, err := q.db.QueryContext(ctx, getReportsSummary,
 		arg.Poi,
 		arg.Months,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
 		arg.Limit,
 		arg.Offset,
 	)
@@ -544,14 +629,33 @@ FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
     TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t1.RadiusUsername ASC,
     t1.Email ASC
 LIMIT 1
 `
 
-func (q *Queries) GetReportsTotalCustomers(ctx context.Context, poi string) (int64, error) {
-	row := q.db.QueryRowContext(ctx, getReportsTotalCustomers, poi)
+type GetReportsTotalCustomersParams struct {
+	Poi    string
+	Search string
+}
+
+func (q *Queries) GetReportsTotalCustomers(ctx context.Context, arg GetReportsTotalCustomersParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalCustomers,
+		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+	)
 	var total_customers int64
 	err := row.Scan(&total_customers)
 	return total_customers, err
@@ -576,14 +680,37 @@ LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t4.RadiusUsername ASC,
     t1.Email ASC
 LIMIT 1
 `
 
-func (q *Queries) GetReportsTotalExpiringCustomers(ctx context.Context, poi string) (int64, error) {
-	row := q.db.QueryRowContext(ctx, getReportsTotalExpiringCustomers, poi)
+type GetReportsTotalExpiringCustomersParams struct {
+	Poi    string
+	Search string
+}
+
+func (q *Queries) GetReportsTotalExpiringCustomers(ctx context.Context, arg GetReportsTotalExpiringCustomersParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalExpiringCustomers,
+		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+	)
 	var total_expiring_customers int64
 	err := row.Scan(&total_expiring_customers)
 	return total_expiring_customers, err
@@ -602,13 +729,36 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT 1
 `
 
-func (q *Queries) GetReportsTotalRechargeSummaries(ctx context.Context, poi string) (int64, error) {
-	row := q.db.QueryRowContext(ctx, getReportsTotalRechargeSummaries, poi)
+type GetReportsTotalRechargeSummariesParams struct {
+	Poi    string
+	Search string
+}
+
+func (q *Queries) GetReportsTotalRechargeSummaries(ctx context.Context, arg GetReportsTotalRechargeSummariesParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalRechargeSummaries,
+		arg.Poi,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+	)
 	var total_recharge_summaries int64
 	err := row.Scan(&total_recharge_summaries)
 	return total_recharge_summaries, err
@@ -628,6 +778,14 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
+    AND (
+        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t1.DateCreated DESC
 LIMIT 1
@@ -637,10 +795,21 @@ type GetReportsTotalRechargesParams struct {
 	Poi       string
 	StartDate time.Time
 	EndDate   time.Time
+	Search    string
 }
 
 func (q *Queries) GetReportsTotalRecharges(ctx context.Context, arg GetReportsTotalRechargesParams) (int64, error) {
-	row := q.db.QueryRowContext(ctx, getReportsTotalRecharges, arg.Poi, arg.StartDate, arg.EndDate)
+	row := q.db.QueryRowContext(ctx, getReportsTotalRecharges,
+		arg.Poi,
+		arg.StartDate,
+		arg.EndDate,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+	)
 	var total_recharges int64
 	err := row.Scan(&total_recharges)
 	return total_recharges, err
@@ -658,6 +827,13 @@ LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+    AND (
+        CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t6.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+    )
 ORDER BY
     t2.DateCreated DESC
 LIMIT 1
@@ -666,10 +842,19 @@ LIMIT 1
 type GetReportsTotalSummariesParams struct {
 	Poi    string
 	Months interface{}
+	Search string
 }
 
 func (q *Queries) GetReportsTotalSummaries(ctx context.Context, arg GetReportsTotalSummariesParams) (int64, error) {
-	row := q.db.QueryRowContext(ctx, getReportsTotalSummaries, arg.Poi, arg.Months)
+	row := q.db.QueryRowContext(ctx, getReportsTotalSummaries,
+		arg.Poi,
+		arg.Months,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+		arg.Search,
+	)
 	var total_summaries int64
 	err := row.Scan(&total_summaries)
 	return total_summaries, err
