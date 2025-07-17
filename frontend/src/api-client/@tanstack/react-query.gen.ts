@@ -48,10 +48,20 @@ import type {
   GetApiExportsSummaryData,
   GetApiPopsData,
   GetApiReportsCustomersData,
+  GetApiReportsCustomersError,
+  GetApiReportsCustomersResponse,
   GetApiReportsExpiringCustomersData,
+  GetApiReportsExpiringCustomersError,
+  GetApiReportsExpiringCustomersResponse,
   GetApiReportsRechargesData,
+  GetApiReportsRechargesError,
+  GetApiReportsRechargesResponse,
   GetApiReportsRechargesSummaryData,
+  GetApiReportsRechargesSummaryError,
+  GetApiReportsRechargesSummaryResponse,
   GetApiReportsSummaryData,
+  GetApiReportsSummaryError,
+  GetApiReportsSummaryResponse,
   GetApiUsersByIdData,
   GetApiUsersData,
   GetApiUsersError,
@@ -625,128 +635,6 @@ export const getApiReportsCustomersOptions = (
   });
 };
 
-export const getApiReportsExpiringCustomersQueryKey = (
-  options?: Options<GetApiReportsExpiringCustomersData>
-) => createQueryKey('getApiReportsExpiringCustomers', options);
-
-/**
- * Expiring Customers Report
- * Endpoint to retrieve expiring customers report
- */
-export const getApiReportsExpiringCustomersOptions = (
-  options?: Options<GetApiReportsExpiringCustomersData>
-) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiReportsExpiringCustomers({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getApiReportsExpiringCustomersQueryKey(options),
-  });
-};
-
-export const getApiReportsRechargesQueryKey = (
-  options: Options<GetApiReportsRechargesData>
-) => createQueryKey('getApiReportsRecharges', options);
-
-/**
- * Recharges Report
- * Endpoint to retrieve recharges report
- */
-export const getApiReportsRechargesOptions = (
-  options: Options<GetApiReportsRechargesData>
-) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiReportsRecharges({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getApiReportsRechargesQueryKey(options),
-  });
-};
-
-export const getApiReportsRechargesSummaryQueryKey = (
-  options?: Options<GetApiReportsRechargesSummaryData>
-) => createQueryKey('getApiReportsRechargesSummary', options);
-
-/**
- * Recharges Summary Report
- * Endpoint to retrieve recharges summary report
- */
-export const getApiReportsRechargesSummaryOptions = (
-  options?: Options<GetApiReportsRechargesSummaryData>
-) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiReportsRechargesSummary({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getApiReportsRechargesSummaryQueryKey(options),
-  });
-};
-
-export const getApiReportsSummaryQueryKey = (
-  options?: Options<GetApiReportsSummaryData>
-) => createQueryKey('getApiReportsSummary', options);
-
-/**
- * Summary Report
- * Endpoint to retrieve summary report
- */
-export const getApiReportsSummaryOptions = (
-  options?: Options<GetApiReportsSummaryData>
-) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiReportsSummary({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getApiReportsSummaryQueryKey(options),
-  });
-};
-
-export const getApiUsersQueryKey = (options?: Options<GetApiUsersData>) =>
-  createQueryKey('getApiUsers', options);
-
-/**
- * Get Users
- * Endpoint to retrieve a list of users
- */
-export const getApiUsersOptions = (options?: Options<GetApiUsersData>) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiUsers({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getApiUsersQueryKey(options),
-  });
-};
-
 const createInfiniteParams = <
   K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>,
 >(
@@ -781,6 +669,388 @@ const createInfiniteParams = <
     };
   }
   return params as unknown as typeof page;
+};
+
+export const getApiReportsCustomersInfiniteQueryKey = (
+  options?: Options<GetApiReportsCustomersData>
+): QueryKey<Options<GetApiReportsCustomersData>> =>
+  createQueryKey('getApiReportsCustomers', options, true);
+
+/**
+ * Customers Report
+ * Endpoint to retrieve customers report
+ */
+export const getApiReportsCustomersInfiniteOptions = (
+  options?: Options<GetApiReportsCustomersData>
+) => {
+  return infiniteQueryOptions<
+    GetApiReportsCustomersResponse,
+    GetApiReportsCustomersError,
+    InfiniteData<GetApiReportsCustomersResponse>,
+    QueryKey<Options<GetApiReportsCustomersData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiReportsCustomersData>>[0],
+        'body' | 'headers' | 'path' | 'query'
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiReportsCustomersData>>[0],
+          'body' | 'headers' | 'path' | 'query'
+        > =
+          typeof pageParam === 'object'
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await getApiReportsCustomers({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: getApiReportsCustomersInfiniteQueryKey(options),
+    }
+  );
+};
+
+export const getApiReportsExpiringCustomersQueryKey = (
+  options?: Options<GetApiReportsExpiringCustomersData>
+) => createQueryKey('getApiReportsExpiringCustomers', options);
+
+/**
+ * Expiring Customers Report
+ * Endpoint to retrieve expiring customers report
+ */
+export const getApiReportsExpiringCustomersOptions = (
+  options?: Options<GetApiReportsExpiringCustomersData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsExpiringCustomers({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsExpiringCustomersQueryKey(options),
+  });
+};
+
+export const getApiReportsExpiringCustomersInfiniteQueryKey = (
+  options?: Options<GetApiReportsExpiringCustomersData>
+): QueryKey<Options<GetApiReportsExpiringCustomersData>> =>
+  createQueryKey('getApiReportsExpiringCustomers', options, true);
+
+/**
+ * Expiring Customers Report
+ * Endpoint to retrieve expiring customers report
+ */
+export const getApiReportsExpiringCustomersInfiniteOptions = (
+  options?: Options<GetApiReportsExpiringCustomersData>
+) => {
+  return infiniteQueryOptions<
+    GetApiReportsExpiringCustomersResponse,
+    GetApiReportsExpiringCustomersError,
+    InfiniteData<GetApiReportsExpiringCustomersResponse>,
+    QueryKey<Options<GetApiReportsExpiringCustomersData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiReportsExpiringCustomersData>>[0],
+        'body' | 'headers' | 'path' | 'query'
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiReportsExpiringCustomersData>>[0],
+          'body' | 'headers' | 'path' | 'query'
+        > =
+          typeof pageParam === 'object'
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await getApiReportsExpiringCustomers({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: getApiReportsExpiringCustomersInfiniteQueryKey(options),
+    }
+  );
+};
+
+export const getApiReportsRechargesQueryKey = (
+  options: Options<GetApiReportsRechargesData>
+) => createQueryKey('getApiReportsRecharges', options);
+
+/**
+ * Recharges Report
+ * Endpoint to retrieve recharges report
+ */
+export const getApiReportsRechargesOptions = (
+  options: Options<GetApiReportsRechargesData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsRecharges({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsRechargesQueryKey(options),
+  });
+};
+
+export const getApiReportsRechargesInfiniteQueryKey = (
+  options: Options<GetApiReportsRechargesData>
+): QueryKey<Options<GetApiReportsRechargesData>> =>
+  createQueryKey('getApiReportsRecharges', options, true);
+
+/**
+ * Recharges Report
+ * Endpoint to retrieve recharges report
+ */
+export const getApiReportsRechargesInfiniteOptions = (
+  options: Options<GetApiReportsRechargesData>
+) => {
+  return infiniteQueryOptions<
+    GetApiReportsRechargesResponse,
+    GetApiReportsRechargesError,
+    InfiniteData<GetApiReportsRechargesResponse>,
+    QueryKey<Options<GetApiReportsRechargesData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiReportsRechargesData>>[0],
+        'body' | 'headers' | 'path' | 'query'
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiReportsRechargesData>>[0],
+          'body' | 'headers' | 'path' | 'query'
+        > =
+          typeof pageParam === 'object'
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await getApiReportsRecharges({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: getApiReportsRechargesInfiniteQueryKey(options),
+    }
+  );
+};
+
+export const getApiReportsRechargesSummaryQueryKey = (
+  options?: Options<GetApiReportsRechargesSummaryData>
+) => createQueryKey('getApiReportsRechargesSummary', options);
+
+/**
+ * Recharges Summary Report
+ * Endpoint to retrieve recharges summary report
+ */
+export const getApiReportsRechargesSummaryOptions = (
+  options?: Options<GetApiReportsRechargesSummaryData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsRechargesSummary({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsRechargesSummaryQueryKey(options),
+  });
+};
+
+export const getApiReportsRechargesSummaryInfiniteQueryKey = (
+  options?: Options<GetApiReportsRechargesSummaryData>
+): QueryKey<Options<GetApiReportsRechargesSummaryData>> =>
+  createQueryKey('getApiReportsRechargesSummary', options, true);
+
+/**
+ * Recharges Summary Report
+ * Endpoint to retrieve recharges summary report
+ */
+export const getApiReportsRechargesSummaryInfiniteOptions = (
+  options?: Options<GetApiReportsRechargesSummaryData>
+) => {
+  return infiniteQueryOptions<
+    GetApiReportsRechargesSummaryResponse,
+    GetApiReportsRechargesSummaryError,
+    InfiniteData<GetApiReportsRechargesSummaryResponse>,
+    QueryKey<Options<GetApiReportsRechargesSummaryData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiReportsRechargesSummaryData>>[0],
+        'body' | 'headers' | 'path' | 'query'
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiReportsRechargesSummaryData>>[0],
+          'body' | 'headers' | 'path' | 'query'
+        > =
+          typeof pageParam === 'object'
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await getApiReportsRechargesSummary({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: getApiReportsRechargesSummaryInfiniteQueryKey(options),
+    }
+  );
+};
+
+export const getApiReportsSummaryQueryKey = (
+  options: Options<GetApiReportsSummaryData>
+) => createQueryKey('getApiReportsSummary', options);
+
+/**
+ * Summary Report
+ * Endpoint to retrieve summary report
+ */
+export const getApiReportsSummaryOptions = (
+  options: Options<GetApiReportsSummaryData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiReportsSummary({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiReportsSummaryQueryKey(options),
+  });
+};
+
+export const getApiReportsSummaryInfiniteQueryKey = (
+  options: Options<GetApiReportsSummaryData>
+): QueryKey<Options<GetApiReportsSummaryData>> =>
+  createQueryKey('getApiReportsSummary', options, true);
+
+/**
+ * Summary Report
+ * Endpoint to retrieve summary report
+ */
+export const getApiReportsSummaryInfiniteOptions = (
+  options: Options<GetApiReportsSummaryData>
+) => {
+  return infiniteQueryOptions<
+    GetApiReportsSummaryResponse,
+    GetApiReportsSummaryError,
+    InfiniteData<GetApiReportsSummaryResponse>,
+    QueryKey<Options<GetApiReportsSummaryData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiReportsSummaryData>>[0],
+        'body' | 'headers' | 'path' | 'query'
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiReportsSummaryData>>[0],
+          'body' | 'headers' | 'path' | 'query'
+        > =
+          typeof pageParam === 'object'
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await getApiReportsSummary({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: getApiReportsSummaryInfiniteQueryKey(options),
+    }
+  );
+};
+
+export const getApiUsersQueryKey = (options?: Options<GetApiUsersData>) =>
+  createQueryKey('getApiUsers', options);
+
+/**
+ * Get Users
+ * Endpoint to retrieve a list of users
+ */
+export const getApiUsersOptions = (options?: Options<GetApiUsersData>) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiUsers({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiUsersQueryKey(options),
+  });
 };
 
 export const getApiUsersInfiniteQueryKey = (

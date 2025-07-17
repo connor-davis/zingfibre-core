@@ -36,16 +36,23 @@ const DebounceIncrementorInput = forwardRef<
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (!props.onChange || !localChange) return;
+      if (!props.onChange || !localChange || !props.onValueChange) return;
 
       props.onChange(localChange);
+
+      const value = Number(incrementInput.current?.value);
+
+      if (!isNaN(value)) {
+        props.onValueChange(value);
+      }
+
       setLocalChange(undefined);
     }, delay);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [localChange, delay, props.onChange]);
+  }, [localChange, delay, props.onChange, props.onValueChange]);
 
   useImperativeHandle(ref, () => incrementInput.current!, []);
 

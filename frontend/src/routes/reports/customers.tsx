@@ -45,6 +45,8 @@ export const Route = createFileRoute('/reports/customers')({
   component: RouteComponent,
   validateSearch: z.object({
     poi: z.string().default(''),
+    page: z.coerce.number().default(1),
+    pageSize: z.coerce.number().default(10),
   }),
   pendingComponent: () => (
     <div className="flex flex-col w-full h-full items-center justify-center">
@@ -81,28 +83,36 @@ export const Route = createFileRoute('/reports/customers')({
     return <ErrorComponent error={error} />;
   },
   wrapInSuspense: true,
-  loaderDeps: ({ search: { poi } }) => ({ poi }),
-  loader: async ({ deps: { poi } }) => {
+  loaderDeps: ({ search: { poi, page, pageSize } }) => ({
+    poi,
+    page,
+    pageSize,
+  }),
+  loader: async ({ deps: { poi, page, pageSize } }) => {
     const { data } = await getApiReportsCustomers({
       client: apiClient,
       query: {
         poi,
+        page,
+        pageSize,
       },
       throwOnError: true,
     });
 
     return {
       customers: data?.data,
+      pages: data?.pages ?? 1,
     } as {
       customers?: ReportCustomers[];
+      pages: number;
     };
   },
 });
 
 export const columns = [
   {
-    id: 'First Name',
-    accessorKey: 'FirstName',
+    id: 'Full Name',
+    accessorKey: 'FullName',
     header: ({ column }) => {
       return (
         <Button
@@ -110,30 +120,12 @@ export const columns = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="p-0 hover:bg-transparent"
         >
-          First Name
+          Full Name
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.getValue('First Name')}</div>,
-    footer: (props) => props.column.id,
-  },
-  {
-    id: 'Last Name',
-    accessorKey: 'Surname',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Last Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div>{row.getValue('Last Name')}</div>,
+    cell: ({ row }) => <div>{row.getValue('Full Name')}</div>,
     footer: (props) => props.column.id,
   },
   {
@@ -191,7 +183,7 @@ export const columns = [
 
 function RouteComponent() {
   const { poi } = Route.useLoaderDeps();
-  const { customers } = Route.useLoaderData();
+  const { customers, pages } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -201,6 +193,7 @@ function RouteComponent() {
   const table = useReactTable({
     data: customers ?? [],
     columns,
+    manualPagination: true,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -218,7 +211,7 @@ function RouteComponent() {
   });
 
   return (
-    <div className="flex flex-col w-full h-full bg-popover border-t p-3 gap-3">
+    <div className="flex flex-col w-full h-full bg-popover border-t p-3 gap-3 overflow-hidden">
       <div className="flex items-center justify-between w-full h-auto">
         <div className="flex items-center gap-3">
           <Label className="text-lg">Customers Report</Label>
@@ -262,61 +255,59 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col w-full h-full gap-3">
-        <div className="w-full overflow-hidden">
-          <div className="rounded-md border overflow-x-auto bg-accent">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
+      <div className="flex flex-col w-full h-full overflow-y-auto gap-3">
+        <div className="flex flex-col rounded-md border overflow-x-auto bg-accent">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={[...(customers ?? [])].length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={[...(customers ?? [])].length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
 
-        <Pagination pages={1} />
+        <Pagination pages={pages} />
       </div>
     </div>
   );

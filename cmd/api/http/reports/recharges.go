@@ -63,6 +63,34 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "page",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "pageSize",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{

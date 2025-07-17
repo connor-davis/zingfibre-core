@@ -47,6 +47,34 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 				},
 			},
 		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "page",
+				In:       "query",
+				Required: true,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "pageSize",
+				In:       "query",
+				Required: true,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	responses.Set("200", &openapi3.ResponseRef{
@@ -144,6 +172,21 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 				})
 			}
 
+			page := c.Query("page")
+			pageSize := c.Query("pageSize")
+
+			pageInt, err := strconv.Atoi(page)
+
+			if err != nil {
+				pageInt = 1
+			}
+
+			pageSizeInt, err := strconv.Atoi(pageSize)
+
+			if err != nil {
+				pageSizeInt = 10
+			}
+
 			totalSummaries, err := r.Zing.GetReportsTotalSummaries(c.Context(), zing.GetReportsTotalSummariesParams{
 				Poi:    poi,
 				Months: monthsInt,
@@ -163,6 +206,8 @@ func (r *ReportsRouter) SummaryRoute() system.Route {
 			summaries, err := r.Zing.GetReportsSummary(c.Context(), zing.GetReportsSummaryParams{
 				Poi:    poi,
 				Months: monthsInt,
+				Limit:  int32(pageSizeInt),
+				Offset: int32((pageInt - 1) * pageSizeInt),
 			})
 
 			if err != nil {

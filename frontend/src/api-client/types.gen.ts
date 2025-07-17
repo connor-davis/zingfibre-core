@@ -2006,6 +2006,8 @@ export type GetApiReportsCustomersData = {
   path?: never;
   query?: {
     poi?: string;
+    page?: number;
+    pageSize?: number;
   };
   url: '/api/reports/customers';
 };
@@ -2190,6 +2192,8 @@ export type GetApiReportsExpiringCustomersData = {
   path?: never;
   query?: {
     poi?: string;
+    page?: number;
+    pageSize?: number;
   };
   url: '/api/reports/expiring-customers';
 };
@@ -2376,6 +2380,8 @@ export type GetApiReportsRechargesData = {
     poi?: string;
     startDate: string;
     endDate: string;
+    page?: number;
+    pageSize?: number;
   };
   url: '/api/reports/recharges';
 };
@@ -2560,6 +2566,8 @@ export type GetApiReportsRechargesSummaryData = {
   path?: never;
   query?: {
     poi?: string;
+    page?: number;
+    pageSize?: number;
   };
   url: '/api/reports/recharges-summary';
 };
@@ -2742,8 +2750,11 @@ export type GetApiReportsRechargesSummaryResponse =
 export type GetApiReportsSummaryData = {
   body?: never;
   path?: never;
-  query?: {
+  query: {
     poi?: string;
+    months: number;
+    page: number;
+    pageSize: number;
   };
   url: '/api/reports/summary';
 };

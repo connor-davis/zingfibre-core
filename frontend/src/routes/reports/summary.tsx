@@ -23,6 +23,7 @@ import {
   type ReportSummary,
   getApiReportsSummary,
 } from '@/api-client';
+import Pagination from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -46,6 +47,9 @@ export const Route = createFileRoute('/reports/summary')({
   component: RouteComponent,
   validateSearch: z.object({
     poi: z.string().default(''),
+    months: z.coerce.number().default(1),
+    page: z.coerce.number().default(1),
+    pageSize: z.coerce.number().default(10),
   }),
   pendingComponent: () => (
     <div className="flex flex-col w-full h-full items-center justify-center">
@@ -82,20 +86,30 @@ export const Route = createFileRoute('/reports/summary')({
     return <ErrorComponent error={error} />;
   },
   wrapInSuspense: true,
-  loaderDeps: ({ search: { poi } }) => ({ poi }),
-  loader: async ({ deps: { poi } }) => {
+  loaderDeps: ({ search: { poi, months, page, pageSize } }) => ({
+    poi,
+    months,
+    page,
+    pageSize,
+  }),
+  loader: async ({ deps: { poi, months, page, pageSize } }) => {
     const { data } = await getApiReportsSummary({
       client: apiClient,
       query: {
         poi,
+        months,
+        page,
+        pageSize,
       },
       throwOnError: true,
     });
 
     return {
-      expiringCustomers: data?.data,
+      summaries: data?.data,
+      pages: data?.pages ?? 1,
     } as {
-      expiringCustomers?: ReportSummaries;
+      summaries?: ReportSummaries;
+      pages: number;
     };
   },
 });
@@ -235,7 +249,7 @@ export const columns = [
 
 function RouteComponent() {
   const { poi } = Route.useLoaderDeps();
-  const { expiringCustomers } = Route.useLoaderData();
+  const { summaries, pages } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -243,8 +257,9 @@ function RouteComponent() {
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data: expiringCustomers ?? [],
+    data: summaries ?? [],
     columns,
+    manualPagination: true,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -306,79 +321,59 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col w-full h-full gap-3">
-        <div className="w-full h-full overflow-hidden">
-          <div className="rounded-md border overflow-x-auto bg-accent">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
+      <div className="flex flex-col w-full h-full overflow-y-auto gap-3">
+        <div className="flex flex-col rounded-md border overflow-x-auto bg-accent">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={[...(expiringCustomers ?? [])].length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={[...(summaries ?? [])].length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+
+        <Pagination pages={pages} />
       </div>
     </div>
   );

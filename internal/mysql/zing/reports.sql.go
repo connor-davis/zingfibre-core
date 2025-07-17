@@ -20,9 +20,9 @@ SELECT
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
-    TRIM(LOWER(t2.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
 ORDER BY
-    t1.RadiusUsername ASC,
+    CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
 LIMIT ?
 OFFSET ?
@@ -94,9 +94,9 @@ LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_
 LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
 ORDER BY
-    t4.RadiusUsername ASC,
+    CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
 LIMIT ?
 OFFSET ?
@@ -257,7 +257,7 @@ const getReportsRecharges = `-- name: GetReportsRecharges :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
-    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
+    CONCAT(t2.FirstName, ' ', t2.Surname) AS full_name,
     CASE 
         WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
@@ -275,7 +275,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
 ORDER BY
@@ -347,7 +347,7 @@ const getReportsRechargesSummary = `-- name: GetReportsRechargesSummary :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
-    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
+    CONCAT(t2.FirstName, ' ', t2.Surname) AS full_name,
     CASE 
         WHEN t3.Category IS NULL OR t3.Name IS NULL THEN 'Intro Package'
         ELSE CONCAT(t3.Category, ' ', t3.Name, ' Access')
@@ -365,7 +365,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
     t1.DateCreated DESC
@@ -468,7 +468,7 @@ LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
 ORDER BY
     t2.DateCreated DESC
@@ -543,7 +543,7 @@ SELECT
 FROM Customers t1
 LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 WHERE
-    TRIM(LOWER(t2.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
 ORDER BY
     t1.RadiusUsername ASC,
     t1.Email ASC
@@ -575,7 +575,7 @@ LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_
 LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 WHERE
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
 ORDER BY
     t4.RadiusUsername ASC,
     t1.Email ASC
@@ -600,7 +600,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
     t1.DateCreated DESC
@@ -625,7 +625,7 @@ LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
 ORDER BY
@@ -656,7 +656,7 @@ LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
 LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
-    TRIM(LOWER(t4.POP)) = TRIM(LOWER(?))
+    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
 ORDER BY
     t2.DateCreated DESC

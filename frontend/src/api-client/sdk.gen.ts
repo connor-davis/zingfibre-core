@@ -442,9 +442,9 @@ export const getApiReportsRechargesSummary = <
  * Endpoint to retrieve summary report
  */
 export const getApiReportsSummary = <ThrowOnError extends boolean = false>(
-  options?: Options<GetApiReportsSummaryData, ThrowOnError>
+  options: Options<GetApiReportsSummaryData, ThrowOnError>
 ) => {
-  return (options?.client ?? _heyApiClient).get<
+  return (options.client ?? _heyApiClient).get<
     GetApiReportsSummaryResponses,
     GetApiReportsSummaryErrors,
     ThrowOnError
