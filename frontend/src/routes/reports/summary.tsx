@@ -179,6 +179,25 @@ export const columns = [
     cell: ({ row }) => <div>{row.getValue('Radius Username')}</div>,
   },
   {
+    id: 'Method',
+    accessorKey: 'Method',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="p-0 hover:bg-transparent"
+        >
+          Method
+          <ArrowUpDown className="w-4 h-4 ml-2" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div>{row.getValue('Method')}</div>;
+    },
+  },
+  {
     id: 'Amount',
     accessorKey: 'AmountGross',
     header: ({ column }) => {
