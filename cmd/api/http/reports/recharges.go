@@ -170,10 +170,27 @@ func (r *ReportsRouter) RechargesRoute() system.Route {
 				})
 			}
 
+			page := c.Query("page")
+			pageSize := c.Query("pageSize")
+
+			pageInt, err := strconv.Atoi(page)
+
+			if err != nil {
+				pageInt = 1
+			}
+
+			pageSizeInt, err := strconv.Atoi(pageSize)
+
+			if err != nil {
+				pageSizeInt = 10
+			}
+
 			recharges, err := r.Zing.GetReportsRecharges(c.Context(), zing.GetReportsRechargesParams{
 				Poi:       poi,
 				StartDate: startDateParsed,
 				EndDate:   endDateParsed,
+				Limit:     int32(pageSizeInt),
+				Offset:    int32((pageInt - 1) * pageSizeInt),
 			})
 
 			if err != nil {
@@ -231,6 +248,34 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 					Value: &openapi3.Schema{
 						Type: &openapi3.Types{
 							"string",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "page",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "pageSize",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
 						},
 					},
 				},
@@ -320,7 +365,26 @@ func (r *ReportsRouter) RechargesSummaryRoute() system.Route {
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
 
-			rechargeSummaries, err := r.Zing.GetReportsRechargesSummary(c.Context(), poi)
+			page := c.Query("page")
+			pageSize := c.Query("pageSize")
+
+			pageInt, err := strconv.Atoi(page)
+
+			if err != nil {
+				pageInt = 1
+			}
+
+			pageSizeInt, err := strconv.Atoi(pageSize)
+
+			if err != nil {
+				pageSizeInt = 10
+			}
+
+			rechargeSummaries, err := r.Zing.GetReportsRechargesSummary(c.Context(), zing.GetReportsRechargesSummaryParams{
+				Poi:    poi,
+				Limit:  int32(pageSizeInt),
+				Offset: int32((pageInt - 1) * pageSizeInt),
+			})
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching recharges summary from Zing: %s", err.Error())

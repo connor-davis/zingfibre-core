@@ -1,6 +1,8 @@
 package reports
 
 import (
+	"strconv"
+
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -25,6 +27,34 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 					Value: &openapi3.Schema{
 						Type: &openapi3.Types{
 							"string",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "page",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "pageSize",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"integer",
 						},
 					},
 				},
@@ -113,6 +143,21 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
 
+			page := c.Query("page")
+			pageSize := c.Query("pageSize")
+
+			pageInt, err := strconv.Atoi(page)
+
+			if err != nil {
+				pageInt = 1
+			}
+
+			pageSizeInt, err := strconv.Atoi(pageSize)
+
+			if err != nil {
+				pageSizeInt = 10
+			}
+
 			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context(), poi)
 
 			if err != nil {
@@ -128,6 +173,8 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				Expiration: "",
 				Address:    "",
 				Poi:        poi,
+				Limit:      int32(pageSizeInt),
+				Offset:     int32((pageInt - 1) * pageSizeInt),
 			})
 
 			if err != nil {

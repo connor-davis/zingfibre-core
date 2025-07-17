@@ -96,7 +96,7 @@ func (r *ExportsRouter) CustomersRoute() system.Route {
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
 
-			customers, err := r.Zing.GetReportsCustomers(c.Context(), poi)
+			customers, err := r.Zing.GetReportExportsCustomers(c.Context(), poi)
 
 			if err != nil {
 				log.Errorf("🔥 Error retrieving customers report: %s", err.Error())

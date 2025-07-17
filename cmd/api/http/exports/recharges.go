@@ -152,7 +152,7 @@ func (r *ExportsRouter) RechargesRoute() system.Route {
 				})
 			}
 
-			recharges, err := r.Zing.GetReportsRecharges(c.Context(), zing.GetReportsRechargesParams{
+			recharges, err := r.Zing.GetReportExportsRecharges(c.Context(), zing.GetReportExportsRechargesParams{
 				Poi:       poi,
 				StartDate: startDateParsed,
 				EndDate:   endDateParsed,
@@ -313,7 +313,7 @@ func (r *ExportsRouter) RechargesSummaryRoute() system.Route {
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
 
-			rechargeSummaries, err := r.Zing.GetReportsRechargesSummary(c.Context(), poi)
+			rechargeSummaries, err := r.Zing.GetReportExportsRechargesSummary(c.Context(), poi)
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching recharges summary from Zing: %s", err.Error())

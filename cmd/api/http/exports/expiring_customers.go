@@ -109,7 +109,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 				})
 			}
 
-			expiringCustomers, err := r.Zing.GetReportsExpiringCustomers(c.Context(), zing.GetReportsExpiringCustomersParams{
+			expiringCustomers, err := r.Zing.GetReportExportsExpiringCustomers(c.Context(), zing.GetReportExportsExpiringCustomersParams{
 				Expiration: "",
 				Address:    "",
 				Poi:        poi,

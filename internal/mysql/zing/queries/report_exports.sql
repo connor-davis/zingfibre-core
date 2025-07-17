@@ -1,48 +1,4 @@
--- name: GetReportsRechargeTypeCounts :many
-SELECT
-	*
-FROM
-	(
-		SELECT
-			t3.Name AS recharge_name,
-			COUNT(*) AS recharge_count,
-			CASE
-				WHEN sqlc.arg('period') = 'weeks' THEN CONCAT(
-					FLOOR((DAY(t1.DateCreated) - 1) / 7) + 1,
-					'-',
-					MONTH(t1.DateCreated),
-					'-',
-					YEAR(t1.DateCreated)
-				)
-				WHEN sqlc.arg('period') = 'months' THEN CONCAT(MONTH(t1.DateCreated), '-', YEAR(t1.DateCreated))
-			END AS recharge_period,
-			MAX(t1.DateCreated) AS recharge_max_date
-		FROM
-			Recharges t1
-			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
-			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
-            LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
-		WHERE
-			TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
-			AND(
-                (
-                    sqlc.arg('period') = 'weeks'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (sqlc.arg('count') - 1) WEEK)
-                )
-                OR(
-                    sqlc.arg('period') = 'months'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('count') - 1) MONTH)
-                )
-			)
-		GROUP BY
-			recharge_name,
-			recharge_period
-	) AS sub
-ORDER BY
-	recharge_max_date ASC,
-    recharge_count DESC;
-
--- name: GetReportsCustomers :many
+-- name: GetReportExportsCustomers :many
 SELECT
     CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     t1.Email AS email,
@@ -54,11 +10,9 @@ WHERE
     TRIM(LOWER(t2.POP)) = TRIM(LOWER(sqlc.arg('poi')))
 ORDER BY
     t1.RadiusUsername ASC,
-    t1.Email ASC
-LIMIT ?
-OFFSET ?;
+    t1.Email ASC;
 
--- name: GetReportsExpiringCustomers :many
+-- name: GetReportExportsExpiringCustomers :many
 SELECT
     CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
     t1.Email AS email,
@@ -86,11 +40,9 @@ WHERE
     TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
 ORDER BY
     t4.RadiusUsername ASC,
-    t1.Email ASC
-LIMIT ?
-OFFSET ?;
+    t1.Email ASC;
 
--- name: GetReportsRecharges :many
+-- name: GetReportExportsRecharges :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
@@ -116,11 +68,9 @@ WHERE
     AND CAST(t1.DateCreated AS DATE) >= sqlc.arg('start_date')
     AND CAST(t1.DateCreated AS DATE) <= sqlc.arg('end_date')
 ORDER BY
-    t1.DateCreated DESC
-LIMIT ?
-OFFSET ?;
+    t1.DateCreated DESC;
 
--- name: GetReportsRechargesSummary :many
+-- name: GetReportExportsRechargesSummary :many
 SELECT
     t1.DateCreated AS date_created,
     t2.Email AS email,
@@ -145,11 +95,9 @@ WHERE
     TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
 ORDER BY
-    t1.DateCreated DESC
-LIMIT ?
-OFFSET ?;
+    t1.DateCreated DESC;
 
--- name: GetReportsSummary :many
+-- name: GetReportExportsSummary :many
 SELECT
     t2.DateCreated AS date_created,
     CASE 
@@ -196,6 +144,4 @@ WHERE
     TRIM(LOWER(t4.POP)) = TRIM(LOWER(sqlc.arg('poi')))
     AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
 ORDER BY
-    t2.DateCreated DESC
-LIMIT ?
-OFFSET ?;
+    t2.DateCreated DESC;

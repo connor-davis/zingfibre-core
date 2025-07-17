@@ -110,7 +110,7 @@ func (r *ExportsRouter) SummaryRoute() system.Route {
 				})
 			}
 
-			summaries, err := r.Zing.GetReportsSummary(c.Context(), zing.GetReportsSummaryParams{
+			summaries, err := r.Zing.GetReportExportsSummary(c.Context(), zing.GetReportExportsSummaryParams{
 				Poi:    poi,
 				Months: monthsInt,
 			})
