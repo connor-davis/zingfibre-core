@@ -128,7 +128,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => (
-      <div>{format(parseISO(row.getValue('Expires On')), 'PPP')}</div>
+      <div>{format(parseISO(row.getValue('Expires On')), 'dd/MM/yyyy')}</div>
     ),
   },
   {

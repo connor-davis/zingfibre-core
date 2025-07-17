@@ -137,7 +137,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => (
-      <div>{format(parseISO(row.getValue('Created On')), 'PPP')}</div>
+      <div>{format(parseISO(row.getValue('Created On')), 'dd/MM/yyyy')}</div>
     ),
   },
   {

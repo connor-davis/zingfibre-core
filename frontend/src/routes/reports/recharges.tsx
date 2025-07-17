@@ -144,7 +144,7 @@ export const columns = [
       );
     },
     cell: ({ row }) => (
-      <div>{format(parseISO(row.getValue('Created On')), 'PPP')}</div>
+      <div>{format(parseISO(row.getValue('Created On')), 'dd/MM/yyyy')}</div>
     ),
   },
   {
@@ -165,8 +165,8 @@ export const columns = [
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
   },
   {
-    id: 'First Name',
-    accessorKey: 'FirstName',
+    id: 'Full Name',
+    accessorKey: 'FullName',
     header: ({ column }) => {
       return (
         <Button
@@ -174,30 +174,12 @@ export const columns = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="p-0 hover:bg-transparent"
         >
-          First Name
+          Full Name
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.getValue('First Name')}</div>,
-    footer: (props) => props.column.id,
-  },
-  {
-    id: 'Last Name',
-    accessorKey: 'Surname',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Last Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div>{row.getValue('Last Name')}</div>,
+    cell: ({ row }) => <div>{row.getValue('Full Name')}</div>,
     footer: (props) => props.column.id,
   },
   {
