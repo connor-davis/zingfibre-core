@@ -8,7 +8,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/exports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
-	"github.com/connor-davis/zingfibre-core/cmd/api/http/pois"
+	"github.com/connor-davis/zingfibre-core/cmd/api/http/pops"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/reports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
@@ -37,7 +37,7 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	users := users.NewUsersRouter(postgres, middleware, sessions)
 	usersRoutes := users.RegisterRoutes()
 
-	pois := pois.NewPointOfInterestsRouter(postgres, middleware, sessions)
+	pois := pops.NewPOPsRouter(postgres, zing, middleware)
 	poisRoutes := pois.RegisterRoutes()
 
 	analytics := analytics.NewAnalyticsRouter(zing, middleware, sessions)
