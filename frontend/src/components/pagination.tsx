@@ -45,7 +45,7 @@ export default function Pagination({ pages }: { pages: number }) {
 
         <div>
           <DebounceNumberInput
-            className="w-24 h-10 rounded-r-none"
+            className="w-24 h-9 rounded-r-none"
             min={1}
             max={100}
             value={pageSize}

@@ -2,6 +2,7 @@ import {
   ErrorComponent,
   createFileRoute,
   useRouter,
+  useRouterState,
   useSearch,
 } from '@tanstack/react-router';
 import { CalendarIcon, SigmaIcon } from 'lucide-react';
@@ -31,7 +32,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { DebounceIncrementorInput } from '@/components/ui/debounce-incrementor';
+import { DebounceNumberInput } from '@/components/ui/debounce-number-input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -119,7 +120,8 @@ export const Route = createFileRoute('/')({
 });
 
 function App() {
-  const { period } = useSearch({ from: '/' });
+  const { period, count } = useSearch({ from: '/' });
+  const routerState = useRouterState();
   const router = useRouter();
 
   const { items, types } = Route.useLoaderData();
@@ -133,18 +135,18 @@ function App() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-3">
             <SigmaIcon className="size-4" />
-            <DebounceIncrementorInput
-              className="w-24"
-              min={1}
-              defaultValue={1}
-              onChange={(value) => {
-                console.log(value);
 
+            <DebounceNumberInput
+              className="w-24 h-9 rounded-r-none"
+              min={1}
+              max={100}
+              value={count}
+              onValueChange={(value) => {
                 router.navigate({
-                  to: '/',
+                  to: routerState.location.pathname,
                   search: (previous) => ({
                     ...previous,
-                    count: value.target.valueAsNumber,
+                    count: value,
                   }),
                 });
               }}

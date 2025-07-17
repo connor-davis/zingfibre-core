@@ -1,4 +1,9 @@
-import { ErrorComponent, createFileRoute } from '@tanstack/react-router';
+import {
+  ErrorComponent,
+  createFileRoute,
+  useRouter,
+  useRouterState,
+} from '@tanstack/react-router';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -26,6 +31,7 @@ import {
 import Pagination from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { DebounceNumberInput } from '@/components/ui/debounce-number-input';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -248,7 +254,10 @@ export const columns = [
 ] as ColumnDef<ReportSummary>[];
 
 function RouteComponent() {
-  const { poi } = Route.useLoaderDeps();
+  const routerState = useRouterState();
+  const router = useRouter();
+
+  const { poi, months } = Route.useLoaderDeps();
   const { summaries, pages } = Route.useLoaderData();
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -283,6 +292,22 @@ function RouteComponent() {
           <Label className="text-lg">Summary Report</Label>
         </div>
         <div className="flex items-center gap-3">
+          <DebounceNumberInput
+            className="w-24 h-9 rounded-r-none"
+            min={1}
+            max={100}
+            value={months}
+            onValueChange={(value) => {
+              router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  months: value,
+                }),
+              });
+            }}
+          />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

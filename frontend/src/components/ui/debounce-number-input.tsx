@@ -154,7 +154,7 @@ export const DebounceNumberInput = forwardRef<
           prefix={prefix}
           customInput={Input}
           placeholder={placeholder}
-          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none w-auto h-10 relative"
+          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none w-auto h-8 relative"
           getInputRef={ref}
           {...props}
         />
@@ -162,7 +162,7 @@ export const DebounceNumberInput = forwardRef<
         <div className="flex flex-col w-auto h-auto">
           <Button
             aria-label="Increase value"
-            className="px-2 h-5 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative"
+            className="px-2 h-4 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative"
             variant="outline"
             onClick={handleIncrement}
             disabled={value === max}
@@ -171,7 +171,7 @@ export const DebounceNumberInput = forwardRef<
           </Button>
           <Button
             aria-label="Decrease value"
-            className="px-2 h-5 rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative"
+            className="px-2 h-4 rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative"
             variant="outline"
             onClick={handleDecrement}
             disabled={value === min}
