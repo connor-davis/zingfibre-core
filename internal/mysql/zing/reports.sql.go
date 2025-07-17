@@ -222,11 +222,19 @@ FROM
 			AND(
                 (
                     ? = 'weeks'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (? - 1) WEEK)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) WEEK), '%Y-%m-01 00:00:00')
+                        END
                 )
                 OR(
                     ? = 'months'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) MONTH), '%Y-%m-01 00:00:00')
+                        END
                 )
 			)
 		GROUP BY
@@ -258,7 +266,9 @@ func (q *Queries) GetReportsRechargeTypeCounts(ctx context.Context, arg GetRepor
 		arg.Poi,
 		arg.Period,
 		arg.Count,
+		arg.Count,
 		arg.Period,
+		arg.Count,
 		arg.Count,
 	)
 	if err != nil {
@@ -548,7 +558,11 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+    AND t1.DateCreated >= 
+        CASE 
+            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) MONTH), '%Y-%m-01 00:00:00')
+        END
     AND (
         CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
@@ -589,6 +603,7 @@ type GetReportsSummaryRow struct {
 func (q *Queries) GetReportsSummary(ctx context.Context, arg GetReportsSummaryParams) ([]GetReportsSummaryRow, error) {
 	rows, err := q.db.QueryContext(ctx, getReportsSummary,
 		arg.Poi,
+		arg.Months,
 		arg.Months,
 		arg.Search,
 		arg.Search,
@@ -836,7 +851,11 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+    AND t1.DateCreated >= 
+        CASE 
+            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) MONTH), '%Y-%m-01 00:00:00')
+        END
     AND (
         CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
@@ -859,6 +878,7 @@ type GetReportsTotalSummariesParams struct {
 func (q *Queries) GetReportsTotalSummaries(ctx context.Context, arg GetReportsTotalSummariesParams) (int64, error) {
 	row := q.db.QueryRowContext(ctx, getReportsTotalSummaries,
 		arg.Poi,
+		arg.Months,
 		arg.Months,
 		arg.Search,
 		arg.Search,

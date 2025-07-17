@@ -27,11 +27,19 @@ FROM
 			AND(
                 (
                     sqlc.arg('period') = 'weeks'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (sqlc.arg('count') - 1) WEEK)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN sqlc.arg('count') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('count') - 1) WEEK), '%Y-%m-01 00:00:00')
+                        END
                 )
                 OR(
                     sqlc.arg('period') = 'months'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('count') - 1) MONTH)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN sqlc.arg('count') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('count') - 1) MONTH), '%Y-%m-01 00:00:00')
+                        END
                 )
 			)
 		GROUP BY
@@ -335,7 +343,11 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
-    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
+    AND t1.DateCreated >= 
+        CASE 
+            WHEN sqlc.arg('months') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('months') - 1) MONTH), '%Y-%m-01 00:00:00')
+        END
     AND (
         CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
@@ -360,7 +372,11 @@ LEFT JOIN Builds t5 ON t4.BuildId = t5.Id
 LEFT JOIN BuildTypes t6 ON t5.BuildTypeId = t6.Id
 WHERE 
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
-    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('months') - 1) MONTH)
+    AND t1.DateCreated >= 
+        CASE 
+            WHEN sqlc.arg('months') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('months') - 1) MONTH), '%Y-%m-01 00:00:00')
+        END
     AND (
         CONCAT(t3.Category, ' ', t3.Name, ' Access') LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
