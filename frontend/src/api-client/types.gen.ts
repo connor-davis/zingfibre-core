@@ -2008,6 +2008,7 @@ export type GetApiReportsCustomersData = {
     poi?: string;
     page?: number;
     pageSize?: number;
+    search?: string;
   };
   url: '/api/reports/customers';
 };
@@ -2194,6 +2195,7 @@ export type GetApiReportsExpiringCustomersData = {
     poi?: string;
     page?: number;
     pageSize?: number;
+    search?: string;
   };
   url: '/api/reports/expiring-customers';
 };
@@ -2382,6 +2384,7 @@ export type GetApiReportsRechargesData = {
     endDate: string;
     page?: number;
     pageSize?: number;
+    search?: string;
   };
   url: '/api/reports/recharges';
 };
@@ -2568,6 +2571,7 @@ export type GetApiReportsRechargesSummaryData = {
     poi?: string;
     page?: number;
     pageSize?: number;
+    search?: string;
   };
   url: '/api/reports/recharges-summary';
 };
@@ -2755,6 +2759,7 @@ export type GetApiReportsSummaryData = {
     months: number;
     page: number;
     pageSize: number;
+    search?: string;
   };
   url: '/api/reports/summary';
 };
