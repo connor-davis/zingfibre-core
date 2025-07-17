@@ -7,9 +7,9 @@ var SuccessResponseSchema = openapi3.NewSchema().WithProperties(map[string]*open
 	"details": openapi3.NewStringSchema().WithDefault("Operation completed successfully"),
 	"data": openapi3.NewOneOfSchema(
 		UserSchema.Value,
-		PointOfInterestSchema.Value,
+		PointOfPresenceSchema.Value,
 		UserArraySchema.Value,
-		PointOfInterestArraySchema.Value,
+		PointsOfPresenceSchema.Value,
 		RechargeTypeCountsSchema.Value,
 		ReportRechargeTypeCountsSchema.Value,
 		ReportCustomerSchema.Value,

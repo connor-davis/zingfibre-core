@@ -9,7 +9,6 @@ import {
 import { client as _heyApiClient } from '../client.gen';
 import {
   type Options,
-  deleteApiPoisById,
   deleteApiUsersById,
   getApiAnalyticsRechargeTypeCounts,
   getApiAuthenticationCheck,
@@ -19,8 +18,7 @@ import {
   getApiExportsRecharges,
   getApiExportsRechargesSummary,
   getApiExportsSummary,
-  getApiPois,
-  getApiPoisById,
+  getApiPops,
   getApiReportsCustomers,
   getApiReportsExpiringCustomers,
   getApiReportsRecharges,
@@ -33,15 +31,10 @@ import {
   postApiAuthenticationMfaDisable,
   postApiAuthenticationMfaVerify,
   postApiAuthenticationRegister,
-  postApiPois,
   postApiUsers,
-  putApiPoisById,
   putApiUsersById,
 } from '../sdk.gen';
 import type {
-  DeleteApiPoisByIdData,
-  DeleteApiPoisByIdError,
-  DeleteApiPoisByIdResponse,
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdError,
   DeleteApiUsersByIdResponse,
@@ -53,10 +46,7 @@ import type {
   GetApiExportsRechargesData,
   GetApiExportsRechargesSummaryData,
   GetApiExportsSummaryData,
-  GetApiPoisByIdData,
-  GetApiPoisData,
-  GetApiPoisError,
-  GetApiPoisResponse,
+  GetApiPopsData,
   GetApiReportsCustomersData,
   GetApiReportsExpiringCustomersData,
   GetApiReportsRechargesData,
@@ -81,15 +71,9 @@ import type {
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterError,
   PostApiAuthenticationRegisterResponse,
-  PostApiPoisData,
-  PostApiPoisError,
-  PostApiPoisResponse,
   PostApiUsersData,
   PostApiUsersError,
   PostApiUsersResponse,
-  PutApiPoisByIdData,
-  PutApiPoisByIdError,
-  PutApiPoisByIdResponse,
   PutApiUsersByIdData,
   PutApiUsersByIdError,
   PutApiUsersByIdResponse,
@@ -594,17 +578,17 @@ export const getApiExportsSummaryOptions = (
   });
 };
 
-export const getApiPoisQueryKey = (options?: Options<GetApiPoisData>) =>
-  createQueryKey('getApiPois', options);
+export const getApiPopsQueryKey = (options?: Options<GetApiPopsData>) =>
+  createQueryKey('getApiPops', options);
 
 /**
- * Get Points Of Interest
- * Endpoint to retrieve a list of points of interest
+ * Get POPs
+ * Endpoint to retrieve a list of points of presence
  */
-export const getApiPoisOptions = (options?: Options<GetApiPoisData>) => {
+export const getApiPopsOptions = (options?: Options<GetApiPopsData>) => {
   return queryOptions({
     queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiPois({
+      const { data } = await getApiPops({
         ...options,
         ...queryKey[0],
         signal,
@@ -612,224 +596,8 @@ export const getApiPoisOptions = (options?: Options<GetApiPoisData>) => {
       });
       return data;
     },
-    queryKey: getApiPoisQueryKey(options),
+    queryKey: getApiPopsQueryKey(options),
   });
-};
-
-const createInfiniteParams = <
-  K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>,
->(
-  queryKey: QueryKey<Options>,
-  page: K
-) => {
-  const params = {
-    ...queryKey[0],
-  };
-  if (page.body) {
-    params.body = {
-      ...(queryKey[0].body as any),
-      ...(page.body as any),
-    };
-  }
-  if (page.headers) {
-    params.headers = {
-      ...queryKey[0].headers,
-      ...page.headers,
-    };
-  }
-  if (page.path) {
-    params.path = {
-      ...(queryKey[0].path as any),
-      ...(page.path as any),
-    };
-  }
-  if (page.query) {
-    params.query = {
-      ...(queryKey[0].query as any),
-      ...(page.query as any),
-    };
-  }
-  return params as unknown as typeof page;
-};
-
-export const getApiPoisInfiniteQueryKey = (
-  options?: Options<GetApiPoisData>
-): QueryKey<Options<GetApiPoisData>> =>
-  createQueryKey('getApiPois', options, true);
-
-/**
- * Get Points Of Interest
- * Endpoint to retrieve a list of points of interest
- */
-export const getApiPoisInfiniteOptions = (
-  options?: Options<GetApiPoisData>
-) => {
-  return infiniteQueryOptions<
-    GetApiPoisResponse,
-    GetApiPoisError,
-    InfiniteData<GetApiPoisResponse>,
-    QueryKey<Options<GetApiPoisData>>,
-    | number
-    | Pick<
-        QueryKey<Options<GetApiPoisData>>[0],
-        'body' | 'headers' | 'path' | 'query'
-      >
-  >(
-    // @ts-ignore
-    {
-      queryFn: async ({ pageParam, queryKey, signal }) => {
-        // @ts-ignore
-        const page: Pick<
-          QueryKey<Options<GetApiPoisData>>[0],
-          'body' | 'headers' | 'path' | 'query'
-        > =
-          typeof pageParam === 'object'
-            ? pageParam
-            : {
-                query: {
-                  page: pageParam,
-                },
-              };
-        const params = createInfiniteParams(queryKey, page);
-        const { data } = await getApiPois({
-          ...options,
-          ...params,
-          signal,
-          throwOnError: true,
-        });
-        return data;
-      },
-      queryKey: getApiPoisInfiniteQueryKey(options),
-    }
-  );
-};
-
-export const postApiPoisQueryKey = (options?: Options<PostApiPoisData>) =>
-  createQueryKey('postApiPois', options);
-
-/**
- * Create Point Of Interest
- * Endpoint to create a new point of interest
- */
-export const postApiPoisOptions = (options?: Options<PostApiPoisData>) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await postApiPois({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: postApiPoisQueryKey(options),
-  });
-};
-
-/**
- * Create Point Of Interest
- * Endpoint to create a new point of interest
- */
-export const postApiPoisMutation = (
-  options?: Partial<Options<PostApiPoisData>>
-): UseMutationOptions<
-  PostApiPoisResponse,
-  PostApiPoisError,
-  Options<PostApiPoisData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    PostApiPoisResponse,
-    PostApiPoisError,
-    Options<PostApiPoisData>
-  > = {
-    mutationFn: async (localOptions) => {
-      const { data } = await postApiPois({
-        ...options,
-        ...localOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-/**
- * Delete Point Of Interest
- * Endpoint to delete a point of interest by ID
- */
-export const deleteApiPoisByIdMutation = (
-  options?: Partial<Options<DeleteApiPoisByIdData>>
-): UseMutationOptions<
-  DeleteApiPoisByIdResponse,
-  DeleteApiPoisByIdError,
-  Options<DeleteApiPoisByIdData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    DeleteApiPoisByIdResponse,
-    DeleteApiPoisByIdError,
-    Options<DeleteApiPoisByIdData>
-  > = {
-    mutationFn: async (localOptions) => {
-      const { data } = await deleteApiPoisById({
-        ...options,
-        ...localOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
-};
-
-export const getApiPoisByIdQueryKey = (options: Options<GetApiPoisByIdData>) =>
-  createQueryKey('getApiPoisById', options);
-
-/**
- * Get Point Of Interest
- * Endpoint to retrieve a point of interest by ID
- */
-export const getApiPoisByIdOptions = (options: Options<GetApiPoisByIdData>) => {
-  return queryOptions({
-    queryFn: async ({ queryKey, signal }) => {
-      const { data } = await getApiPoisById({
-        ...options,
-        ...queryKey[0],
-        signal,
-        throwOnError: true,
-      });
-      return data;
-    },
-    queryKey: getApiPoisByIdQueryKey(options),
-  });
-};
-
-/**
- * Update Point Of Interest
- * Endpoint to update an existing point of interest
- */
-export const putApiPoisByIdMutation = (
-  options?: Partial<Options<PutApiPoisByIdData>>
-): UseMutationOptions<
-  PutApiPoisByIdResponse,
-  PutApiPoisByIdError,
-  Options<PutApiPoisByIdData>
-> => {
-  const mutationOptions: UseMutationOptions<
-    PutApiPoisByIdResponse,
-    PutApiPoisByIdError,
-    Options<PutApiPoisByIdData>
-  > = {
-    mutationFn: async (localOptions) => {
-      const { data } = await putApiPoisById({
-        ...options,
-        ...localOptions,
-        throwOnError: true,
-      });
-      return data;
-    },
-  };
-  return mutationOptions;
 };
 
 export const getApiReportsCustomersQueryKey = (
@@ -977,6 +745,42 @@ export const getApiUsersOptions = (options?: Options<GetApiUsersData>) => {
     },
     queryKey: getApiUsersQueryKey(options),
   });
+};
+
+const createInfiniteParams = <
+  K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>,
+>(
+  queryKey: QueryKey<Options>,
+  page: K
+) => {
+  const params = {
+    ...queryKey[0],
+  };
+  if (page.body) {
+    params.body = {
+      ...(queryKey[0].body as any),
+      ...(page.body as any),
+    };
+  }
+  if (page.headers) {
+    params.headers = {
+      ...queryKey[0].headers,
+      ...page.headers,
+    };
+  }
+  if (page.path) {
+    params.path = {
+      ...(queryKey[0].path as any),
+      ...(page.path as any),
+    };
+  }
+  if (page.query) {
+    params.query = {
+      ...(queryKey[0].query as any),
+      ...(page.query as any),
+    };
+  }
+  return params as unknown as typeof page;
 };
 
 export const getApiUsersInfiniteQueryKey = (

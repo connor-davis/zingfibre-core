@@ -1,8 +1,8 @@
-import { getApiPoisOptions } from '@/api-client/@tanstack/react-query.gen';
+import { getApiPopsOptions } from '@/api-client/@tanstack/react-query.gen';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useRouter, useSearch } from '@tanstack/react-router';
 
-import type { PointOfInterest } from '@/api-client';
+import type { PointsOfPresence } from '@/api-client';
 import { apiClient } from '@/lib/utils';
 
 import {
@@ -21,7 +21,7 @@ export default function Header() {
   const { poi } = useSearch({ from: '__root__' });
 
   const { data: poiData, isLoading: isLoadingPointsOfInterest } = useQuery({
-    ...getApiPoisOptions({
+    ...getApiPopsOptions({
       client: apiClient,
     }),
   });
@@ -65,13 +65,11 @@ export default function Header() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="--">Global</SelectItem>
-              {[...((poiData?.data ?? []) as Array<PointOfInterest>)].map(
-                (poi) => (
-                  <SelectItem key={poi.ID!} value={poi.Key!}>
-                    {poi.Name!}
-                  </SelectItem>
-                )
-              )}
+              {[...((poiData?.data ?? []) as PointsOfPresence)].map((poi) => (
+                <SelectItem key={poi} value={poi}>
+                  {poi}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

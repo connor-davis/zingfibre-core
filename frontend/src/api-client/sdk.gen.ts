@@ -2,9 +2,6 @@
 import type { Client, Options as ClientOptions, TDataShape } from './client';
 import { client as _heyApiClient } from './client.gen';
 import type {
-  DeleteApiPoisByIdData,
-  DeleteApiPoisByIdErrors,
-  DeleteApiPoisByIdResponses,
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdErrors,
   DeleteApiUsersByIdResponses,
@@ -32,12 +29,9 @@ import type {
   GetApiExportsSummaryData,
   GetApiExportsSummaryErrors,
   GetApiExportsSummaryResponses,
-  GetApiPoisByIdData,
-  GetApiPoisByIdErrors,
-  GetApiPoisByIdResponses,
-  GetApiPoisData,
-  GetApiPoisErrors,
-  GetApiPoisResponses,
+  GetApiPopsData,
+  GetApiPopsErrors,
+  GetApiPopsResponses,
   GetApiReportsCustomersData,
   GetApiReportsCustomersErrors,
   GetApiReportsCustomersResponses,
@@ -74,15 +68,9 @@ import type {
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterErrors,
   PostApiAuthenticationRegisterResponses,
-  PostApiPoisData,
-  PostApiPoisErrors,
-  PostApiPoisResponses,
   PostApiUsersData,
   PostApiUsersErrors,
   PostApiUsersResponses,
-  PutApiPoisByIdData,
-  PutApiPoisByIdErrors,
-  PutApiPoisByIdResponses,
   PutApiUsersByIdData,
   PutApiUsersByIdErrors,
   PutApiUsersByIdResponses,
@@ -361,95 +349,19 @@ export const getApiExportsSummary = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * Get Points Of Interest
- * Endpoint to retrieve a list of points of interest
+ * Get POPs
+ * Endpoint to retrieve a list of points of presence
  */
-export const getApiPois = <ThrowOnError extends boolean = false>(
-  options?: Options<GetApiPoisData, ThrowOnError>
+export const getApiPops = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiPopsData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
-    GetApiPoisResponses,
-    GetApiPoisErrors,
+    GetApiPopsResponses,
+    GetApiPopsErrors,
     ThrowOnError
   >({
-    url: '/api/pois',
+    url: '/api/pops',
     ...options,
-  });
-};
-
-/**
- * Create Point Of Interest
- * Endpoint to create a new point of interest
- */
-export const postApiPois = <ThrowOnError extends boolean = false>(
-  options?: Options<PostApiPoisData, ThrowOnError>
-) => {
-  return (options?.client ?? _heyApiClient).post<
-    PostApiPoisResponses,
-    PostApiPoisErrors,
-    ThrowOnError
-  >({
-    url: '/api/pois',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
-  });
-};
-
-/**
- * Delete Point Of Interest
- * Endpoint to delete a point of interest by ID
- */
-export const deleteApiPoisById = <ThrowOnError extends boolean = false>(
-  options: Options<DeleteApiPoisByIdData, ThrowOnError>
-) => {
-  return (options.client ?? _heyApiClient).delete<
-    DeleteApiPoisByIdResponses,
-    DeleteApiPoisByIdErrors,
-    ThrowOnError
-  >({
-    url: '/api/pois/{id}',
-    ...options,
-  });
-};
-
-/**
- * Get Point Of Interest
- * Endpoint to retrieve a point of interest by ID
- */
-export const getApiPoisById = <ThrowOnError extends boolean = false>(
-  options: Options<GetApiPoisByIdData, ThrowOnError>
-) => {
-  return (options.client ?? _heyApiClient).get<
-    GetApiPoisByIdResponses,
-    GetApiPoisByIdErrors,
-    ThrowOnError
-  >({
-    url: '/api/pois/{id}',
-    ...options,
-  });
-};
-
-/**
- * Update Point Of Interest
- * Endpoint to update an existing point of interest
- */
-export const putApiPoisById = <ThrowOnError extends boolean = false>(
-  options: Options<PutApiPoisByIdData, ThrowOnError>
-) => {
-  return (options.client ?? _heyApiClient).put<
-    PutApiPoisByIdResponses,
-    PutApiPoisByIdErrors,
-    ThrowOnError
-  >({
-    url: '/api/pois/{id}',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
   });
 };
 
