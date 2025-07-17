@@ -314,8 +314,8 @@ WHERE
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t2.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
@@ -423,8 +423,8 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t2.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
@@ -740,8 +740,8 @@ WHERE
     TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01')
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t2.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
@@ -789,8 +789,8 @@ WHERE
     AND CAST(t1.DateCreated AS DATE) >= ?
     AND CAST(t1.DateCreated AS DATE) <= ?
     AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        t2.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
+        OR t2.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t1.PaymentAmount LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t4.ServiceId LIKE CONCAT('%', TRIM(LOWER(?)), '%')
         OR t5.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
