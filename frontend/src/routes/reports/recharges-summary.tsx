@@ -39,7 +39,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Table,
   TableBody,
@@ -396,7 +395,7 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-      <ScrollArea className="flex flex-col rounded-md border bg-accent w-full h-full">
+      <div className="flex flex-col rounded-md border overflow-auto bg-accent w-full h-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -445,7 +444,7 @@ function RouteComponent() {
             )}
           </TableBody>
         </Table>
-      </ScrollArea>
+      </div>
 
       <div className="flex flex-col w-full h-auto">
         <Pagination pages={pages} />
