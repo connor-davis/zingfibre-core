@@ -257,7 +257,7 @@ function App() {
         </div>
       </div>
 
-      <Card className="pt-0 w-full h-full bg-background max-h-[700px] lg:max-h-[500px]">
+      <Card className="pt-0 w-full bg-background h-[400px] lg:h-[500px]">
         <CardHeader className="flex gap-2 space-y-0 py-5 sm:flex-row p-3">
           <div className="grid flex-1 gap-1">
             <CardTitle>Recharge Counts</CardTitle>
