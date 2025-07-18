@@ -1,4 +1,7 @@
-import { putApiUsersByIdMutation } from '@/api-client/@tanstack/react-query.gen';
+import {
+  postApiAuthenticationPasswordResetMutation,
+  putApiUsersByIdMutation,
+} from '@/api-client/@tanstack/react-query.gen';
 import { useMutation } from '@tanstack/react-query';
 import {
   ErrorComponent,
@@ -6,7 +9,7 @@ import {
   createFileRoute,
   useParams,
 } from '@tanstack/react-router';
-import { ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon, ChevronsUpDown } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
@@ -14,6 +17,11 @@ import { toast } from 'sonner';
 import { type ErrorResponse, type User, getApiUsersById } from '@/api-client';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import {
   Form,
   FormControl,
@@ -24,6 +32,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -96,22 +110,43 @@ function RouteComponent() {
     values: user,
   });
 
+  const passwordResetForm = useForm<{ Code: string; NewPassword: string }>({
+    defaultValues: {
+      Code: '',
+      NewPassword: '',
+    },
+  });
+
   const updateUser = useMutation({
     ...putApiUsersByIdMutation({
       client: apiClient,
       path: { id },
     }),
-    onError: (error: ErrorResponse) => {
+    onError: (error: ErrorResponse) =>
       toast.error(error.error, {
         description: error.details,
         duration: 2000,
-      });
-    },
-    onSuccess: ({ data: updatedUser }) => {
-      userForm.reset({ ...user, ...updatedUser });
-
+      }),
+    onSuccess: () => {
       toast.success('Success', {
         description: 'The user has been updated.',
+        duration: 2000,
+      });
+    },
+  });
+
+  const resetPassword = useMutation({
+    ...postApiAuthenticationPasswordResetMutation({
+      client: apiClient,
+    }),
+    onError: (error: ErrorResponse) =>
+      toast.error(error.error, {
+        description: error.details,
+        duration: 2000,
+      }),
+    onSuccess: () => {
+      toast.success('Success', {
+        description: 'The password has been reset.',
         duration: 2000,
       });
     },
@@ -196,6 +231,85 @@ function RouteComponent() {
           </Button>
         </form>
       </Form>
+
+      <Collapsible className="flex w-full flex-col gap-2">
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="outline"
+            className="flex items-center justify-between gap-4 px-4"
+          >
+            <h4 className="text-sm font-semibold">Password Reset</h4>
+
+            <ChevronsUpDown />
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="flex flex-col gap-2">
+          <Form {...passwordResetForm}>
+            <form
+              onSubmit={passwordResetForm.handleSubmit((values) =>
+                resetPassword.mutate({
+                  body: values,
+                })
+              )}
+              className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 border bg-accent rounded-md p-3"
+            >
+              <FormField
+                control={passwordResetForm.control}
+                name="Code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>MFA Code</FormLabel>
+                    <FormControl>
+                      <InputOTP maxLength={6} {...field}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </FormControl>
+                    <FormDescription>
+                      Please enter the MFA code from your authenticator app.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={passwordResetForm.control}
+                name="NewPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="New Password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Please enter the user's new password.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="w-full col-span-2">
+                Reset Password
+              </Button>
+            </form>
+          </Form>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }

@@ -23,6 +23,11 @@ export type MonthlyStatistics = {
   UniquePurchasers?: number;
 };
 
+export type PasswordReset = {
+  Code?: string;
+  NewPassword?: string;
+};
+
 export type PointOfPresence = string;
 
 export type PointsOfPresence = Array<string>;
@@ -1556,6 +1561,188 @@ export type PostApiAuthenticationMfaVerifyResponses = {
 
 export type PostApiAuthenticationMfaVerifyResponse =
   PostApiAuthenticationMfaVerifyResponses[keyof PostApiAuthenticationMfaVerifyResponses];
+
+export type PostApiAuthenticationPasswordResetData = {
+  body?: {
+    Code?: string;
+    NewPassword?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/api/authentication/password-reset';
+};
+
+export type PostApiAuthenticationPasswordResetErrors = {
+  /**
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal Server Error.
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type PostApiAuthenticationPasswordResetError =
+  PostApiAuthenticationPasswordResetErrors[keyof PostApiAuthenticationPasswordResetErrors];
+
+export type PostApiAuthenticationPasswordResetResponses = {
+  /**
+   * MFA code verified successfully.
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | string
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<string>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FullName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }
+      | Array<{
+          Email?: string;
+          FullName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FullName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FullName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }>
+      | {
+          Amount?: string;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          Method?: string;
+          RadiusUsername?: string;
+          ServiceId?: number;
+        }
+      | Array<{
+          Amount?: string;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          Method?: string;
+          RadiusUsername?: string;
+          ServiceId?: number;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type PostApiAuthenticationPasswordResetResponse =
+  PostApiAuthenticationPasswordResetResponses[keyof PostApiAuthenticationPasswordResetResponses];
 
 export type PostApiAuthenticationRegisterData = {
   body?: {

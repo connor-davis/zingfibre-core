@@ -31,6 +31,7 @@ import {
   postApiAuthenticationLogout,
   postApiAuthenticationMfaDisable,
   postApiAuthenticationMfaVerify,
+  postApiAuthenticationPasswordReset,
   postApiAuthenticationRegister,
   postApiUsers,
   putApiUsersById,
@@ -80,6 +81,9 @@ import type {
   PostApiAuthenticationMfaVerifyData,
   PostApiAuthenticationMfaVerifyError,
   PostApiAuthenticationMfaVerifyResponse,
+  PostApiAuthenticationPasswordResetData,
+  PostApiAuthenticationPasswordResetError,
+  PostApiAuthenticationPasswordResetResponse,
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterError,
   PostApiAuthenticationRegisterResponse,
@@ -427,6 +431,59 @@ export const postApiAuthenticationMfaVerifyMutation = (
   > = {
     mutationFn: async (localOptions) => {
       const { data } = await postApiAuthenticationMfaVerify({
+        ...options,
+        ...localOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const postApiAuthenticationPasswordResetQueryKey = (
+  options?: Options<PostApiAuthenticationPasswordResetData>
+) => createQueryKey('postApiAuthenticationPasswordReset', options);
+
+/**
+ * Password Reset
+ * Endpoint to reset user password
+ */
+export const postApiAuthenticationPasswordResetOptions = (
+  options?: Options<PostApiAuthenticationPasswordResetData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await postApiAuthenticationPasswordReset({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: postApiAuthenticationPasswordResetQueryKey(options),
+  });
+};
+
+/**
+ * Password Reset
+ * Endpoint to reset user password
+ */
+export const postApiAuthenticationPasswordResetMutation = (
+  options?: Partial<Options<PostApiAuthenticationPasswordResetData>>
+): UseMutationOptions<
+  PostApiAuthenticationPasswordResetResponse,
+  PostApiAuthenticationPasswordResetError,
+  Options<PostApiAuthenticationPasswordResetData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiAuthenticationPasswordResetResponse,
+    PostApiAuthenticationPasswordResetError,
+    Options<PostApiAuthenticationPasswordResetData>
+  > = {
+    mutationFn: async (localOptions) => {
+      const { data } = await postApiAuthenticationPasswordReset({
         ...options,
         ...localOptions,
         throwOnError: true,

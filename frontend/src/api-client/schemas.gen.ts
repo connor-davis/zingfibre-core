@@ -66,6 +66,17 @@ export const MonthlyStatisticsSchema = {
   },
 } as const;
 
+export const PasswordResetSchema = {
+  properties: {
+    Code: {
+      type: 'string',
+    },
+    NewPassword: {
+      type: 'string',
+    },
+  },
+} as const;
+
 export const PointOfPresenceSchema = {
   type: 'string',
 } as const;

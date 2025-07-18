@@ -68,6 +68,9 @@ import type {
   PostApiAuthenticationMfaVerifyData,
   PostApiAuthenticationMfaVerifyErrors,
   PostApiAuthenticationMfaVerifyResponses,
+  PostApiAuthenticationPasswordResetData,
+  PostApiAuthenticationPasswordResetErrors,
+  PostApiAuthenticationPasswordResetResponses,
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterErrors,
   PostApiAuthenticationRegisterResponses,
@@ -250,6 +253,29 @@ export const postApiAuthenticationMfaVerify = <
     ThrowOnError
   >({
     url: '/api/authentication/mfa/verify',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+};
+
+/**
+ * Password Reset
+ * Endpoint to reset user password
+ */
+export const postApiAuthenticationPasswordReset = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<PostApiAuthenticationPasswordResetData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).post<
+    PostApiAuthenticationPasswordResetResponses,
+    PostApiAuthenticationPasswordResetErrors,
+    ThrowOnError
+  >({
+    url: '/api/authentication/password-reset',
     ...options,
     headers: {
       'Content-Type': 'application/json',
