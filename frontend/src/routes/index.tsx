@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
-import uniqolor from 'uniqolor';
 import z from 'zod';
 
 import {
@@ -164,6 +163,17 @@ export const Route = createFileRoute('/')({
     };
   },
 });
+
+const COLORS = [
+  // Red
+  '#FF6384',
+  // Green
+  '#4BC0C0',
+  // Blue
+  '#36A2EB',
+  // Yellow
+  '#FFCE56',
+];
 
 function App() {
   const { period, count } = useSearch({ from: '/' });
@@ -399,17 +409,11 @@ function App() {
                 />
                 <ChartLegend content={<ChartLegendContent />} />
 
-                {[...(rechargeTypes ?? [])].map((type) => (
+                {[...(rechargeTypes ?? [])].map((type, index) => (
                   <Line
                     key={type}
                     dataKey={type}
-                    stroke={
-                      uniqolor(type.replaceAll('1 ', ''), {
-                        format: 'hex',
-                        lightness: 50,
-                        saturation: 100,
-                      }).color
-                    }
+                    stroke={COLORS[index]}
                     connectNulls
                     type="monotone"
                   />
