@@ -11,32 +11,38 @@ import (
 
 const getAnalyticsMonthlyRevenueStatistics = `-- name: GetAnalyticsMonthlyRevenueStatistics :one
 SELECT
-	SUM(
-        CASE
-            WHEN 
-                t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-            THEN t1.PaymentAmount
-            ELSE 0
-        END
-    ) - 0 AS revenue,
-	COALESCE(SUM(
-		CASE
-			WHEN 
-				t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-			THEN t1.PaymentAmount
-			ELSE 0
-		END
-	), 0)
-	-
-	COALESCE(SUM(
-		CASE
-			WHEN 
-				t1.DateCreated >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01 00:00:00')
-				AND t1.DateCreated < DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-			THEN t1.PaymentAmount
-			ELSE 0
-		END
-	), 0) AS revenue_growth_amount,
+	CAST(
+        SUM(
+            CASE
+                WHEN 
+                    t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                THEN t1.PaymentAmount
+                ELSE 0
+            END
+        ) AS SIGNED
+    ) AS revenue,
+	CAST(
+        (
+            SUM(
+                CASE
+                    WHEN 
+                        t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                    THEN t1.PaymentAmount
+                    ELSE 0
+                END
+            )
+            -
+            SUM(
+                CASE
+                    WHEN 
+                        t1.DateCreated >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01 00:00:00')
+                        AND t1.DateCreated < DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                    THEN t1.PaymentAmount
+                    ELSE 0
+                END
+            )
+        ) AS SIGNED
+    ) AS revenue_growth_amount,
 	ROUND(
 	(
 		(
@@ -65,17 +71,17 @@ LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 LEFT JOIN Addresses t3 ON t2.AddressId = t3.Id
 WHERE
     t1.RechargeSuccessful = 1
-    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sql.arg('pop'), '%')))
+    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(?, '%')))
 `
 
 type GetAnalyticsMonthlyRevenueStatisticsRow struct {
-	Revenue                 int32
-	RevenueGrowthAmount     int32
+	Revenue                 int64
+	RevenueGrowthAmount     int64
 	RevenueGrowthPercentage float64
 }
 
-func (q *Queries) GetAnalyticsMonthlyRevenueStatistics(ctx context.Context) (GetAnalyticsMonthlyRevenueStatisticsRow, error) {
-	row := q.db.QueryRowContext(ctx, getAnalyticsMonthlyRevenueStatistics)
+func (q *Queries) GetAnalyticsMonthlyRevenueStatistics(ctx context.Context, poi interface{}) (GetAnalyticsMonthlyRevenueStatisticsRow, error) {
+	row := q.db.QueryRowContext(ctx, getAnalyticsMonthlyRevenueStatistics, poi)
 	var i GetAnalyticsMonthlyRevenueStatisticsRow
 	err := row.Scan(&i.Revenue, &i.RevenueGrowthAmount, &i.RevenueGrowthPercentage)
 	return i, err
@@ -83,20 +89,22 @@ func (q *Queries) GetAnalyticsMonthlyRevenueStatistics(ctx context.Context) (Get
 
 const getAnalyticsMonthlyUniquePurchasers = `-- name: GetAnalyticsMonthlyUniquePurchasers :one
 SELECT
-    COUNT(DISTINCT t2.RadiusUsername) - 0 AS unique_purchasers
+    CAST(
+        COUNT(DISTINCT t2.RadiusUsername) AS SIGNED
+    ) AS unique_purchasers
 FROM
     Recharges t1
 LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 LEFT JOIN Addresses t3 ON t2.AddressId = t3.Id
 WHERE
     t1.RechargeSuccessful = 1
-    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sql.arg('pop'), '%')))
+    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(?, '%')))
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
 `
 
-func (q *Queries) GetAnalyticsMonthlyUniquePurchasers(ctx context.Context) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getAnalyticsMonthlyUniquePurchasers)
-	var unique_purchasers int32
+func (q *Queries) GetAnalyticsMonthlyUniquePurchasers(ctx context.Context, poi interface{}) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getAnalyticsMonthlyUniquePurchasers, poi)
+	var unique_purchasers int64
 	err := row.Scan(&unique_purchasers)
 	return unique_purchasers, err
 }

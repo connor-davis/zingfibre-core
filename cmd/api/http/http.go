@@ -210,6 +210,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				"ReportRechargeSummaries": schemas.ReportRechargeSummariesSchema,
 				"ReportSummary":           schemas.ReportSummarySchema,
 				"ReportSummaries":         schemas.ReportSummariesSchema,
+				"MonthlyStatistics":       schemas.MonthlyStatisticsSchema,
 			},
 		},
 	}

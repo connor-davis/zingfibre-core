@@ -23,8 +23,10 @@ func NewAnalyticsRouter(zing *zing.Queries, middleware *middleware.Middleware, s
 
 func (r *AnalyticsRouter) RegisterRoutes() []system.Route {
 	rechargeTypeCountsRoute := r.RechargeTypeCountsRoute()
+	monthlyStatisticsRoute := r.MonthlyStatisticsRoute()
 
 	return []system.Route{
 		rechargeTypeCountsRoute,
+		monthlyStatisticsRoute,
 	}
 }

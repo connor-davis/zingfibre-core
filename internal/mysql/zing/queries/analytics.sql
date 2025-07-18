@@ -1,31 +1,37 @@
 -- name: GetAnalyticsMonthlyRevenueStatistics :one
 SELECT
-	SUM(
-        CASE
-            WHEN 
-                t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-            THEN t1.PaymentAmount
-            ELSE 0
-        END
-    ) - 0 AS revenue,
-	COALESCE(SUM(
-		CASE
-			WHEN 
-				t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-			THEN t1.PaymentAmount
-			ELSE 0
-		END
-	), 0)
-	-
-	COALESCE(SUM(
-		CASE
-			WHEN 
-				t1.DateCreated >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01 00:00:00')
-				AND t1.DateCreated < DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-			THEN t1.PaymentAmount
-			ELSE 0
-		END
-	), 0) AS revenue_growth_amount,
+	CAST(
+        SUM(
+            CASE
+                WHEN 
+                    t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                THEN t1.PaymentAmount
+                ELSE 0
+            END
+        ) AS SIGNED
+    ) AS revenue,
+	CAST(
+        (
+            SUM(
+                CASE
+                    WHEN 
+                        t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                    THEN t1.PaymentAmount
+                    ELSE 0
+                END
+            )
+            -
+            SUM(
+                CASE
+                    WHEN 
+                        t1.DateCreated >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01 00:00:00')
+                        AND t1.DateCreated < DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                    THEN t1.PaymentAmount
+                    ELSE 0
+                END
+            )
+        ) AS SIGNED
+    ) AS revenue_growth_amount,
 	ROUND(
 	(
 		(
@@ -54,16 +60,18 @@ LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 LEFT JOIN Addresses t3 ON t2.AddressId = t3.Id
 WHERE
     t1.RechargeSuccessful = 1
-    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sql.arg('pop'), '%')));
+    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sqlc.arg('poi'), '%')));
 
 -- name: GetAnalyticsMonthlyUniquePurchasers :one
 SELECT
-    COUNT(DISTINCT t2.RadiusUsername) - 0 AS unique_purchasers
+    CAST(
+        COUNT(DISTINCT t2.RadiusUsername) AS SIGNED
+    ) AS unique_purchasers
 FROM
     Recharges t1
 LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 LEFT JOIN Addresses t3 ON t2.AddressId = t3.Id
 WHERE
     t1.RechargeSuccessful = 1
-    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sql.arg('pop'), '%')))
+    AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sqlc.arg('poi'), '%')))
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
