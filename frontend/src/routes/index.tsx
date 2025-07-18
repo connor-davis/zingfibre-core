@@ -408,7 +408,6 @@ function App() {
                         format: 'hex',
                         lightness: 50,
                         saturation: 100,
-                        differencePoint: 0.5,
                       }).color
                     }
                     connectNulls
