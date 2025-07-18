@@ -11,7 +11,6 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 )
 
 func (r *ReportsRouter) CustomersRoute() system.Route {
@@ -180,8 +179,6 @@ func (r *ReportsRouter) CustomersRoute() system.Route {
 					"details": constants.InternalServerErrorDetails,
 				})
 			}
-
-			log.Infof("Total customers found: %d", totalCustomers)
 
 			pages := int32(math.Ceil(float64(totalCustomers) / float64(pageSizeInt)))
 
