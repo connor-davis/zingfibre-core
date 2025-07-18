@@ -166,13 +166,13 @@ export const Route = createFileRoute('/')({
 
 const COLORS = [
   // Red
-  '#FF6384',
+  '#b91c1c',
   // Green
-  '#4BC0C0',
+  '#15803d',
   // Blue
-  '#36A2EB',
+  '#1d4ed8',
   // Yellow
-  '#FFCE56',
+  '#a16207',
 ];
 
 function App() {
