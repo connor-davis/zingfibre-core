@@ -28,12 +28,11 @@ export const AuthenticationProvider = ({
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     refetchOnReconnect: true,
-    refetchInterval: 120 * 1000,
   });
 
   return (
     <AuthenticationContext.Provider
-      value={{ user: data?.data, isLoading, isError }}
+      value={{ user: data?.data as User, isLoading, isError }}
     >
       {children}
     </AuthenticationContext.Provider>

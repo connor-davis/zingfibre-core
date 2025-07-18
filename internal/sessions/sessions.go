@@ -22,6 +22,6 @@ func NewSessions(db *pgxpool.Pool) *session.Store {
 		CookieSameSite:    "Strict",
 		CookieSessionOnly: false,
 		CookieHTTPOnly:    false,
-		Expiration:        5 * time.Minute,
+		Expiration:        24 * time.Hour,
 	})
 }
