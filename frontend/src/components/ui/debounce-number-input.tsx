@@ -138,7 +138,7 @@ export const DebounceNumberInput = forwardRef<
     };
 
     return (
-      <div className="flex items-center w-auto h-auto">
+      <div className="flex items-center w-full">
         <NumericFormat
           value={value}
           onValueChange={handleChange}

@@ -5,7 +5,7 @@ import {
   useRouterState,
   useSearch,
 } from '@tanstack/react-router';
-import { CalendarIcon, SigmaIcon } from 'lucide-react';
+import { CalendarIcon, FilterIcon, SigmaIcon } from 'lucide-react';
 
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 import uniqolor from 'uniqolor';
@@ -18,6 +18,7 @@ import {
 } from '@/api-client';
 import AuthenticationGuard from '@/components/guards/authentication-guard';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -33,6 +34,14 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { DebounceNumberInput } from '@/components/ui/debounce-number-input';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -132,56 +141,10 @@ function App() {
         <div className="flex items-center gap-3">
           <Label className="text-lg">Dashboard</Label>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3">
-            <SigmaIcon className="size-4" />
-
-            <DebounceNumberInput
-              className="w-24 h-9 rounded-r-none"
-              min={1}
-              max={100}
-              value={count}
-              onValueChange={(value) => {
-                router.navigate({
-                  to: routerState.location.pathname,
-                  search: (previous) => ({
-                    ...previous,
-                    count: value,
-                  }),
-                });
-              }}
-            />
-          </div>
-
-          <div className="flex items-center gap-3">
-            <CalendarIcon className="size-4" />
-            <Select
-              defaultValue="months"
-              value={period}
-              onValueChange={(value) => {
-                router.navigate({
-                  to: '/',
-                  search: (previous) => ({
-                    ...previous,
-                    period: value,
-                  }),
-                });
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Period" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="weeks">Weeks</SelectItem>
-                <SelectItem value="months">Months</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
       </div>
 
       <Card className="pt-0 w-full h-full bg-background">
-        <CardHeader className="flex items-center gap-2 space-y-0 py-5 sm:flex-row">
+        <CardHeader className="flex gap-2 space-y-0 py-5 sm:flex-row p-3">
           <div className="grid flex-1 gap-1">
             <CardTitle>Recharge Counts</CardTitle>
             <CardDescription>
@@ -189,7 +152,117 @@ function App() {
               period, grouped by recharge type.
             </CardDescription>
           </div>
-          <div className="flex items-center gap-1"></div>
+          <div className="flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-3">
+              <div className="flex items-center gap-3">
+                <SigmaIcon className="size-4" />
+
+                <DebounceNumberInput
+                  className="w-24 h-9 rounded-r-none"
+                  min={1}
+                  max={100}
+                  value={count}
+                  onValueChange={(value) => {
+                    router.navigate({
+                      to: routerState.location.pathname,
+                      search: (previous) => ({
+                        ...previous,
+                        count: value,
+                      }),
+                    });
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <CalendarIcon className="size-4" />
+                <Select
+                  defaultValue="months"
+                  value={period}
+                  onValueChange={(value) => {
+                    router.navigate({
+                      to: '/',
+                      search: (previous) => ({
+                        ...previous,
+                        period: value,
+                      }),
+                    });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Period" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="weeks">Weeks</SelectItem>
+                    <SelectItem value="months">Months</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <FilterIcon className="size-4" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Filters</DrawerTitle>
+                  <DrawerDescription>
+                    Use the filters to refine the data displayed in the
+                    dashboard.
+                  </DrawerDescription>
+                </DrawerHeader>
+
+                <div className="flex flex-col w-full h-auto gap-3 p-3">
+                  <div className="flex items-center gap-3">
+                    <SigmaIcon className="size-4" />
+
+                    <DebounceNumberInput
+                      className="w-full h-9 rounded-r-none"
+                      min={1}
+                      max={100}
+                      value={count}
+                      onValueChange={(value) => {
+                        router.navigate({
+                          to: routerState.location.pathname,
+                          search: (previous) => ({
+                            ...previous,
+                            count: value,
+                          }),
+                        });
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <CalendarIcon className="size-4" />
+                    <Select
+                      defaultValue="months"
+                      value={period}
+                      onValueChange={(value) => {
+                        router.navigate({
+                          to: '/',
+                          search: (previous) => ({
+                            ...previous,
+                            period: value,
+                          }),
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Period" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="weeks">Weeks</SelectItem>
+                        <SelectItem value="months">Months</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
         </CardHeader>
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 w-full h-full">
           {items && types && (

@@ -39,13 +39,13 @@ export default function Pagination({ pages }: { pages: number }) {
   }, [routerState.location.pathname, page]);
 
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div className="flex items-center gap-3">
         <Label className="text-xs text-muted-foreground">Showing</Label>
 
         <div>
           <DebounceNumberInput
-            className="w-24 h-9 rounded-r-none"
+            className="w-full lg:w-24 h-9 rounded-r-none"
             min={1}
             max={100}
             value={pageSize}
@@ -64,43 +64,45 @@ export default function Pagination({ pages }: { pages: number }) {
         <Label className="text-xs text-muted-foreground">items per page</Label>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between lg:justify-normal gap-3">
         <Label className="text-xs text-muted-foreground">
           Page {page} of {pages}
         </Label>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            router.navigate({
-              to: routerState.location.pathname,
-              search: (previous) => ({
-                ...previous,
-                page: (page ?? 1) - 1,
-              }),
-            })
-          }
-          disabled={!page || page <= 1}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            router.navigate({
-              to: routerState.location.pathname,
-              search: (previous) => ({
-                ...previous,
-                page: (page ?? 1) + 1,
-              }),
-            })
-          }
-          disabled={!page || page >= pages}
-        >
-          Next
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  page: (page ?? 1) - 1,
+                }),
+              })
+            }
+            disabled={!page || page <= 1}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  page: (page ?? 1) + 1,
+                }),
+              })
+            }
+            disabled={!page || page >= pages}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
