@@ -3,6 +3,7 @@ import {
   postApiAuthenticationLoginMutation,
 } from '@/api-client/@tanstack/react-query.gen';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -33,6 +34,7 @@ export default function AuthenticationGuard({
   children: ReactNode;
   disabled?: boolean;
 }) {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   if (disabled) return children;
@@ -65,6 +67,8 @@ export default function AuthenticationGuard({
         description: 'You have been logged in successfully.',
         duration: 2000,
       });
+
+      router.invalidate();
 
       return queryClient.invalidateQueries({
         queryKey: getApiAuthenticationCheckQueryKey({
