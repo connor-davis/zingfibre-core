@@ -23,7 +23,7 @@ FROM
 			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
             LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 		WHERE
-			TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+			TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
 			AND(
                 (
                     sqlc.arg('period') = 'weeks'
