@@ -52,14 +52,11 @@ export default function AuthenticationGuard({
     ...postApiAuthenticationLoginMutation({
       client: apiClient,
     }),
-    onError: (error: ErrorResponse) => {
-      loginForm.reset();
-
+    onError: (error: ErrorResponse) =>
       toast.error(error.error, {
         description: error.details,
         duration: 2000,
-      });
-    },
+      }),
     onSuccess: () => {
       loginForm.reset();
 
