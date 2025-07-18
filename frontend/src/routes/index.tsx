@@ -205,12 +205,20 @@ function App() {
 
             <Label
               className={`text-xs ${
-                (monthlyStatistics.revenueGrowthPercentage ?? 0 >= 0)
+                (
+                  monthlyStatistics.revenueGrowthPercentage
+                    ? monthlyStatistics.revenueGrowthPercentage >= 0
+                    : false
+                )
                   ? 'text-green-500'
                   : 'text-red-500'
               }`}
             >
-              {(monthlyStatistics.revenueGrowthPercentage ?? 0 >= 0) ? (
+              {(
+                monthlyStatistics.revenueGrowthPercentage
+                  ? monthlyStatistics.revenueGrowthPercentage >= 0
+                  : false
+              ) ? (
                 <ArrowUpLeftIcon className="inline size-4" />
               ) : (
                 <ArrowDownLeftIcon className="inline size-4" />
