@@ -33,27 +33,25 @@ SELECT
         ) AS SIGNED
     ) AS revenue_growth_amount,
 	ROUND(
-        ABS(
-            (
-                SUM(
-                    CASE
-                        WHEN 
-                            t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
-                        THEN PaymentAmount
-                        ELSE 0
-                    END
-                )
-                /
-                NULLIF(SUM(
-                    CASE
-                        WHEN 
-                            t1.DateCreated >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01 00:00:00')
-                            AND t1.DateCreated <= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-%d 23:59:59')
-                        THEN PaymentAmount
-                        ELSE 0
-                    END
-                ), 0) - 1
+        (
+            SUM(
+                CASE
+                    WHEN 
+                        t1.DateCreated >= DATE_FORMAT(CURDATE(), '%Y-%m-01 00:00:00')
+                    THEN PaymentAmount
+                    ELSE 0
+                END
             )
+            /
+            NULLIF(SUM(
+                CASE
+                    WHEN 
+                        t1.DateCreated >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01 00:00:00')
+                        AND t1.DateCreated <= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-%d 23:59:59')
+                    THEN PaymentAmount
+                    ELSE 0
+                END
+            ), 0) - 1
         ), 4
     ) AS revenue_growth_percentage
 FROM Recharges t1
