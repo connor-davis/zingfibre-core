@@ -404,7 +404,7 @@ function App() {
                     key={type}
                     dataKey={type}
                     stroke={
-                      uniqolor(type, {
+                      uniqolor(type.replaceAll('1 ', ''), {
                         format: 'hex',
                         lightness: 50,
                         saturation: 100,
