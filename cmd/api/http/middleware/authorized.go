@@ -50,7 +50,7 @@ func (m *Middleware) Authorized() fiber.Handler {
 		c.Locals("user", currentUser)
 
 		currentSession.Set("userId", currentUser.ID.String())
-		currentSession.SetExpiry(5 * time.Minute)
+		currentSession.SetExpiry(24 * time.Hour)
 
 		if err := currentSession.Save(); err != nil {
 			log.Errorf("🔥 Error saving session: %s", err.Error())

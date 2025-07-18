@@ -156,7 +156,7 @@ func (r *AuthenticationRouter) LoginRoute() system.Route {
 			}
 
 			currentSession.Set("userId", user.ID.String())
-			currentSession.SetExpiry(5 * time.Minute)
+			currentSession.SetExpiry(24 * time.Hour)
 
 			if err := currentSession.Save(); err != nil {
 				log.Errorf("🔥 Error saving session: %s", err.Error())
