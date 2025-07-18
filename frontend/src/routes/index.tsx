@@ -5,7 +5,14 @@ import {
   useRouterState,
   useSearch,
 } from '@tanstack/react-router';
-import { CalendarIcon, FilterIcon, SigmaIcon } from 'lucide-react';
+import {
+  ArrowDownLeftIcon,
+  ArrowUpLeftIcon,
+  CalendarIcon,
+  FilterIcon,
+  SigmaIcon,
+  UsersIcon,
+} from 'lucide-react';
 
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 import uniqolor from 'uniqolor';
@@ -13,7 +20,9 @@ import z from 'zod';
 
 import {
   type ErrorResponse,
+  type MonthlyStatistics,
   type RechargeTypeCounts,
+  getApiAnalyticsMonthlyStatistics,
   getApiAnalyticsRechargeTypeCounts,
 } from '@/api-client';
 import AuthenticationGuard from '@/components/guards/authentication-guard';
@@ -102,28 +111,56 @@ export const Route = createFileRoute('/')({
     poi: poi ?? '',
   }),
   loader: async ({ deps: { count, period, poi } }) => {
-    const { data } = await getApiAnalyticsRechargeTypeCounts({
-      client: apiClient,
-      query: {
-        count,
-        period,
-        poi,
-      },
-      throwOnError: true,
-    });
+    const { data: rechargeTypeCounts } =
+      await getApiAnalyticsRechargeTypeCounts({
+        client: apiClient,
+        query: {
+          count,
+          period,
+          poi,
+        },
+        throwOnError: true,
+      });
 
-    const result = {
-      data: data?.data,
-      pages: data ? (data.pages ? data.pages : 1) : 1,
+    const rechargeTypeCountsResult = {
+      data: rechargeTypeCounts?.data,
+      pages: rechargeTypeCounts
+        ? rechargeTypeCounts.pages
+          ? rechargeTypeCounts.pages
+          : 1
+        : 1,
     } as {
       data: RechargeTypeCounts;
       pages: number;
     };
 
+    const { data: monthlyStatistics } = await getApiAnalyticsMonthlyStatistics({
+      client: apiClient,
+      query: {
+        poi,
+      },
+      throwOnError: true,
+    });
+
+    const monthlyStatisticsResult = {
+      data: monthlyStatistics?.data,
+    } as {
+      data: MonthlyStatistics;
+    };
+
     return {
-      items: result.data.Items,
-      types: result.data.Types,
-      pages: result.pages,
+      rechargeTypeCounts: {
+        items: rechargeTypeCountsResult.data.Items,
+        types: rechargeTypeCountsResult.data.Types,
+        pages: rechargeTypeCountsResult.pages,
+      },
+      monthlyStatistics: {
+        revenue: monthlyStatisticsResult.data.Revenue,
+        revenueGrowth: monthlyStatisticsResult.data.RevenueGrowth,
+        revenueGrowthPercentage:
+          monthlyStatisticsResult.data.RevenueGrowthPercentage,
+        uniquePurchasers: monthlyStatisticsResult.data.UniquePurchasers,
+      },
     };
   },
 });
@@ -133,7 +170,10 @@ function App() {
   const routerState = useRouterState();
   const router = useRouter();
 
-  const { items, types } = Route.useLoaderData();
+  const {
+    rechargeTypeCounts: { items: rechargeTypeCounts, types: rechargeTypes },
+    monthlyStatistics,
+  } = Route.useLoaderData();
 
   return (
     <div className="flex flex-col w-full h-full bg-popover border-t p-3 gap-3">
@@ -143,7 +183,73 @@ function App() {
         </div>
       </div>
 
-      <Card className="pt-0 w-full h-full bg-background">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <div className="flex flex-col w-full h-32 bg-background border text-card-foreground rounded-md gap-3 p-3">
+          <Label className="text-muted-foreground">Revenue</Label>
+
+          <div className="flex flex-col w-full h-full items-center justify-center">
+            <Label className="text-2xl font-mono">
+              {monthlyStatistics.revenue?.toLocaleString('en-ZA', {
+                style: 'currency',
+                currency: 'ZAR',
+                maximumFractionDigits: 0,
+              }) ?? 'R0'}
+            </Label>
+          </div>
+        </div>
+        <div className="flex flex-col w-full h-32 bg-background border text-card-foreground rounded-md gap-3 p-3">
+          <div className="flex items-center justify-between w-full h-auto gap-3">
+            <Label className="text-muted-foreground font-semibold">
+              Revenue Growth
+            </Label>
+
+            <Label
+              className={`text-xs ${
+                (monthlyStatistics.revenueGrowthPercentage ?? 0 >= 0)
+                  ? 'text-green-500'
+                  : 'text-red-500'
+              }`}
+            >
+              {(monthlyStatistics.revenueGrowthPercentage ?? 0 >= 0) ? (
+                <ArrowUpLeftIcon className="inline size-4" />
+              ) : (
+                <ArrowDownLeftIcon className="inline size-4" />
+              )}
+              {monthlyStatistics.revenueGrowthPercentage?.toLocaleString(
+                'en-ZA',
+                {
+                  style: 'percent',
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }
+              ) ?? '0%'}
+            </Label>
+          </div>
+
+          <div className="flex flex-col w-full h-full items-center justify-center">
+            <Label className="text-2xl gap-3 items-center font-mono">
+              {monthlyStatistics.revenueGrowth?.toLocaleString('en-ZA', {
+                style: 'currency',
+                currency: 'ZAR',
+                maximumFractionDigits: 0,
+              }) ?? 'R0'}
+            </Label>
+          </div>
+        </div>
+        <div className="flex flex-col w-full h-32 bg-background border text-card-foreground rounded-md gap-3 p-3">
+          <Label className="text-muted-foreground">Unique Purchasers</Label>
+
+          <div className="flex flex-col w-full h-full items-center justify-center">
+            <Label className="text-2xl font-mono">
+              <UsersIcon className="inline" />
+
+              {monthlyStatistics.uniquePurchasers ?? '0'}
+            </Label>
+          </div>
+        </div>
+      </div>
+
+      <Card className="pt-0 w-full h-full bg-background max-h-[500px]">
         <CardHeader className="flex gap-2 space-y-0 py-5 sm:flex-row p-3">
           <div className="grid flex-1 gap-1">
             <CardTitle>Recharge Counts</CardTitle>
@@ -265,9 +371,9 @@ function App() {
           </div>
         </CardHeader>
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 w-full h-full">
-          {items && types && (
+          {rechargeTypeCounts && rechargeTypes && (
             <ChartContainer config={{}} className="aspect-auto w-full h-full">
-              <LineChart data={items ?? []}>
+              <LineChart data={rechargeTypeCounts ?? []}>
                 <CartesianGrid strokeDasharray="3 3" />
 
                 <XAxis dataKey="Period" />
@@ -285,7 +391,7 @@ function App() {
                 />
                 <ChartLegend content={<ChartLegendContent />} />
 
-                {[...(types ?? [])].map((type) => (
+                {[...(rechargeTypes ?? [])].map((type) => (
                   <Line
                     key={type}
                     dataKey={type}

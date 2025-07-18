@@ -64,7 +64,7 @@ SELECT
 					ELSE 0
 				END
 			), 0)) - 1
-		) * 100, 2
+		), 4
 	) AS revenue_growth_percentage
 FROM Recharges t1
 LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id

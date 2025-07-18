@@ -46,6 +46,26 @@ export const LoginRequestSchema = {
   },
 } as const;
 
+export const MonthlyStatisticsSchema = {
+  properties: {
+    Revenue: {
+      format: 'int64',
+      type: 'integer',
+    },
+    RevenueGrowth: {
+      format: 'int64',
+      type: 'integer',
+    },
+    RevenueGrowthPercentage: {
+      type: 'number',
+    },
+    UniquePurchasers: {
+      format: 'int64',
+      type: 'integer',
+    },
+  },
+} as const;
+
 export const PointOfPresenceSchema = {
   type: 'string',
 } as const;

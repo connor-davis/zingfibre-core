@@ -25,7 +25,7 @@ function RootComponent() {
     <ThemeProvider defaultTheme="system" defaultAppearance="zing">
       <QueryClientProvider client={queryClient}>
         <AuthenticationProvider>
-          <div className="flex flex-col w-screen h-screen bg-background">
+          <div className="flex flex-col w-screen h-screen bg-background font-montserrat antialiased">
             <SidebarProvider>
               <AuthenticationGuard>
                 <div className="flex w-screen h-screen overflow-hidden">

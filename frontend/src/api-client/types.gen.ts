@@ -16,6 +16,13 @@ export type LoginRequest = {
   Password?: string;
 };
 
+export type MonthlyStatistics = {
+  Revenue?: number;
+  RevenueGrowth?: number;
+  RevenueGrowthPercentage?: number;
+  UniquePurchasers?: number;
+};
+
 export type PointOfPresence = string;
 
 export type PointsOfPresence = Array<string>;
@@ -286,6 +293,180 @@ export type User = {
   MfaVerified?: boolean;
   Role?: 'admin' | 'staff' | 'user';
 };
+
+export type GetApiAnalyticsMonthlyStatisticsData = {
+  body?: never;
+  path?: never;
+  query?: {
+    poi?: string;
+  };
+  url: '/api/analytics/monthly-statistics';
+};
+
+export type GetApiAnalyticsMonthlyStatisticsErrors = {
+  /**
+   * The user is not authenticated.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal server error
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiAnalyticsMonthlyStatisticsError =
+  GetApiAnalyticsMonthlyStatisticsErrors[keyof GetApiAnalyticsMonthlyStatisticsErrors];
+
+export type GetApiAnalyticsMonthlyStatisticsResponses = {
+  /**
+   * The monthly statistics for the current month
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | string
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<string>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FullName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }
+      | Array<{
+          Email?: string;
+          FullName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FullName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FullName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }>
+      | {
+          Amount?: string;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          Method?: string;
+          RadiusUsername?: string;
+          ServiceId?: number;
+        }
+      | Array<{
+          Amount?: string;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          Method?: string;
+          RadiusUsername?: string;
+          ServiceId?: number;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiAnalyticsMonthlyStatisticsResponse =
+  GetApiAnalyticsMonthlyStatisticsResponses[keyof GetApiAnalyticsMonthlyStatisticsResponses];
 
 export type GetApiAnalyticsRechargeTypeCountsData = {
   body?: never;

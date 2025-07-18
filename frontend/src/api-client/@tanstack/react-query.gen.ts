@@ -10,6 +10,7 @@ import { client as _heyApiClient } from '../client.gen';
 import {
   type Options,
   deleteApiUsersById,
+  getApiAnalyticsMonthlyStatistics,
   getApiAnalyticsRechargeTypeCounts,
   getApiAuthenticationCheck,
   getApiAuthenticationMfaEnable,
@@ -38,6 +39,7 @@ import type {
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdError,
   DeleteApiUsersByIdResponse,
+  GetApiAnalyticsMonthlyStatisticsData,
   GetApiAnalyticsRechargeTypeCountsData,
   GetApiAuthenticationCheckData,
   GetApiAuthenticationMfaEnableData,
@@ -121,6 +123,31 @@ const createQueryKey = <TOptions extends Options>(
     params.query = options.query;
   }
   return [params];
+};
+
+export const getApiAnalyticsMonthlyStatisticsQueryKey = (
+  options?: Options<GetApiAnalyticsMonthlyStatisticsData>
+) => createQueryKey('getApiAnalyticsMonthlyStatistics', options);
+
+/**
+ * Monthly Statistics
+ * Endpoint to retrieve monthly statistics for the current month
+ */
+export const getApiAnalyticsMonthlyStatisticsOptions = (
+  options?: Options<GetApiAnalyticsMonthlyStatisticsData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiAnalyticsMonthlyStatistics({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiAnalyticsMonthlyStatisticsQueryKey(options),
+  });
 };
 
 export const getApiAnalyticsRechargeTypeCountsQueryKey = (

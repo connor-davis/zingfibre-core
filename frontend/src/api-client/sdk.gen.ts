@@ -5,6 +5,9 @@ import type {
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdErrors,
   DeleteApiUsersByIdResponses,
+  GetApiAnalyticsMonthlyStatisticsData,
+  GetApiAnalyticsMonthlyStatisticsErrors,
+  GetApiAnalyticsMonthlyStatisticsResponses,
   GetApiAnalyticsRechargeTypeCountsData,
   GetApiAnalyticsRechargeTypeCountsErrors,
   GetApiAnalyticsRechargeTypeCountsResponses,
@@ -91,6 +94,25 @@ export type Options<
    * used to access values that aren't defined as part of the SDK function.
    */
   meta?: Record<string, unknown>;
+};
+
+/**
+ * Monthly Statistics
+ * Endpoint to retrieve monthly statistics for the current month
+ */
+export const getApiAnalyticsMonthlyStatistics = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetApiAnalyticsMonthlyStatisticsData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiAnalyticsMonthlyStatisticsResponses,
+    GetApiAnalyticsMonthlyStatisticsErrors,
+    ThrowOnError
+  >({
+    url: '/api/analytics/monthly-statistics',
+    ...options,
+  });
 };
 
 /**
