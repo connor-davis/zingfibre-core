@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDownIcon } from 'lucide-react';
+import { ArrowUpDown, ChevronDownIcon, FilterIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { format, parseISO } from 'date-fns';
@@ -32,6 +32,14 @@ import Pagination from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { DebounceInput } from '@/components/ui/debounce-input';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -300,7 +308,7 @@ function RouteComponent() {
         <div className="flex items-center gap-3">
           <Label className="text-lg">Expiring Customers Report</Label>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           <DebounceInput
             type="text"
             className="w-64"
@@ -354,6 +362,76 @@ function RouteComponent() {
             </a>
           </Button>
         </div>
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="ghost" size="icon" className="lg:hidden">
+              <FilterIcon className="size-4" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Filters</DrawerTitle>
+              <DrawerDescription>
+                Use the filters to refine the data displayed in the report.
+              </DrawerDescription>
+            </DrawerHeader>
+
+            <div className="flex flex-col gap-3 p-3">
+              <DebounceInput
+                type="text"
+                className="w-full"
+                placeholder="Search for expiring customer"
+                defaultValue={search}
+                onChange={(value) => {
+                  router.navigate({
+                    to: routerState.location.pathname,
+                    search: (previous) => ({
+                      ...previous,
+                      search: value.target.value,
+                    }),
+                  });
+                }}
+              />
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="justify-between w-full">
+                    Columns <ChevronDownIcon />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button asChild>
+                <a
+                  href={`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/exports/expiring-customers?poi=${poi}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Export
+                </a>
+              </Button>
+            </div>
+          </DrawerContent>
+        </Drawer>
       </div>
       <div className="flex flex-col rounded-md border overflow-auto bg-accent w-full h-full">
         <Table>

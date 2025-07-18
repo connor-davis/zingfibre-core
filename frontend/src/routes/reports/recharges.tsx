@@ -16,7 +16,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, CalendarIcon, ChevronDownIcon } from 'lucide-react';
+import {
+  ArrowUpDown,
+  CalendarIcon,
+  ChevronDownIcon,
+  FilterIcon,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import { format, parseISO, subDays } from 'date-fns';
@@ -33,6 +38,14 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { DebounceInput } from '@/components/ui/debounce-input';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -356,7 +369,7 @@ function RouteComponent() {
         <div className="flex items-center gap-3">
           <Label className="text-lg">Recharges Report</Label>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           <DebounceInput
             type="text"
             className="w-64"
@@ -473,6 +486,143 @@ function RouteComponent() {
             </a>
           </Button>
         </div>
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="ghost" size="icon" className="lg:hidden">
+              <FilterIcon className="size-4" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Filters</DrawerTitle>
+              <DrawerDescription>
+                Use the filters to refine the data displayed in the report.
+              </DrawerDescription>
+            </DrawerHeader>
+
+            <div className="flex flex-col gap-3 p-3">
+              <DebounceInput
+                type="text"
+                className="w-full"
+                placeholder="Search for recharge"
+                defaultValue={search}
+                onChange={(value) => {
+                  router.navigate({
+                    to: routerState.location.pathname,
+                    search: (previous) => ({
+                      ...previous,
+                      search: value.target.value,
+                    }),
+                  });
+                }}
+              />
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="justify-between w-full">
+                    Columns <ChevronDownIcon />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Popover>
+                <PopoverTrigger>
+                  <Button
+                    id="date"
+                    variant="outline"
+                    className={cn(
+                      'w-full justify-start text-left font-normal',
+                      !startDate && !endDate && 'text-muted-foreground'
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 size-4" />
+                    {startDate ? (
+                      endDate ? (
+                        <>
+                          {format(parseISO(startDate), 'LLL dd, y')} -{' '}
+                          {format(parseISO(endDate), 'LLL dd, y')}
+                        </>
+                      ) : (
+                        format(parseISO(startDate), 'LLL dd, y')
+                      )
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="range"
+                    defaultMonth={startDate ? parseISO(startDate) : undefined}
+                    selected={{
+                      from: startDate ? parseISO(startDate) : undefined,
+                      to: endDate ? parseISO(endDate) : undefined,
+                    }}
+                    onSelect={(selected) => {
+                      if (!selected) {
+                        return;
+                      }
+
+                      const from = selected.from
+                        ? new Date(
+                            selected.from.setHours(0, 0, 0, 0)
+                          ).toISOString()
+                        : new Date(
+                            new Date().setHours(0, 0, 0, 0)
+                          ).toISOString();
+                      const to = selected.to
+                        ? new Date(
+                            selected.to.setHours(23, 59, 59, 999)
+                          ).toISOString()
+                        : new Date(
+                            new Date().setHours(23, 59, 59, 999)
+                          ).toISOString();
+
+                      router.navigate({
+                        to: '/reports/recharges',
+                        search: (previous) => ({
+                          ...previous,
+                          startDate: from,
+                          endDate: to,
+                        }),
+                      });
+                    }}
+                    numberOfMonths={2}
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <Button asChild>
+                <a
+                  href={`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/exports/recharges?poi=${poi}&startDate=${startDate}&endDate=${endDate}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Export
+                </a>
+              </Button>
+            </div>
+          </DrawerContent>
+        </Drawer>
       </div>
       <div className="flex flex-col rounded-md border overflow-auto bg-accent w-full h-full">
         <Table>
