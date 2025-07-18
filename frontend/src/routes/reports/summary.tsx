@@ -376,7 +376,7 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col rounded-md border overflow-auto bg-accent">
+      <div className="flex flex-col rounded-md border overflow-auto bg-accent w-full h-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
