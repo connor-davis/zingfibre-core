@@ -74,5 +74,6 @@ LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 LEFT JOIN Addresses t3 ON t2.AddressId = t3.Id
 WHERE
     t1.RechargeSuccessful = 1
+    AND t1.PaymentAmount > 0
     AND TRIM(LOWER(t3.POP)) LIKE TRIM(LOWER(CONCAT(sqlc.arg('poi'), '%')))
     AND t1.DateCreated >= DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
