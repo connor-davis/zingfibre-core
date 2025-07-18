@@ -403,7 +403,13 @@ function App() {
                   <Line
                     key={type}
                     dataKey={type}
-                    stroke={uniqolor(type).color}
+                    stroke={
+                      uniqolor(type, {
+                        format: 'hex',
+                        lightness: 50,
+                        saturation: 100,
+                      }).color
+                    }
                     connectNulls
                     type="monotone"
                   />
