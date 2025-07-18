@@ -39,7 +39,7 @@ export default function Pagination({ pages }: { pages: number }) {
   }, [routerState.location.pathname, page]);
 
   return (
-    <div className="flex items-center justify-between py-4 gap-3">
+    <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3">
         <Label className="text-xs text-muted-foreground">Showing</Label>
 
