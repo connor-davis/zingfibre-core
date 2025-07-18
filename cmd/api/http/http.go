@@ -197,6 +197,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 				"PointOfPresence":         schemas.PointOfPresenceSchema,
 				"PointsOfPresence":        schemas.PointsOfPresenceSchema,
 				"LoginRequest":            schemas.LoginRequestSchema,
+				"PasswordReset":           schemas.PasswordResetSchema,
 				"SuccessResponse":         schemas.SuccessResponseSchema,
 				"ErrorResponse":           schemas.ErrorResponseSchema,
 				"RechargeTypeCounts":      schemas.RechargeTypeCountsSchema,
