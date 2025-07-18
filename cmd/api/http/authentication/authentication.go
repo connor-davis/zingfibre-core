@@ -28,6 +28,7 @@ func (r *AuthenticationRouter) RegisterRoutes() []system.Route {
 	loginRoute := r.LoginRoute()
 	registerRoute := r.RegisterRoute()
 	logoutRoute := r.LogoutRoute()
+	passwordResetRoute := r.PasswordResetRoute()
 
 	// Add the MFA routes
 	enableMfaRoute := r.EnableMFARoute()
@@ -39,6 +40,7 @@ func (r *AuthenticationRouter) RegisterRoutes() []system.Route {
 		loginRoute,
 		registerRoute,
 		logoutRoute,
+		passwordResetRoute,
 		enableMfaRoute,
 		verifyMfaRoute,
 		disableMfaRoute,
