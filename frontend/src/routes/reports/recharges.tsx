@@ -45,6 +45,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Table,
   TableBody,
@@ -474,7 +475,7 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col rounded-md border overflow-auto bg-accent w-full h-full">
+      <ScrollArea className="flex flex-col rounded-md border bg-accent w-full h-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -523,7 +524,7 @@ function RouteComponent() {
             )}
           </TableBody>
         </Table>
-      </div>
+      </ScrollArea>
 
       <div className="flex flex-col w-full h-auto">
         <Pagination pages={pages} />
