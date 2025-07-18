@@ -173,6 +173,10 @@ const COLORS = [
   '#1d4ed8',
   // Yellow
   '#a16207',
+  // Purple
+  '#7c3aed',
+  // Pink
+  '#ec4899',
 ];
 
 function App() {
