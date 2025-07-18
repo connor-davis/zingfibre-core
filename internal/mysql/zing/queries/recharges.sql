@@ -41,16 +41,25 @@ FROM
 			Recharges t1
 			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+            LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 		WHERE
-			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
+			TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(sqlc.arg('poi'))), '%')
 			AND(
                 (
                     sqlc.arg('period') = 'weeks'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (sqlc.arg('count') - 1) WEEK)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN sqlc.arg('count') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('count') - 1) WEEK), '%Y-%m-01 00:00:00')
+                        END
                 )
                 OR(
                     sqlc.arg('period') = 'months'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (sqlc.arg('count') - 1) MONTH)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN sqlc.arg('count') = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (sqlc.arg('count') - 1) MONTH), '%Y-%m-01 00:00:00')
+                        END
                 )
 			)
 		GROUP BY

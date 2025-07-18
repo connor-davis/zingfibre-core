@@ -69,16 +69,25 @@ FROM
 			Recharges t1
 			LEFT JOIN Customers t2 ON t1.CustomerId = t2.Id
 			LEFT JOIN Products t3 ON t1.ProductId = t3.Id
+            LEFT JOIN Addresses t4 ON t2.AddressId = t4.Id
 		WHERE
-			TRIM(LOWER(t2.RadiusUsername)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+			TRIM(LOWER(t4.POP)) LIKE CONCAT(TRIM(LOWER(?)), '%')
 			AND(
                 (
                     ? = 'weeks'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL (? - 1) WEEK)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) WEEK), '%Y-%m-01 00:00:00')
+                        END
                 )
                 OR(
                     ? = 'months'
-                    AND t1.DateCreated >= DATE_SUB(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE()) - 1 DAY), INTERVAL (? - 1) MONTH)
+                    AND t1.DateCreated >= 
+                        CASE 
+                            WHEN ? = 1 THEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00')
+                            ELSE DATE_FORMAT(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL (? - 1) MONTH), '%Y-%m-01 00:00:00')
+                        END
                 )
 			)
 		GROUP BY
@@ -110,7 +119,9 @@ func (q *Queries) GetRechargeTypeCounts(ctx context.Context, arg GetRechargeType
 		arg.Poi,
 		arg.Period,
 		arg.Count,
+		arg.Count,
 		arg.Period,
+		arg.Count,
 		arg.Count,
 	)
 	if err != nil {
