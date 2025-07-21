@@ -23,6 +23,7 @@ type ReportExpiringCustomer struct {
 	LastPurchaseSpeed    string `json:"LastPurchaseSpeed,omitempty"`
 	Expiration           string `json:"Expiration,omitempty"`
 	Address              string `json:"Address,omitempty"`
+	POP                  string `json:"POP,omitempty"`
 }
 
 type ReportRecharge struct {

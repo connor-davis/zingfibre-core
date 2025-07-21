@@ -1,10 +1,12 @@
 package reports
 
 import (
-	"database/sql"
 	"math"
 	"strconv"
+	"strings"
+	"time"
 
+	linq "github.com/ahmetb/go-linq/v3"
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -57,6 +59,20 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 					Value: &openapi3.Schema{
 						Type: &openapi3.Types{
 							"integer",
+						},
+					},
+				},
+			},
+		},
+		{
+			Value: &openapi3.Parameter{
+				Name:     "sort",
+				In:       "query",
+				Required: false,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
 						},
 					},
 				},
@@ -159,6 +175,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 		Handler: func(c *fiber.Ctx) error {
 			poi := c.Query("poi")
 			search := c.Query("search")
+			sort := c.Query("sort")
 
 			page := c.Query("page")
 			pageSize := c.Query("pageSize")
@@ -186,48 +203,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				})
 			}
 
-			totalExpiringCustomers, err := r.Zing.GetReportsTotalExpiringCustomers(c.Context(), zing.GetReportsTotalExpiringCustomersParams{
-				Poi:    poi,
-				Search: search,
-				RadiusUsernames: func() []sql.NullString {
-					usernames := make([]sql.NullString, len(expiringCustomersRadius))
-					for i, customer := range expiringCustomersRadius {
-						usernames[i] = sql.NullString{
-							String: customer.Username,
-							Valid:  true,
-						}
-					}
-					return usernames
-				}(),
-			})
-
-			if err != nil {
-				log.Errorf("🔥 Error fetching total expiring customers from Zing: %s", err.Error())
-
-				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-					"error":   constants.InternalServerError,
-					"details": constants.InternalServerErrorDetails,
-				})
-			}
-
-			pages := int32(math.Ceil(float64(totalExpiringCustomers) / float64(pageSizeInt)))
-
-			expiringCustomers, err := r.Zing.GetReportsExpiringCustomers(c.Context(), zing.GetReportsExpiringCustomersParams{
-				Poi:    poi,
-				Search: search,
-				Limit:  int32(pageSizeInt),
-				Offset: int32((pageInt - 1) * pageSizeInt),
-				RadiusUsernames: func() []sql.NullString {
-					usernames := make([]sql.NullString, len(expiringCustomersRadius))
-					for i, customer := range expiringCustomersRadius {
-						usernames[i] = sql.NullString{
-							String: customer.Username,
-							Valid:  true,
-						}
-					}
-					return usernames
-				}(),
-			})
+			expiringCustomersZing, err := r.Zing.GetReportsExpiringCustomers(c.Context())
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching expiring customers from Zing: %s", err.Error())
@@ -238,29 +214,122 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				})
 			}
 
-			data := []system.ReportExpiringCustomer{}
+			linqExpiringCustomersZing := linq.From(expiringCustomersZing)
+			linqExpiringCustomersRadius := linq.From(expiringCustomersRadius)
 
-			for _, expiringCustomer := range expiringCustomers {
-				expiringCustomerRadius := &radius.GetReportsExpiringCustomersRow{}
-
-				for _, radiusCustomer := range expiringCustomersRadius {
-					if radiusCustomer.Username == expiringCustomer.RadiusUsername.String {
-						expiringCustomerRadius = &radiusCustomer
-						break
-					}
-				}
-
-				data = append(data, system.ReportExpiringCustomer{
-					FullName:             expiringCustomer.FullName,
-					Email:                expiringCustomer.Email.String,
-					PhoneNumber:          expiringCustomer.PhoneNumber.String,
-					RadiusUsername:       expiringCustomer.RadiusUsername.String,
-					LastPurchaseDuration: expiringCustomer.LastPurchaseDuration.String,
-					LastPurchaseSpeed:    expiringCustomer.LastPurchaseSpeed.String,
-					Expiration:           expiringCustomerRadius.Expiration.Time.Format("2006-01-02T15:04:05Z07:00"),
-					Address:              expiringCustomer.Address.String,
+			expiringCustomersQuery := linqExpiringCustomersZing.
+				Join(
+					linqExpiringCustomersRadius,
+					func(i interface{}) interface{} {
+						return strings.ToLower(i.(zing.GetReportsExpiringCustomersRow).RadiusUsername.String)
+					},
+					func(o interface{}) interface{} {
+						return strings.ToLower(o.(radius.GetReportsExpiringCustomersRow).Username)
+					},
+					func(i interface{}, o interface{}) interface{} {
+						return system.ReportExpiringCustomer{
+							FullName:             i.(zing.GetReportsExpiringCustomersRow).FullName,
+							Email:                i.(zing.GetReportsExpiringCustomersRow).Email.String,
+							PhoneNumber:          i.(zing.GetReportsExpiringCustomersRow).PhoneNumber.String,
+							RadiusUsername:       i.(zing.GetReportsExpiringCustomersRow).RadiusUsername.String,
+							LastPurchaseDuration: i.(zing.GetReportsExpiringCustomersRow).LastPurchaseDuration.String,
+							LastPurchaseSpeed:    i.(zing.GetReportsExpiringCustomersRow).LastPurchaseSpeed.String,
+							Expiration:           o.(radius.GetReportsExpiringCustomersRow).Expiration.Time.Format(time.DateOnly),
+							Address:              i.(zing.GetReportsExpiringCustomersRow).Address.String,
+							POP:                  i.(zing.GetReportsExpiringCustomersRow).Pop.String,
+						}
+					},
+				).
+				Where(func(i interface{}) bool {
+					return strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).POP), strings.ToLower(poi)) &&
+						(strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).FullName), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).Email), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).Address), strings.ToLower(search)) ||
+							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).Expiration), strings.ToLower(search)))
 				})
+
+			orderedExpiringCustomers := []system.ReportExpiringCustomer{}
+
+			switch sort {
+			case "full_name_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "full_name_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "email_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).Email)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "email_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).Email)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "phone_number_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "phone_number_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "radius_username_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "radius_username_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "last_purchase_duration_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "last_purchase_duration_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "last_purchase_speed_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "last_purchase_speed_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "address_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).Address)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "address_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).Address)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "expiration_asc":
+				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).Expiration)
+				}).ToSlice(&orderedExpiringCustomers)
+			case "expiration_desc":
+				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
+					return strings.ToLower(i.(system.ReportExpiringCustomer).Expiration)
+				}).ToSlice(&orderedExpiringCustomers)
 			}
+
+			totalExpiringCustomers := linq.From(orderedExpiringCustomers).
+				Count()
+
+			pages := int(math.Ceil(float64(totalExpiringCustomers) / float64(pageSizeInt)))
+
+			data := linq.From(orderedExpiringCustomers).
+				Skip((pageInt - 1) * pageSizeInt).
+				Take(pageSizeInt).
+				Results()
 
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
