@@ -241,84 +241,148 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 					},
 				).
 				Where(func(i interface{}) bool {
-					return strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).POP), strings.ToLower(poi)) &&
-						(strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).FullName), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).Email), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).Address), strings.ToLower(search)) ||
-							strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).Expiration), strings.ToLower(search)))
+					return strings.Contains(
+						strings.ToLower(i.(system.ReportExpiringCustomer).POP),
+						strings.ToLower(poi),
+					) &&
+						(strings.Contains(
+							strings.ToLower(i.(system.ReportExpiringCustomer).FullName),
+							strings.ToLower(search),
+						) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).Email),
+								strings.ToLower(search),
+							) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber),
+								strings.ToLower(search),
+							) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername),
+								strings.ToLower(search),
+							) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration),
+								strings.ToLower(search),
+							) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed),
+								strings.ToLower(search),
+							) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).Address),
+								strings.ToLower(search),
+							) ||
+							strings.Contains(
+								strings.ToLower(i.(system.ReportExpiringCustomer).Expiration),
+								strings.ToLower(search),
+							))
 				})
 
 			orderedExpiringCustomers := []system.ReportExpiringCustomer{}
 
 			switch sort {
 			case "full_name_asc":
-				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderBy(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "full_name_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "email_asc":
-				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).Email)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderBy(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).Email)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "email_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).Email)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).Email)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "phone_number_asc":
-				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderBy(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "phone_number_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).PhoneNumber)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "radius_username_asc":
 				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
 					return strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername)
 				}).ToSlice(&orderedExpiringCustomers)
 			case "radius_username_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).RadiusUsername)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "last_purchase_duration_asc":
 				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
 					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration)
 				}).ToSlice(&orderedExpiringCustomers)
 			case "last_purchase_duration_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseDuration)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "last_purchase_speed_asc":
-				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderBy(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "last_purchase_speed_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).LastPurchaseSpeed)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "address_asc":
-				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).Address)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderBy(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).Address)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "address_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).Address)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).Address)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "expiration_asc":
-				expiringCustomersQuery.OrderBy(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).Expiration)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderBy(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).Expiration)
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			case "expiration_desc":
-				expiringCustomersQuery.OrderByDescending(func(i interface{}) interface{} {
-					return strings.ToLower(i.(system.ReportExpiringCustomer).Expiration)
-				}).ToSlice(&orderedExpiringCustomers)
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return strings.ToLower(i.(system.ReportExpiringCustomer).Expiration)
+					}).
+					ToSlice(&orderedExpiringCustomers)
+			default:
+				expiringCustomersQuery.
+					OrderByDescending(func(i interface{}) interface{} {
+						return i.(system.ReportExpiringCustomer).Expiration
+					}).
+					ThenBy(func(i interface{}) interface{} {
+						return i.(system.ReportExpiringCustomer).FullName
+					}).
+					ToSlice(&orderedExpiringCustomers)
 			}
 
 			totalExpiringCustomers := linq.From(orderedExpiringCustomers).

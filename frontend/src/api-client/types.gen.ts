@@ -2453,6 +2453,7 @@ export type GetApiReportsExpiringCustomersData = {
     poi?: string;
     page?: number;
     pageSize?: number;
+    sort?: string;
     search?: string;
   };
   url: '/api/reports/expiring-customers';

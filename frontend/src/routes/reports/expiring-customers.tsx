@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDownIcon, FilterIcon } from 'lucide-react';
+import { ChevronDownIcon, ChevronUpIcon, FilterIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { format, parseISO } from 'date-fns';
@@ -64,6 +64,7 @@ export const Route = createFileRoute('/reports/expiring-customers')({
     search: z.string().default(''),
     page: z.coerce.number().default(1),
     pageSize: z.coerce.number().default(10),
+    sort: z.string().default('expiration_asc'),
   }),
   pendingComponent: () => (
     <div className="flex flex-col w-full h-full items-center justify-center">
@@ -100,13 +101,14 @@ export const Route = createFileRoute('/reports/expiring-customers')({
     return <ErrorComponent error={error} />;
   },
   wrapInSuspense: true,
-  loaderDeps: ({ search: { poi, search, page, pageSize } }) => ({
+  loaderDeps: ({ search: { poi, search, page, pageSize, sort } }) => ({
     poi,
     search,
     page,
     pageSize,
+    sort,
   }),
-  loader: async ({ deps: { poi, search, page, pageSize } }) => {
+  loader: async ({ deps: { poi, search, page, pageSize, sort } }) => {
     const { data } = await getApiReportsExpiringCustomers({
       client: apiClient,
       query: {
@@ -114,6 +116,7 @@ export const Route = createFileRoute('/reports/expiring-customers')({
         search,
         page,
         pageSize,
+        sort,
       },
       throwOnError: true,
     });
@@ -133,7 +136,51 @@ export const columns = [
     id: 'Expires On',
     accessorKey: 'Expiration',
     header: () => {
-      return <div>Expires On</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('expiration')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'expiration_asc'
+                    : 'expiration_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'expiration_asc'
+                    ? 'expiration_desc'
+                    : 'expiration_asc',
+              }),
+            });
+          }}
+        >
+          Expires On
+          {sort.startsWith('expiration') ? (
+            sort === 'expiration_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => (
       <div>{format(parseISO(row.getValue('Expires On')), 'dd/MM/yyyy')}</div>
@@ -143,7 +190,49 @@ export const columns = [
     id: 'Full Name',
     accessorKey: 'FullName',
     header: () => {
-      return <div>Full Name</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('full_name')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'full_name_asc'
+                    : 'full_name_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'full_name_asc' ? 'full_name_desc' : 'full_name_asc',
+              }),
+            });
+          }}
+        >
+          Full Name
+          {sort.startsWith('full_name') ? (
+            sort === 'full_name_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Full Name')}</div>,
   },
@@ -151,7 +240,46 @@ export const columns = [
     id: 'Email',
     accessorKey: 'Email',
     header: () => {
-      return <div>Email</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('email')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc') ? 'email_asc' : 'email_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort: sort === 'email_asc' ? 'email_desc' : 'email_asc',
+              }),
+            });
+          }}
+        >
+          Email
+          {sort.startsWith('email') ? (
+            sort === 'email_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
   },
@@ -159,7 +287,51 @@ export const columns = [
     id: 'Radius Username',
     accessorKey: 'RadiusUsername',
     header: () => {
-      return <div>Radius Username</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('radius_username')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'radius_username_asc'
+                    : 'radius_username_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'radius_username_asc'
+                    ? 'radius_username_desc'
+                    : 'radius_username_asc',
+              }),
+            });
+          }}
+        >
+          Radius Username
+          {sort.startsWith('radius_username') ? (
+            sort === 'radius_username_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Radius Username')}</div>,
   },
@@ -167,7 +339,51 @@ export const columns = [
     id: 'Phone Number',
     accessorKey: 'PhoneNumber',
     header: () => {
-      return <div>Phone Number</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('phone_number')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'phone_number_asc'
+                    : 'phone_number_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'phone_number_asc'
+                    ? 'phone_number_desc'
+                    : 'phone_number_asc',
+              }),
+            });
+          }}
+        >
+          Phone Number
+          {sort.startsWith('phone_number') ? (
+            sort === 'phone_number_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Phone Number')}</div>,
   },
@@ -175,7 +391,46 @@ export const columns = [
     id: 'Address',
     accessorKey: 'Address',
     header: () => {
-      return <div>Address</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('address')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc') ? 'address_asc' : 'address_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort: sort === 'address_asc' ? 'address_desc' : 'address_asc',
+              }),
+            });
+          }}
+        >
+          Address
+          {sort.startsWith('address') ? (
+            sort === 'address_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Address')}</div>,
   },
@@ -183,7 +438,51 @@ export const columns = [
     id: 'Last Duration',
     accessorKey: 'LastPurchaseDuration',
     header: () => {
-      return <div>Last Duration</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('last_purchase_duration')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'last_purchase_duration_asc'
+                    : 'last_purchase_duration_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'last_purchase_duration_asc'
+                    ? 'last_purchase_duration_desc'
+                    : 'last_purchase_duration_asc',
+              }),
+            });
+          }}
+        >
+          Last Duration
+          {sort.startsWith('last_purchase_duration') ? (
+            sort === 'last_purchase_duration_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Last Duration')}</div>,
   },
@@ -191,7 +490,51 @@ export const columns = [
     id: 'Last Speed',
     accessorKey: 'LastPurchaseSpeed',
     header: () => {
-      return <div>Last Speed</div>;
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('last_purchase_speed')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'last_purchase_speed_asc'
+                    : 'last_purchase_speed_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'last_purchase_speed_asc'
+                    ? 'last_purchase_speed_desc'
+                    : 'last_purchase_speed_asc',
+              }),
+            });
+          }}
+        >
+          Last Speed
+          {sort.startsWith('last_purchase_speed') ? (
+            sort === 'last_purchase_speed_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
     },
     cell: ({ row }) => <div>{row.getValue('Last Speed')}</div>,
   },
