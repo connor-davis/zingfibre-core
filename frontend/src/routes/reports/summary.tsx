@@ -175,14 +175,16 @@ export const columns = [
     header: () => {
       return <div>Amount</div>;
     },
-    cell: ({ row }) => (
-      <div>
-        {row.getValue<number | undefined>('Amount')?.toLocaleString('en-ZA', {
-          style: 'currency',
-          currency: 'ZAR',
-        }) ?? 'R 0'}
-      </div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.getValue<number | undefined>('Amount')?.toLocaleString('en-ZA', {
+            style: 'currency',
+            currency: 'ZAR',
+          }) ?? 'R 0'}
+        </div>
+      );
+    },
   },
   {
     id: 'Service Id',
