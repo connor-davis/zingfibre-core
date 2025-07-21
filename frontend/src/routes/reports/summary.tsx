@@ -178,10 +178,13 @@ export const columns = [
     cell: ({ row }) => {
       return (
         <div>
-          {row.getValue<number | undefined>('Amount')?.toLocaleString('en-ZA', {
-            style: 'currency',
-            currency: 'ZAR',
-          }) ?? 'R 0'}
+          {Number(row.getValue<string | undefined>('Amount'))?.toLocaleString(
+            'en-ZA',
+            {
+              style: 'currency',
+              currency: 'ZAR',
+            }
+          ) ?? 'R 0'}
         </div>
       );
     },
