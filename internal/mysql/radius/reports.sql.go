@@ -13,22 +13,20 @@ import (
 const getReportsExpiringCustomers = `-- name: GetReportsExpiringCustomers :many
 SELECT
     username,
-    expiration,
-    address
+    expiration
 FROM
     rm_users
 WHERE
-    TRIM(LOWER(username)) LIKE CONCAT(TRIM(LOWER(?)), '%')
+    expiration IS NOT NULL
 `
 
 type GetReportsExpiringCustomersRow struct {
 	Username   string
 	Expiration sql.NullTime
-	Address    string
 }
 
-func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, poi string) ([]GetReportsExpiringCustomersRow, error) {
-	rows, err := q.db.QueryContext(ctx, getReportsExpiringCustomers, poi)
+func (q *Queries) GetReportsExpiringCustomers(ctx context.Context) ([]GetReportsExpiringCustomersRow, error) {
+	rows, err := q.db.QueryContext(ctx, getReportsExpiringCustomers)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +34,7 @@ func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, poi string) (
 	var items []GetReportsExpiringCustomersRow
 	for rows.Next() {
 		var i GetReportsExpiringCustomersRow
-		if err := rows.Scan(&i.Username, &i.Expiration, &i.Address); err != nil {
+		if err := rows.Scan(&i.Username, &i.Expiration); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -48,4 +46,20 @@ func (q *Queries) GetReportsExpiringCustomers(ctx context.Context, poi string) (
 		return nil, err
 	}
 	return items, nil
+}
+
+const getReportsTotalExpiringCustomers = `-- name: GetReportsTotalExpiringCustomers :one
+SELECT
+    COUNT(*) AS total_expiring_customers
+FROM
+    rm_users
+WHERE
+    expiration IS NOT NULL
+`
+
+func (q *Queries) GetReportsTotalExpiringCustomers(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getReportsTotalExpiringCustomers)
+	var total_expiring_customers int64
+	err := row.Scan(&total_expiring_customers)
+	return total_expiring_customers, err
 }

@@ -1,6 +1,7 @@
 package exports
 
 import (
+	"database/sql"
 	"encoding/csv"
 	"fmt"
 	"time"
@@ -96,9 +97,9 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
 		},
 		Handler: func(c *fiber.Ctx) error {
-			poi := c.Query("poi")
+			pop := c.Query("poi")
 
-			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context(), poi)
+			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context())
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching expiring customers from Radius: %s", err.Error())
@@ -110,9 +111,17 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 			}
 
 			expiringCustomers, err := r.Zing.GetReportExportsExpiringCustomers(c.Context(), zing.GetReportExportsExpiringCustomersParams{
-				Expiration: "",
-				Address:    "",
-				Poi:        poi,
+				Poi: pop,
+				RadiusUsernames: func() []sql.NullString {
+					usernames := make([]sql.NullString, len(expiringCustomersRadius))
+					for i, customer := range expiringCustomersRadius {
+						usernames[i] = sql.NullString{
+							String: customer.Username,
+							Valid:  true,
+						}
+					}
+					return usernames
+				}(),
 			})
 
 			if err != nil {
@@ -162,7 +171,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 					expiringCustomer.RadiusUsername.String,
 					expiringCustomer.LastPurchaseDuration.String,
 					expiringCustomer.LastPurchaseSpeed.String,
-					expiringCustomerRadius.Address,
+					expiringCustomer.Address.String,
 				}
 
 				if err := writer.Write(record); err != nil {

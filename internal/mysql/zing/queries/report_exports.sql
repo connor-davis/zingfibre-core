@@ -20,8 +20,8 @@ SELECT
     t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
-    CONCAT(sqlc.arg('expiration')) AS expiration,
-    CONCAT(sqlc.arg('address')) AS address
+    t4.StreetAddress AS Address,
+    CONCAT('') AS expiration
 FROM
     Customers t1
 LEFT JOIN (
@@ -47,6 +47,7 @@ WHERE
         OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
     )
+    AND t4.RadiusUsername IN (sqlc.slice('radius_usernames'))
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC;

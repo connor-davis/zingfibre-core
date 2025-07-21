@@ -100,8 +100,8 @@ SELECT
     t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
-    CONCAT(sqlc.arg('expiration')) AS expiration,
-    CONCAT(sqlc.arg('address')) AS address
+    t4.StreetAddress AS Address,
+    CONCAT('') AS expiration
 FROM
     Customers t1
 LEFT JOIN (
@@ -127,6 +127,7 @@ WHERE
         OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
     )
+    AND t4.RadiusUsername IN (sqlc.slice('radius_usernames'))
 ORDER BY
     CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
     t1.Email ASC
@@ -138,6 +139,7 @@ SELECT
     COUNT(*) AS total_expiring_customers
 FROM
     Customers t1
+LEFT JOIN Addresses t2 ON t1.AddressId = t2.Id
 LEFT JOIN (
     SELECT
         CustomerID,
@@ -147,24 +149,20 @@ LEFT JOIN (
     GROUP BY
         CustomerID
 ) AS latest_recharge ON t1.Id = latest_recharge.CustomerID
-LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_recharge.LastRechargeDate = t2.DateCreated
-LEFT JOIN Products t3 ON t2.ProductId = t3.Id
-LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
+LEFT JOIN Recharges t3 ON latest_recharge.CustomerID = t3.CustomerID AND latest_recharge.LastRechargeDate = t3.DateCreated
+LEFT JOIN Products t4 ON t3.ProductId = t4.Id
 WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
+    TRIM(LOWER(t2.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
     AND (
         t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
         OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t2.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
+        OR t4.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
     )
-ORDER BY
-    t4.RadiusUsername ASC,
-    t1.Email ASC
-LIMIT 1;
+    AND t2.RadiusUsername IN (sqlc.slice('radius_usernames'));
 
 -- name: GetReportsRecharges :many
 SELECT

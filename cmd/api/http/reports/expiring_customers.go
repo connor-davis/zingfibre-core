@@ -1,6 +1,7 @@
 package reports
 
 import (
+	"database/sql"
 	"math"
 	"strconv"
 
@@ -174,11 +175,30 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				pageSizeInt = 10
 			}
 
-			expiringCustomersExport, err := r.Zing.GetReportExportsExpiringCustomers(c.Context(), zing.GetReportExportsExpiringCustomersParams{
-				Expiration: "",
-				Address:    "",
-				Poi:        poi,
-				Search:     search,
+			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context())
+
+			if err != nil {
+				log.Errorf("🔥 Error fetching expiring customers from Radius: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			totalExpiringCustomers, err := r.Zing.GetReportsTotalExpiringCustomers(c.Context(), zing.GetReportsTotalExpiringCustomersParams{
+				Poi:    poi,
+				Search: search,
+				RadiusUsernames: func() []sql.NullString {
+					usernames := make([]sql.NullString, len(expiringCustomersRadius))
+					for i, customer := range expiringCustomersRadius {
+						usernames[i] = sql.NullString{
+							String: customer.Username,
+							Valid:  true,
+						}
+					}
+					return usernames
+				}(),
 			})
 
 			if err != nil {
@@ -190,24 +210,23 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 				})
 			}
 
-			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context(), poi)
-
-			if err != nil {
-				log.Errorf("🔥 Error fetching expiring customers from Radius: %s", err.Error())
-
-				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-					"error":   constants.InternalServerError,
-					"details": constants.InternalServerErrorDetails,
-				})
-			}
+			pages := int32(math.Ceil(float64(totalExpiringCustomers) / float64(pageSizeInt)))
 
 			expiringCustomers, err := r.Zing.GetReportsExpiringCustomers(c.Context(), zing.GetReportsExpiringCustomersParams{
-				Expiration: "",
-				Address:    "",
-				Poi:        poi,
-				Search:     search,
-				Limit:      int32(pageSizeInt),
-				Offset:     int32((pageInt - 1) * pageSizeInt),
+				Poi:    poi,
+				Search: search,
+				Limit:  int32(pageSizeInt),
+				Offset: int32((pageInt - 1) * pageSizeInt),
+				RadiusUsernames: func() []sql.NullString {
+					usernames := make([]sql.NullString, len(expiringCustomersRadius))
+					for i, customer := range expiringCustomersRadius {
+						usernames[i] = sql.NullString{
+							String: customer.Username,
+							Valid:  true,
+						}
+					}
+					return usernames
+				}(),
 			})
 
 			if err != nil {
@@ -220,8 +239,6 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 			}
 
 			data := []system.ReportExpiringCustomer{}
-
-			totalData := []system.ReportExpiringCustomer{}
 
 			for _, expiringCustomer := range expiringCustomers {
 				expiringCustomerRadius := &radius.GetReportsExpiringCustomersRow{}
@@ -241,33 +258,9 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 					LastPurchaseDuration: expiringCustomer.LastPurchaseDuration.String,
 					LastPurchaseSpeed:    expiringCustomer.LastPurchaseSpeed.String,
 					Expiration:           expiringCustomerRadius.Expiration.Time.Format("2006-01-02T15:04:05Z07:00"),
-					Address:              expiringCustomerRadius.Address,
+					Address:              expiringCustomer.Address.String,
 				})
 			}
-
-			for _, expiringCustomer := range expiringCustomersExport {
-				expiringCustomerRadius := &radius.GetReportsExpiringCustomersRow{}
-
-				for _, radiusCustomer := range expiringCustomersRadius {
-					if radiusCustomer.Username == expiringCustomer.RadiusUsername.String {
-						expiringCustomerRadius = &radiusCustomer
-						break
-					}
-				}
-
-				totalData = append(totalData, system.ReportExpiringCustomer{
-					FullName:             expiringCustomer.FullName,
-					Email:                expiringCustomer.Email.String,
-					PhoneNumber:          expiringCustomer.PhoneNumber.String,
-					RadiusUsername:       expiringCustomer.RadiusUsername.String,
-					LastPurchaseDuration: expiringCustomer.LastPurchaseDuration.String,
-					LastPurchaseSpeed:    expiringCustomer.LastPurchaseSpeed.String,
-					Expiration:           expiringCustomerRadius.Expiration.Time.Format("2006-01-02T15:04:05Z07:00"),
-					Address:              expiringCustomerRadius.Address,
-				})
-			}
-
-			pages := int32(math.Ceil(float64(len(totalData)) / 10))
 
 			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
