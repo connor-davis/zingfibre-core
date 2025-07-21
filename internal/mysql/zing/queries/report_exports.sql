@@ -14,14 +14,14 @@ ORDER BY
 
 -- name: GetReportExportsExpiringCustomers :many
 SELECT
-    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
+    CONCAT(TRIM(t1.FirstName), ' ', TRIM(t1.Surname)) AS full_name,
     t1.Email AS email,
     t1.PhoneNumber AS phone_number,
     t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
-    t4.StreetAddress AS Address,
-    CONCAT('') AS expiration
+    t4.StreetAddress AS address,
+    t4.POP AS pop
 FROM
     Customers t1
 LEFT JOIN (
@@ -35,22 +35,7 @@ LEFT JOIN (
 ) AS latest_recharge ON t1.Id = latest_recharge.CustomerID
 LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_recharge.LastRechargeDate = t2.DateCreated
 LEFT JOIN Products t3 ON t2.ProductId = t3.Id
-LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
-WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('poi'))), '%')
-    AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(sqlc.arg('search'))), '%')
-    )
-    AND t4.RadiusUsername IN (sqlc.slice('radius_usernames'))
-ORDER BY
-    CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
-    t1.Email ASC;
+LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id;
 
 -- name: GetReportExportsRecharges :many
 SELECT

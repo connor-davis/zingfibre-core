@@ -1,11 +1,12 @@
 package exports
 
 import (
-	"database/sql"
 	"encoding/csv"
 	"fmt"
+	"strings"
 	"time"
 
+	"github.com/ahmetb/go-linq/v3"
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -97,7 +98,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
 		},
 		Handler: func(c *fiber.Ctx) error {
-			pop := c.Query("poi")
+			poi := c.Query("poi")
 
 			expiringCustomersRadius, err := r.Radius.GetReportsExpiringCustomers(c.Context())
 
@@ -110,19 +111,7 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 				})
 			}
 
-			expiringCustomers, err := r.Zing.GetReportExportsExpiringCustomers(c.Context(), zing.GetReportExportsExpiringCustomersParams{
-				Poi: pop,
-				RadiusUsernames: func() []sql.NullString {
-					usernames := make([]sql.NullString, len(expiringCustomersRadius))
-					for i, customer := range expiringCustomersRadius {
-						usernames[i] = sql.NullString{
-							String: customer.Username,
-							Valid:  true,
-						}
-					}
-					return usernames
-				}(),
-			})
+			expiringCustomersZing, err := r.Zing.GetReportExportsExpiringCustomers(c.Context())
 
 			if err != nil {
 				log.Errorf("🔥 Error fetching expiring customers from Zing: %s", err.Error())
@@ -132,6 +121,43 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 					"details": constants.InternalServerErrorDetails,
 				})
 			}
+
+			linqExpiringCustomersZing := linq.From(expiringCustomersZing)
+			linqExpiringCustomersRadius := linq.From(expiringCustomersRadius)
+
+			expiringCustomersQuery := linqExpiringCustomersZing.
+				Join(
+					linqExpiringCustomersRadius,
+					func(i interface{}) interface{} {
+						return strings.ToLower(i.(zing.GetReportExportsExpiringCustomersRow).RadiusUsername.String)
+					},
+					func(o interface{}) interface{} {
+						return strings.ToLower(o.(radius.GetReportsExpiringCustomersRow).Username)
+					},
+					func(i interface{}, o interface{}) interface{} {
+						return system.ReportExpiringCustomer{
+							FullName:             i.(zing.GetReportExportsExpiringCustomersRow).FullName,
+							Email:                i.(zing.GetReportExportsExpiringCustomersRow).Email.String,
+							PhoneNumber:          i.(zing.GetReportExportsExpiringCustomersRow).PhoneNumber.String,
+							RadiusUsername:       i.(zing.GetReportExportsExpiringCustomersRow).RadiusUsername.String,
+							LastPurchaseDuration: i.(zing.GetReportExportsExpiringCustomersRow).LastPurchaseDuration.String,
+							LastPurchaseSpeed:    i.(zing.GetReportExportsExpiringCustomersRow).LastPurchaseSpeed.String,
+							Expiration:           o.(radius.GetReportsExpiringCustomersRow).Expiration.Time.Format(time.RFC3339),
+							Address:              i.(zing.GetReportExportsExpiringCustomersRow).Address.String,
+							POP:                  i.(zing.GetReportExportsExpiringCustomersRow).Pop.String,
+						}
+					},
+				).
+				Where(func(i interface{}) bool {
+					return strings.Contains(strings.ToLower(i.(system.ReportExpiringCustomer).POP), strings.ToLower(poi))
+				}).
+				OrderByDescending(func(i interface{}) interface{} {
+					return i.(system.ReportExpiringCustomer).Expiration
+				}).
+				ThenBy(func(i interface{}) interface{} {
+					return i.(system.ReportExpiringCustomer).FullName
+				}).
+				Results()
 
 			now := time.Now()
 
@@ -153,31 +179,27 @@ func (r *ExportsRouter) ExpiringCustomersRoute() system.Route {
 				})
 			}
 
-			for _, expiringCustomer := range expiringCustomers {
-				expiringCustomerRadius := &radius.GetReportsExpiringCustomersRow{}
-
-				for _, radiusCustomer := range expiringCustomersRadius {
-					if radiusCustomer.Username == expiringCustomer.RadiusUsername.String {
-						expiringCustomerRadius = &radiusCustomer
-						break
-					}
-				}
+			for _, customer := range expiringCustomersQuery {
+				expiringCustomer := customer.(system.ReportExpiringCustomer)
 
 				record := []string{
-					expiringCustomerRadius.Expiration.Time.Format(time.DateTime),
+					expiringCustomer.Expiration,
 					expiringCustomer.FullName,
-					expiringCustomer.Email.String,
-					expiringCustomer.PhoneNumber.String,
-					expiringCustomer.RadiusUsername.String,
-					expiringCustomer.LastPurchaseDuration.String,
-					expiringCustomer.LastPurchaseSpeed.String,
-					expiringCustomer.Address.String,
+					expiringCustomer.Email,
+					expiringCustomer.PhoneNumber,
+					expiringCustomer.RadiusUsername,
+					expiringCustomer.LastPurchaseDuration,
+					expiringCustomer.LastPurchaseSpeed,
+					expiringCustomer.Address,
 				}
 
 				if err := writer.Write(record); err != nil {
 					log.Errorf("🔥 Error writing CSV record: %s", err.Error())
 
-					continue
+					return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+						"error":   constants.InternalServerError,
+						"details": constants.InternalServerErrorDetails,
+					})
 				}
 			}
 

@@ -8,7 +8,6 @@ package zing
 import (
 	"context"
 	"database/sql"
-	"strings"
 	"time"
 )
 
@@ -70,8 +69,8 @@ SELECT
     t4.RadiusUsername AS radius_username,
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
-    t4.StreetAddress AS Address,
-    CONCAT('') AS expiration
+    t4.StreetAddress AS address,
+    t4.POP AS pop
 FROM
     Customers t1
 LEFT JOIN (
@@ -86,28 +85,7 @@ LEFT JOIN (
 LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_recharge.LastRechargeDate = t2.DateCreated
 LEFT JOIN Products t3 ON t2.ProductId = t3.Id
 LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id
-WHERE
-    TRIM(LOWER(t4.POP)) LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-    AND (
-        t1.FirstName LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.Surname LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.Email LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t1.PhoneNumber LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t4.RadiusUsername LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t3.Name LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-        OR t3.Category LIKE CONCAT('%', TRIM(LOWER(?)), '%')
-    )
-    AND t4.RadiusUsername IN (/*SLICE:radius_usernames*/?)
-ORDER BY
-    CONCAT(t1.FirstName, ' ', t1.Surname) ASC,
-    t1.Email ASC
 `
-
-type GetReportExportsExpiringCustomersParams struct {
-	Poi             string
-	Search          string
-	RadiusUsernames []sql.NullString
-}
 
 type GetReportExportsExpiringCustomersRow struct {
 	FullName             string
@@ -117,29 +95,11 @@ type GetReportExportsExpiringCustomersRow struct {
 	LastPurchaseDuration sql.NullString
 	LastPurchaseSpeed    sql.NullString
 	Address              sql.NullString
-	Expiration           string
+	Pop                  sql.NullString
 }
 
-func (q *Queries) GetReportExportsExpiringCustomers(ctx context.Context, arg GetReportExportsExpiringCustomersParams) ([]GetReportExportsExpiringCustomersRow, error) {
-	query := getReportExportsExpiringCustomers
-	var queryParams []interface{}
-	queryParams = append(queryParams, arg.Poi)
-	queryParams = append(queryParams, arg.Search)
-	queryParams = append(queryParams, arg.Search)
-	queryParams = append(queryParams, arg.Search)
-	queryParams = append(queryParams, arg.Search)
-	queryParams = append(queryParams, arg.Search)
-	queryParams = append(queryParams, arg.Search)
-	queryParams = append(queryParams, arg.Search)
-	if len(arg.RadiusUsernames) > 0 {
-		for _, v := range arg.RadiusUsernames {
-			queryParams = append(queryParams, v)
-		}
-		query = strings.Replace(query, "/*SLICE:radius_usernames*/?", strings.Repeat(",?", len(arg.RadiusUsernames))[1:], 1)
-	} else {
-		query = strings.Replace(query, "/*SLICE:radius_usernames*/?", "NULL", 1)
-	}
-	rows, err := q.db.QueryContext(ctx, query, queryParams...)
+func (q *Queries) GetReportExportsExpiringCustomers(ctx context.Context) ([]GetReportExportsExpiringCustomersRow, error) {
+	rows, err := q.db.QueryContext(ctx, getReportExportsExpiringCustomers)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +115,7 @@ func (q *Queries) GetReportExportsExpiringCustomers(ctx context.Context, arg Get
 			&i.LastPurchaseDuration,
 			&i.LastPurchaseSpeed,
 			&i.Address,
-			&i.Expiration,
+			&i.Pop,
 		); err != nil {
 			return nil, err
 		}

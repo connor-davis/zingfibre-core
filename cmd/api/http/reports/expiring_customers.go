@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	linq "github.com/ahmetb/go-linq/v3"
+	"github.com/ahmetb/go-linq/v3"
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -234,7 +234,7 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 							RadiusUsername:       i.(zing.GetReportsExpiringCustomersRow).RadiusUsername.String,
 							LastPurchaseDuration: i.(zing.GetReportsExpiringCustomersRow).LastPurchaseDuration.String,
 							LastPurchaseSpeed:    i.(zing.GetReportsExpiringCustomersRow).LastPurchaseSpeed.String,
-							Expiration:           o.(radius.GetReportsExpiringCustomersRow).Expiration.Time.Format(time.DateOnly),
+							Expiration:           o.(radius.GetReportsExpiringCustomersRow).Expiration.Time.Format(time.RFC3339),
 							Address:              i.(zing.GetReportsExpiringCustomersRow).Address.String,
 							POP:                  i.(zing.GetReportsExpiringCustomersRow).Pop.String,
 						}
