@@ -134,6 +134,30 @@ ORDER BY
 LIMIT ?
 OFFSET ?;
 
+-- name: GetReportsExpiringCustomersNoPagination :many
+SELECT
+    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
+    t1.Email AS email,
+    t1.PhoneNumber AS phone_number,
+    t4.RadiusUsername AS radius_username,
+    t3.Name AS last_purchase_duration,
+    t3.Category AS last_purchase_speed,
+    t4.StreetAddress AS Address
+FROM
+    Customers t1
+LEFT JOIN (
+    SELECT
+        CustomerID,
+        MAX(DateCreated) AS LastRechargeDate
+    FROM
+        Recharges
+    GROUP BY
+        CustomerID
+) AS latest_recharge ON t1.Id = latest_recharge.CustomerID
+LEFT JOIN Recharges t2 ON latest_recharge.CustomerID = t2.CustomerID AND latest_recharge.LastRechargeDate = t2.DateCreated
+LEFT JOIN Products t3 ON t2.ProductId = t3.Id
+LEFT JOIN Addresses t4 ON t1.AddressId = t4.Id;
+
 -- name: GetReportsTotalExpiringCustomers :one
 SELECT
     COUNT(*) AS total_expiring_customers

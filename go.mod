@@ -17,6 +17,7 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/ahmetb/go-linq/v3 v3.2.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
