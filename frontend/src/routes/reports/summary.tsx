@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDownIcon, FilterIcon } from 'lucide-react';
+import { ChevronDownIcon, FilterIcon, SigmaIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { format, parseISO } from 'date-fns';
@@ -270,21 +270,25 @@ function RouteComponent() {
             }}
           />
 
-          <DebounceNumberInput
-            className="w-24 h-9 rounded-r-none"
-            min={1}
-            max={100}
-            value={months}
-            onValueChange={(value) => {
-              router.navigate({
-                to: routerState.location.pathname,
-                search: (previous) => ({
-                  ...previous,
-                  months: value,
-                }),
-              });
-            }}
-          />
+          <div className="flex items-center gap-1">
+            <SigmaIcon className="size-4" />
+
+            <DebounceNumberInput
+              className="w-24 h-9 rounded-r-none"
+              min={1}
+              max={100}
+              value={months}
+              onValueChange={(value) => {
+                router.navigate({
+                  to: routerState.location.pathname,
+                  search: (previous) => ({
+                    ...previous,
+                    months: value,
+                  }),
+                });
+              }}
+            />
+          </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
