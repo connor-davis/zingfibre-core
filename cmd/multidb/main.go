@@ -81,9 +81,7 @@ func main() {
 	linqExpiringCustomersZing := linq.From(expiringCustomersZing)
 	linqExpiringCustomersRadius := linq.From(expiringCustomersRadius)
 
-	joinedData := []interface{}{}
-
-	linqExpiringCustomersZing.
+	joinedData := linqExpiringCustomersZing.
 		Join(
 			linqExpiringCustomersRadius,
 			func(i interface{}) interface{} {
@@ -108,7 +106,9 @@ func main() {
 		OrderBy(func(i interface{}) interface{} {
 			return strings.ToLower(i.(system.ReportExpiringCustomer).FullName)
 		}).
-		ToSlice(&joinedData)
+		Take(10).
+		Skip(0).
+		Results()
 
 	prettyJoinedData, err := json.MarshalIndent(joinedData, "", "  ")
 
