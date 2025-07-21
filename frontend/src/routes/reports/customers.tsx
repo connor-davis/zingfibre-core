@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDownIcon, FilterIcon } from 'lucide-react';
+import { ChevronDownIcon, FilterIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import z from 'zod';
@@ -130,17 +130,8 @@ export const columns = [
   {
     id: 'Full Name',
     accessorKey: 'FullName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Full Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Full Name</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Full Name')}</div>,
     footer: (props) => props.column.id,
@@ -148,51 +139,24 @@ export const columns = [
   {
     id: 'Email',
     accessorKey: 'Email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Email
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Email</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
   },
   {
     id: 'Radius Username',
     accessorKey: 'RadiusUsername',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Radius Username
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Radius Username</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Radius Username')}</div>,
   },
   {
     id: 'Phone Number',
     accessorKey: 'PhoneNumber',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Phone Number
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Phone Number</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Phone Number')}</div>,
   },

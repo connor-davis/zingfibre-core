@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDownIcon, FilterIcon } from 'lucide-react';
+import { ChevronDownIcon, FilterIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { format, parseISO } from 'date-fns';
@@ -132,17 +132,8 @@ export const columns = [
   {
     id: 'Expires On',
     accessorKey: 'Expiration',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Expires On
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Expires On</div>;
     },
     cell: ({ row }) => (
       <div>{format(parseISO(row.getValue('Expires On')), 'dd/MM/yyyy')}</div>
@@ -151,120 +142,56 @@ export const columns = [
   {
     id: 'Full Name',
     accessorKey: 'FullName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Full Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Full Name</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Full Name')}</div>,
-    footer: (props) => props.column.id,
   },
   {
     id: 'Email',
     accessorKey: 'Email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Email
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Email</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
   },
   {
-    id: 'Username',
+    id: 'Radius Username',
     accessorKey: 'RadiusUsername',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Username
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Radius Username</div>;
     },
-    cell: ({ row }) => <div>{row.getValue('Username')}</div>,
+    cell: ({ row }) => <div>{row.getValue('Radius Username')}</div>,
   },
   {
     id: 'Phone Number',
     accessorKey: 'PhoneNumber',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Phone Number
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Phone Number</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Phone Number')}</div>,
   },
   {
     id: 'Address',
     accessorKey: 'Address',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Address
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Address</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Address')}</div>,
   },
   {
     id: 'Last Duration',
     accessorKey: 'LastPurchaseDuration',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Last Duration
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Last Duration</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Last Duration')}</div>,
   },
   {
     id: 'Last Speed',
     accessorKey: 'LastPurchaseSpeed',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Last Speed
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Last Speed</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Last Speed')}</div>,
   },

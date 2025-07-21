@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, ChevronDownIcon, FilterIcon } from 'lucide-react';
+import { ChevronDownIcon, FilterIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { format, parseISO } from 'date-fns';
@@ -132,17 +132,8 @@ export const columns = [
   {
     id: 'Created On',
     accessorKey: 'DateCreated',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Date
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Created On</div>;
     },
     cell: ({ row }) => (
       <div>{format(parseISO(row.getValue('Created On')), 'dd/MM/yyyy')}</div>
@@ -151,88 +142,49 @@ export const columns = [
   {
     id: 'Email',
     accessorKey: 'Email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Email
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Email</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Email')}</div>,
   },
   {
     id: 'Full Name',
     accessorKey: 'FullName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Full Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Full Name</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Full Name')}</div>,
-    footer: (props) => props.column.id,
   },
   {
     id: 'Item',
     accessorKey: 'ItemName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Item
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Item</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Item')}</div>,
   },
   {
     id: 'Amount',
     accessorKey: 'Amount',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Amount
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Amount</div>;
     },
     cell: ({ row }) => {
-      return <div>R {row.getValue('Amount')}</div>;
+      return (
+        <div>
+          {row.getValue<number | undefined>('Amount')?.toLocaleString('en-ZA', {
+            style: 'currency',
+            currency: 'ZAR',
+          }) ?? 'R 0'}
+        </div>
+      );
     },
   },
   {
     id: 'Method',
     accessorKey: 'Method',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Method
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Method</div>;
     },
     cell: ({ row }) => {
       return <div>{row.getValue('Method')}</div>;
@@ -241,17 +193,8 @@ export const columns = [
   {
     id: 'Status',
     accessorKey: 'Successful',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Status
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Status</div>;
     },
     cell: ({ row }) => (
       <div>{row.getValue('Status') === true ? 'Success' : 'Failed'}</div>
@@ -260,51 +203,24 @@ export const columns = [
   {
     id: 'Service Id',
     accessorKey: 'ServiceId',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Service Id
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Service Id</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Service Id')}</div>,
   },
   {
     id: 'Build Name',
     accessorKey: 'BuildName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Build Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Build Name</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Build Name')}</div>,
   },
   {
     id: 'Build Type',
     accessorKey: 'BuildType',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="p-0 hover:bg-transparent"
-        >
-          Build Type
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      );
+    header: () => {
+      return <div>Build Type</div>;
     },
     cell: ({ row }) => <div>{row.getValue('Build Type')}</div>,
   },
