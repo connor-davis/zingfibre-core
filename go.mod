@@ -3,6 +3,7 @@ module github.com/connor-davis/zingfibre-core
 go 1.24.3
 
 require (
+	github.com/ahmetb/go-linq/v3 v3.2.0
 	github.com/MarceloPetrucio/go-scalar-api-reference v0.0.0-20240521013641-ce5d2efe0e06
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/go-sql-driver/mysql v1.9.3
@@ -17,7 +18,6 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/ahmetb/go-linq/v3 v3.2.0
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
