@@ -204,11 +204,8 @@ type DynamicQueryAggregate struct {
 }
 
 type DynamicQueryChildQuery struct {
-	ID             uuid.UUID
 	DynamicQueryID uuid.UUID
-	ChildQueryID   pgtype.UUID
-	CreatedAt      pgtype.Timestamptz
-	UpdatedAt      pgtype.Timestamptz
+	ChildQueryID   uuid.UUID
 }
 
 type DynamicQueryClause struct {

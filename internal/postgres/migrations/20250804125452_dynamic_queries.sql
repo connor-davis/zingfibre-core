@@ -15,11 +15,9 @@ CREATE TABLE
 
 CREATE TABLE
     dynamic_query_child_queries (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
-        dynamic_query_id UUID NOT NULL REFERENCES dynamic_queries (id) ON DELETE SET NULL,
-        child_query_id UUID REFERENCES dynamic_queries (id) ON DELETE SET NULL,
-        created_at TIMESTAMPTZ DEFAULT now (),
-        updated_at TIMESTAMPTZ DEFAULT now ()
+        dynamic_query_id UUID NOT NULL REFERENCES dynamic_queries (id) ON DELETE CASCADE,
+        child_query_id UUID NOT NULL REFERENCES dynamic_queries (id) ON DELETE CASCADE,
+        PRIMARY KEY (dynamic_query_id, child_query_id)
     );
 
 CREATE TABLE
