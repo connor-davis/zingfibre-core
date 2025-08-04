@@ -63,7 +63,7 @@ func (q *Queries) GetReportExportsCustomers(ctx context.Context, poi string) ([]
 
 const getReportExportsExpiringCustomers = `-- name: GetReportExportsExpiringCustomers :many
 SELECT
-    CONCAT(t1.FirstName, ' ', t1.Surname) AS full_name,
+    CONCAT(TRIM(t1.FirstName), ' ', TRIM(t1.Surname)) AS full_name,
     t1.Email AS email,
     t1.PhoneNumber AS phone_number,
     t4.RadiusUsername AS radius_username,
