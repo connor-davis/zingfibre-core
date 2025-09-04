@@ -44,6 +44,8 @@ type DynamicQueryTable struct {
 }
 
 type DynamicQueryColumn struct {
+	Database  string                 `json:"database"`
+	Table     DynamicQueryTable      `json:"table"`
 	Column    string                 `json:"column"`
 	Label     string                 `json:"label"`
 	Aggregate *DynamicQueryAggregate `json:"aggregate"`

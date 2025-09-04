@@ -120,61 +120,81 @@ func (r *DynamicQueriesRouter) SQL() system.Route {
 			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
-			userEmailsDynamicQuery := system.DynamicQuery{
-				Database: "zing",
+			addressesDynamicQuery := system.DynamicQuery{
+				Database: "Zing",
 				Table: system.DynamicQueryTable{
-					Table:     "user_emails",
+					Table:     "Addresses",
 					IsPrimary: false,
 				},
 				Columns: []system.DynamicQueryColumn{
 					{
-						Column: "email",
-						Label:  "Email",
+						Database: "Zing",
+						Table: system.DynamicQueryTable{
+							Table:     "Addresses",
+							IsPrimary: false,
+						},
+						Column: "Id",
+						Label:  "Id",
 					},
 					{
-						Column: "user_id",
-						Label:  "UserId",
+						Database: "Zing",
+						Table: system.DynamicQueryTable{
+							Table:     "Addresses",
+							IsPrimary: false,
+						},
+						Column: "StreetAddress",
+						Label:  "Street Address",
 					},
 				},
 			}
 
-			dynamicQuery := system.DynamicQuery{
-				Database: "zing",
+			customersDynamicQuery := system.DynamicQuery{
+				Database: "Zing",
 				Table: system.DynamicQueryTable{
-					Table:     "users",
+					Table:     "Customers",
 					IsPrimary: true,
 				},
 				Columns: []system.DynamicQueryColumn{
 					{
-						Column: "t1.id",
-						Label:  "Id",
+						Database: "Zing",
+						Table: system.DynamicQueryTable{
+							Table:     "Customers",
+							IsPrimary: true,
+						},
+						Column: "Email",
+						Label:  "Email",
 					},
 					{
-						Column: "t2.email",
-						Label:  "Email",
+						Database: "Zing",
+						Table: system.DynamicQueryTable{
+							Table:     "Addresses",
+							IsPrimary: false,
+						},
+						Column: "`Street Address`",
+						Label:  "Street Address",
 					},
 				},
 				Joins: []system.DynamicQueryJoin{
 					{
 						Type:          system.InnerJoin,
-						LocalDatabase: "zing",
+						LocalDatabase: "Zing",
 						LocalTable: system.DynamicQueryTable{
-							Table:     "users",
+							Table:     "Customers",
 							IsPrimary: true,
 						},
-						LocalColumn:       "id",
-						ReferenceDatabase: "zing",
+						LocalColumn:       "AddressId",
+						ReferenceDatabase: "Zing",
 						ReferenceTable: system.DynamicQueryTable{
-							Table:     "user_emails",
+							Table:     "Addresses",
 							IsPrimary: false,
 						},
-						ReferenceColumn: "user_id",
-						SubQuery:        &userEmailsDynamicQuery,
+						ReferenceColumn: "Id",
+						SubQuery:        &addressesDynamicQuery,
 					},
 				},
 				Filters: []system.DynamicQueryFilter{
 					{
-						Column:   "t2.email",
+						Column:   "Zing_Customers.Email",
 						Operator: "LIKE",
 						Type:     system.StringFilter,
 						Value:    "%@zingfibre.co.za",
@@ -182,17 +202,17 @@ func (r *DynamicQueriesRouter) SQL() system.Route {
 				},
 				Orders: []system.DynamicQueryOrder{
 					{
-						Column:     "t2.email",
+						Column:     "zing_Customers.Email",
 						Descending: false,
 					},
 				},
 				SubQueries: []system.DynamicQuery{
-					userEmailsDynamicQuery,
+					addressesDynamicQuery,
 				},
 			}
 
 			return c.Status(fiber.StatusOK).
-				SendString(helpers.DynamicQueryParser(dynamicQuery))
+				SendString(helpers.DynamicQueryParser(customersDynamicQuery))
 		},
 	}
 }
