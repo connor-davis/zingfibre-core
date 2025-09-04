@@ -34,5 +34,9 @@ func NewDynamicQueriesRouter(
 }
 
 func (r *DynamicQueriesRouter) RegisterRoutes() []system.Route {
-	return []system.Route{}
+	sqlRoute := r.SQL()
+
+	return []system.Route{
+		sqlRoute,
+	}
 }

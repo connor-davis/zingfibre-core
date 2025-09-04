@@ -2,6 +2,7 @@ package dynamicQueries
 
 import (
 	"github.com/connor-davis/zingfibre-core/internal/constants"
+	"github.com/connor-davis/zingfibre-core/internal/helpers"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
@@ -119,8 +120,79 @@ func (r *DynamicQueriesRouter) SQL() system.Route {
 			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff),
 		},
 		Handler: func(c *fiber.Ctx) error {
+			userEmailsDynamicQuery := system.DynamicQuery{
+				Database: "zing",
+				Table: system.DynamicQueryTable{
+					Table:     "user_emails",
+					IsPrimary: false,
+				},
+				Columns: []system.DynamicQueryColumn{
+					{
+						Column: "email",
+						Label:  "Email",
+					},
+					{
+						Column: "user_id",
+						Label:  "UserId",
+					},
+				},
+			}
 
-			return c.Status(fiber.StatusOK).SendString("SELECT * FROM users;")
+			dynamicQuery := system.DynamicQuery{
+				Database: "zing",
+				Table: system.DynamicQueryTable{
+					Table:     "users",
+					IsPrimary: true,
+				},
+				Columns: []system.DynamicQueryColumn{
+					{
+						Column: "t1.id",
+						Label:  "Id",
+					},
+					{
+						Column: "t2.email",
+						Label:  "Email",
+					},
+				},
+				Joins: []system.DynamicQueryJoin{
+					{
+						Type:          system.InnerJoin,
+						LocalDatabase: "zing",
+						LocalTable: system.DynamicQueryTable{
+							Table:     "users",
+							IsPrimary: true,
+						},
+						LocalColumn:       "id",
+						ReferenceDatabase: "zing",
+						ReferenceTable: system.DynamicQueryTable{
+							Table:     "user_emails",
+							IsPrimary: false,
+						},
+						ReferenceColumn: "user_id",
+						SubQuery:        &userEmailsDynamicQuery,
+					},
+				},
+				Filters: []system.DynamicQueryFilter{
+					{
+						Column:   "t2.email",
+						Operator: "LIKE",
+						Type:     system.StringFilter,
+						Value:    "%@zingfibre.co.za",
+					},
+				},
+				Orders: []system.DynamicQueryOrder{
+					{
+						Column:     "t2.email",
+						Descending: false,
+					},
+				},
+				SubQueries: []system.DynamicQuery{
+					userEmailsDynamicQuery,
+				},
+			}
+
+			return c.Status(fiber.StatusOK).
+				SendString(helpers.DynamicQueryParser(dynamicQuery))
 		},
 	}
 }

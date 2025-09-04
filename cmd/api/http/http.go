@@ -6,6 +6,7 @@ import (
 
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/analytics"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/authentication"
+	dynamicQueries "github.com/connor-davis/zingfibre-core/cmd/api/http/dynamic-queries"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/exports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pops"
@@ -49,6 +50,9 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	exports := exports.NewExportsRouter(zing, radius, middleware, sessions)
 	exportsRoutes := exports.RegisterRoutes()
 
+	dynamicQueries := dynamicQueries.NewDynamicQueriesRouter(postgres, zing, radius, middleware, sessions)
+	dynamicQueriesRoutes := dynamicQueries.RegisterRoutes()
+
 	routes := []system.Route{}
 
 	routes = append(routes, authenticationRoutes...)
@@ -57,6 +61,7 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	routes = append(routes, analyticsRoutes...)
 	routes = append(routes, reportsRoutes...)
 	routes = append(routes, exportsRoutes...)
+	routes = append(routes, dynamicQueriesRoutes...)
 
 	return &HttpRouter{
 		Routes:     routes,
