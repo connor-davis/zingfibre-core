@@ -30,6 +30,7 @@ const (
 
 type DynamicQuery struct {
 	Database   string               `json:"database"`
+	IsSubQuery bool                 `json:"isSubQuery"`
 	Table      DynamicQueryTable    `json:"table"`
 	Columns    []DynamicQueryColumn `json:"columns"`
 	Joins      []DynamicQueryJoin   `json:"joins"`
@@ -44,7 +45,6 @@ type DynamicQueryTable struct {
 }
 
 type DynamicQueryColumn struct {
-	Database  string                 `json:"database"`
 	Table     DynamicQueryTable      `json:"table"`
 	Column    string                 `json:"column"`
 	Label     string                 `json:"label"`
@@ -52,17 +52,16 @@ type DynamicQueryColumn struct {
 }
 
 type DynamicQueryJoin struct {
-	Type              DynamicQueryJoinType `json:"type"`
-	LocalDatabase     string               `json:"localDatabase"`
-	LocalTable        DynamicQueryTable    `json:"localTable"`
-	LocalColumn       string               `json:"localColumn"`
-	ReferenceDatabase string               `json:"referenceDatabase"`
-	ReferenceTable    DynamicQueryTable    `json:"referenceTable"`
-	ReferenceColumn   string               `json:"referenceColumn"`
-	SubQuery          *DynamicQuery        `json:"subQuery"`
+	Type            DynamicQueryJoinType `json:"type"`
+	LocalTable      DynamicQueryTable    `json:"localTable"`
+	LocalColumn     string               `json:"localColumn"`
+	ReferenceTable  DynamicQueryTable    `json:"referenceTable"`
+	ReferenceColumn string               `json:"referenceColumn"`
+	SubQuery        *DynamicQuery        `json:"subQuery"`
 }
 
 type DynamicQueryFilter struct {
+	Table    DynamicQueryTable      `json:"table"`
 	Column   string                 `json:"field"`
 	Value    string                 `json:"value"`
 	Operator string                 `json:"operator"`
@@ -70,6 +69,7 @@ type DynamicQueryFilter struct {
 }
 
 type DynamicQueryOrder struct {
-	Column     string `json:"column"`
-	Descending bool   `json:"descending"`
+	Table      DynamicQueryTable `json:"table"`
+	Column     string            `json:"column"`
+	Descending bool              `json:"descending"`
 }

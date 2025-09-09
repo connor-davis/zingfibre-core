@@ -12,68 +12,183 @@ func DynamicQueryParser(query system.DynamicQuery) string {
 
 	tableAliases := map[string]string{}
 
-	// Base table alias
-	tableAliases[fmt.Sprintf("%s.%s", query.Database, query.Table.Table)] = "t1"
+	tableAliases[query.Table.Table] = "t1"
 
-	// Join table aliases
 	for joinIdx, join := range query.Joins {
-		tableAliases[fmt.Sprintf("%s.%s", join.ReferenceDatabase, join.ReferenceTable.Table)] =
-			fmt.Sprintf("t%d", joinIdx+2)
+		tableAliases[join.ReferenceTable.Table] = fmt.Sprintf(
+			"t%d",
+			joinIdx+2,
+		)
 	}
 
-	// SELECT clause
 	sqlString += "SELECT\n"
 
 	columns := []string{}
-	for _, column := range query.Columns {
-		tableAlias := tableAliases[fmt.Sprintf("%s.%s", column.Database, column.Table.Table)]
 
-		if column.Aggregate != nil {
-			columns = append(columns,
-				fmt.Sprintf("\t%s(%s.%s) AS `%s`", *column.Aggregate, tableAlias, column.Column, column.Label))
+	for _, column := range query.Columns {
+		tableAlias := tableAliases[column.Table.Table]
+
+		if query.IsSubQuery {
+			if column.Aggregate != nil {
+				columns = append(
+					columns,
+					fmt.Sprintf(
+						"\t%s(%s.%s)",
+						*column.Aggregate,
+						tableAlias,
+						column.Column,
+					),
+				)
+			} else {
+				columns = append(
+					columns,
+					fmt.Sprintf(
+						"\t%s.%s",
+						tableAlias,
+						column.Column,
+					),
+				)
+			}
 		} else {
-			columns = append(columns,
-				fmt.Sprintf("\t%s.%s AS `%s`", tableAlias, column.Column, column.Label))
+			if column.Aggregate != nil {
+				columns = append(
+					columns,
+					fmt.Sprintf(
+						"\t%s(%s.%s) AS `%s`",
+						*column.Aggregate,
+						tableAlias,
+						column.Column,
+						column.Label,
+					),
+				)
+			} else {
+				columns = append(
+					columns,
+					fmt.Sprintf(
+						"\t%s.%s AS `%s`",
+						tableAlias,
+						column.Column,
+						column.Label,
+					),
+				)
+			}
 		}
 	}
 
-	sqlString += fmt.Sprintf("%s\n", strings.Join(columns, ",\n"))
+	sqlString += fmt.Sprintf(
+		"%s\n",
+		strings.Join(columns, ",\n"),
+	)
 
-	// FROM clause
-	sqlString += fmt.Sprintf("FROM %s.%s AS t1", query.Database, query.Table.Table)
+	sqlString += fmt.Sprintf(
+		"FROM %s AS t1",
+		query.Table.Table,
+	)
 
-	// JOINs
 	for _, join := range query.Joins {
-		refKey := fmt.Sprintf("%s.%s", join.ReferenceDatabase, join.ReferenceTable.Table)
-		tableAlias := tableAliases[refKey]
+		tableAlias := tableAliases[join.ReferenceTable.Table]
 
 		if join.SubQuery != nil {
 			subQuerySQL := DynamicQueryParser(*join.SubQuery)
-			subQuerySQL = strings.ReplaceAll(subQuerySQL, "\n", "\n\t")
+			subQuerySQL = strings.ReplaceAll(
+				subQuerySQL,
+				"\n",
+				"\n\t",
+			)
 
-			sqlString += fmt.Sprintf("\n%s JOIN (\n\t%s\n) AS %s ON t1.%s = %s.%s",
-				join.Type, subQuerySQL, tableAlias,
-				join.LocalColumn, tableAlias, join.ReferenceColumn)
+			sqlString += fmt.Sprintf(
+				"\n%s JOIN (\n\t%s\n) AS %s ON t1.%s = %s.%s",
+				join.Type,
+				subQuerySQL,
+				tableAlias,
+				join.LocalColumn,
+				tableAlias,
+				join.ReferenceColumn,
+			)
+
 			continue
 		}
 
 		switch join.Type {
 		case system.InnerJoin:
-			sqlString += fmt.Sprintf("\nINNER JOIN %s.%s AS %s ON t1.%s = %s.%s",
-				join.ReferenceDatabase, join.ReferenceTable.Table, tableAlias,
-				join.LocalColumn, tableAlias, join.ReferenceColumn)
+			sqlString += fmt.Sprintf(
+				"\nINNER JOIN %s AS %s ON t1.%s = %s.%s",
+				join.ReferenceTable.Table,
+				tableAlias,
+				join.LocalColumn,
+				tableAlias,
+				join.ReferenceColumn,
+			)
 		case system.LeftJoin:
-			sqlString += fmt.Sprintf("\nLEFT JOIN %s.%s AS %s ON t1.%s = %s.%s",
-				join.ReferenceDatabase, join.ReferenceTable.Table, tableAlias,
-				join.LocalColumn, tableAlias, join.ReferenceColumn)
+			sqlString += fmt.Sprintf(
+				"\nLEFT JOIN %s AS %s ON t1.%s = %s.%s",
+				join.ReferenceTable.Table,
+				tableAlias,
+				join.LocalColumn,
+				tableAlias,
+				join.ReferenceColumn,
+			)
 		case system.RightJoin:
-			sqlString += fmt.Sprintf("\nRIGHT JOIN %s.%s AS %s ON t1.%s = %s.%s",
-				join.ReferenceDatabase, join.ReferenceTable.Table, tableAlias,
-				join.LocalColumn, tableAlias, join.ReferenceColumn)
+			sqlString += fmt.Sprintf(
+				"\nRIGHT JOIN %s AS %s ON t1.%s = %s.%s",
+				join.ReferenceTable.Table,
+				tableAlias,
+				join.LocalColumn,
+				tableAlias,
+				join.ReferenceColumn,
+			)
 		case system.OuterJoin:
-			sqlString += fmt.Sprintf("\nOUTER JOIN %s.%s AS %s ON t1.%s = %s.%s",
-				join.ReferenceDatabase, join.ReferenceTable.Table, tableAlias,
-				join.LocalColumn, tableAlias, join.ReferenceColumn)
+			sqlString += fmt.Sprintf(
+				"\nOUTER JOIN %s AS %s ON t1.%s = %s.%s",
+				join.ReferenceTable.Table,
+				tableAlias,
+				join.LocalColumn,
+				tableAlias,
+				join.ReferenceColumn,
+			)
+		}
+	}
+
+	if len(query.Filters) > 0 {
+		sqlString += "\nWHERE"
+
+		for _, filter := range query.Filters {
+			tableAlias := tableAliases[filter.Table.Table]
+
+			switch filter.Type {
+			case system.StringFilter:
+				sqlString += fmt.Sprintf(
+					"\n\t%s.%s %s '%s'",
+					tableAlias,
+					filter.Column,
+					filter.Operator,
+					filter.Value,
+				)
+			case system.DateFilter:
+				sqlString += fmt.Sprintf(
+					"\n\t%s.%s %s '%s'",
+					tableAlias,
+					filter.Column,
+					filter.Operator,
+					filter.Value,
+				)
+			case system.NumberFilter:
+				sqlString += fmt.Sprintf(
+					"\n\t%s.%s %s %s",
+					tableAlias,
+					filter.Column,
+					filter.Operator,
+					filter.Value,
+				)
+			case system.BooleanFilter:
+				sqlString += fmt.Sprintf(
+					"\n\t%s.%s %s %s",
+					tableAlias,
+					filter.Column,
+					filter.Operator,
+					filter.Value,
+				)
+			}
 		}
 	}
 
