@@ -239,7 +239,7 @@ func (r *DynamicQueriesRouter) SQL() system.Route {
 			}
 
 			return c.Status(fiber.StatusOK).
-				SendString(helpers.DynamicQueryParser(customersDynamicQuery))
+				SendString(helpers.SQLQueryParser(customersDynamicQuery))
 		},
 	}
 }

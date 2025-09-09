@@ -7,7 +7,13 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 )
 
-func DynamicQueryParser(query system.DynamicQuery) string {
+func LinqQueryParser(query system.DynamicQuery) map[string]any {
+	linqResult := map[string]any{}
+
+	return linqResult
+}
+
+func SQLQueryParser(query system.DynamicQuery) string {
 	sqlString := ""
 
 	tableAliases := map[string]string{}
@@ -89,7 +95,7 @@ func DynamicQueryParser(query system.DynamicQuery) string {
 		tableAlias := tableAliases[join.ReferenceTable.Table]
 
 		if join.SubQuery != nil {
-			subQuerySQL := DynamicQueryParser(*join.SubQuery)
+			subQuerySQL := SQLQueryParser(*join.SubQuery)
 			subQuerySQL = strings.ReplaceAll(
 				subQuerySQL,
 				"\n",
