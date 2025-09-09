@@ -192,5 +192,23 @@ func DynamicQueryParser(query system.DynamicQuery) string {
 		}
 	}
 
+	if len(query.Orders) > 0 {
+		sqlString += "\nORDER BY"
+
+		orderColumns := []string{}
+
+		for _, order := range query.Orders {
+			tableAlias := tableAliases[order.Table.Table]
+
+			if order.Descending {
+				orderColumns = append(orderColumns, fmt.Sprintf("\n\t%s.%s %s", tableAlias, order.Column, "DESC"))
+			} else {
+				orderColumns = append(orderColumns, fmt.Sprintf("\n\t%s.%s %s", tableAlias, order.Column, "ASC"))
+			}
+		}
+
+		sqlString += strings.Join(orderColumns, ",")
+	}
+
 	return sqlString
 }

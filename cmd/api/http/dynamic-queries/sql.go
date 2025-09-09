@@ -223,18 +223,6 @@ func (r *DynamicQueriesRouter) SQL() system.Route {
 						SubQuery:        &addressesDynamicQuery,
 					},
 				},
-				Filters: []system.DynamicQueryFilter{
-					{
-						Table: system.DynamicQueryTable{
-							Table:     "Customers",
-							IsPrimary: true,
-						},
-						Column:   "Email",
-						Operator: "LIKE",
-						Type:     system.StringFilter,
-						Value:    "%@zingfibre.co.za",
-					},
-				},
 				Orders: []system.DynamicQueryOrder{
 					{
 						Table: system.DynamicQueryTable{
