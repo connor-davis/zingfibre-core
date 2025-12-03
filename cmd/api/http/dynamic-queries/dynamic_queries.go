@@ -34,5 +34,11 @@ func NewDynamicQueriesRouter(
 }
 
 func (r *DynamicQueriesRouter) RegisterRoutes() []system.Route {
-	return []system.Route{}
+	return []system.Route{
+		r.GetDynamicQueriesRoute(),
+		r.GetDynamicQueryRoute(),
+		r.CreateDynamicQueryRoute(),
+		r.UpdateDynamicQueryRoute(),
+		r.DeleteDynamicQueryRoute(),
+	}
 }

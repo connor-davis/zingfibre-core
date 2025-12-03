@@ -2,6 +2,9 @@
 import type { Client, Options as ClientOptions, TDataShape } from './client';
 import { client as _heyApiClient } from './client.gen';
 import type {
+  DeleteApiDynamicQueriesByIdData,
+  DeleteApiDynamicQueriesByIdErrors,
+  DeleteApiDynamicQueriesByIdResponses,
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdErrors,
   DeleteApiUsersByIdResponses,
@@ -17,6 +20,12 @@ import type {
   GetApiAuthenticationMfaEnableData,
   GetApiAuthenticationMfaEnableErrors,
   GetApiAuthenticationMfaEnableResponses,
+  GetApiDynamicQueriesByIdData,
+  GetApiDynamicQueriesByIdErrors,
+  GetApiDynamicQueriesByIdResponses,
+  GetApiDynamicQueriesData,
+  GetApiDynamicQueriesErrors,
+  GetApiDynamicQueriesResponses,
   GetApiExportsCustomersData,
   GetApiExportsCustomersErrors,
   GetApiExportsCustomersResponses,
@@ -74,9 +83,15 @@ import type {
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterErrors,
   PostApiAuthenticationRegisterResponses,
+  PostApiDynamicQueriesData,
+  PostApiDynamicQueriesErrors,
+  PostApiDynamicQueriesResponses,
   PostApiUsersData,
   PostApiUsersErrors,
   PostApiUsersResponses,
+  PutApiDynamicQueriesByIdData,
+  PutApiDynamicQueriesByIdErrors,
+  PutApiDynamicQueriesByIdResponses,
   PutApiUsersByIdData,
   PutApiUsersByIdErrors,
   PutApiUsersByIdResponses,
@@ -299,6 +314,101 @@ export const postApiAuthenticationRegister = <
     ThrowOnError
   >({
     url: '/api/authentication/register',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+};
+
+/**
+ * Get Dynamic Queries
+ * Endpoint to retrieve a list of dynamic queries
+ */
+export const getApiDynamicQueries = <ThrowOnError extends boolean = false>(
+  options?: Options<GetApiDynamicQueriesData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).get<
+    GetApiDynamicQueriesResponses,
+    GetApiDynamicQueriesErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries',
+    ...options,
+  });
+};
+
+/**
+ * Create Dynamic Query
+ * Endpoint to create a new dynamic query
+ */
+export const postApiDynamicQueries = <ThrowOnError extends boolean = false>(
+  options?: Options<PostApiDynamicQueriesData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).post<
+    PostApiDynamicQueriesResponses,
+    PostApiDynamicQueriesErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+};
+
+/**
+ * Delete Dynamic Query
+ * Endpoint to delete a dynamic query by ID
+ */
+export const deleteApiDynamicQueriesById = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<DeleteApiDynamicQueriesByIdData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).delete<
+    DeleteApiDynamicQueriesByIdResponses,
+    DeleteApiDynamicQueriesByIdErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries/{id}',
+    ...options,
+  });
+};
+
+/**
+ * Get Dynamic Query
+ * Endpoint to retrieve a dynamic query by ID
+ */
+export const getApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
+  options: Options<GetApiDynamicQueriesByIdData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetApiDynamicQueriesByIdResponses,
+    GetApiDynamicQueriesByIdErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries/{id}',
+    ...options,
+  });
+};
+
+/**
+ * Update Dynamic Query
+ * Endpoint to update an existing dynamic query
+ */
+export const putApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
+  options?: Options<PutApiDynamicQueriesByIdData, ThrowOnError>
+) => {
+  return (options?.client ?? _heyApiClient).put<
+    PutApiDynamicQueriesByIdResponses,
+    PutApiDynamicQueriesByIdErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries/{id}',
     ...options,
     headers: {
       'Content-Type': 'application/json',

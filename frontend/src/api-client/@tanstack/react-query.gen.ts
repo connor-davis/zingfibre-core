@@ -9,11 +9,14 @@ import {
 import { client as _heyApiClient } from '../client.gen';
 import {
   type Options,
+  deleteApiDynamicQueriesById,
   deleteApiUsersById,
   getApiAnalyticsMonthlyStatistics,
   getApiAnalyticsRechargeTypeCounts,
   getApiAuthenticationCheck,
   getApiAuthenticationMfaEnable,
+  getApiDynamicQueries,
+  getApiDynamicQueriesById,
   getApiExportsCustomers,
   getApiExportsExpiringCustomers,
   getApiExportsRecharges,
@@ -33,10 +36,15 @@ import {
   postApiAuthenticationMfaVerify,
   postApiAuthenticationPasswordReset,
   postApiAuthenticationRegister,
+  postApiDynamicQueries,
   postApiUsers,
+  putApiDynamicQueriesById,
   putApiUsersById,
 } from '../sdk.gen';
 import type {
+  DeleteApiDynamicQueriesByIdData,
+  DeleteApiDynamicQueriesByIdError,
+  DeleteApiDynamicQueriesByIdResponse,
   DeleteApiUsersByIdData,
   DeleteApiUsersByIdError,
   DeleteApiUsersByIdResponse,
@@ -44,6 +52,10 @@ import type {
   GetApiAnalyticsRechargeTypeCountsData,
   GetApiAuthenticationCheckData,
   GetApiAuthenticationMfaEnableData,
+  GetApiDynamicQueriesByIdData,
+  GetApiDynamicQueriesData,
+  GetApiDynamicQueriesError,
+  GetApiDynamicQueriesResponse,
   GetApiExportsCustomersData,
   GetApiExportsExpiringCustomersData,
   GetApiExportsRechargesData,
@@ -87,9 +99,15 @@ import type {
   PostApiAuthenticationRegisterData,
   PostApiAuthenticationRegisterError,
   PostApiAuthenticationRegisterResponse,
+  PostApiDynamicQueriesData,
+  PostApiDynamicQueriesError,
+  PostApiDynamicQueriesResponse,
   PostApiUsersData,
   PostApiUsersError,
   PostApiUsersResponse,
+  PutApiDynamicQueriesByIdData,
+  PutApiDynamicQueriesByIdError,
+  PutApiDynamicQueriesByIdResponse,
   PutApiUsersByIdData,
   PutApiUsersByIdError,
   PutApiUsersByIdResponse,
@@ -547,6 +565,253 @@ export const postApiAuthenticationRegisterMutation = (
   return mutationOptions;
 };
 
+export const getApiDynamicQueriesQueryKey = (
+  options?: Options<GetApiDynamicQueriesData>
+) => createQueryKey('getApiDynamicQueries', options);
+
+/**
+ * Get Dynamic Queries
+ * Endpoint to retrieve a list of dynamic queries
+ */
+export const getApiDynamicQueriesOptions = (
+  options?: Options<GetApiDynamicQueriesData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiDynamicQueries({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiDynamicQueriesQueryKey(options),
+  });
+};
+
+const createInfiniteParams = <
+  K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>,
+>(
+  queryKey: QueryKey<Options>,
+  page: K
+) => {
+  const params = {
+    ...queryKey[0],
+  };
+  if (page.body) {
+    params.body = {
+      ...(queryKey[0].body as any),
+      ...(page.body as any),
+    };
+  }
+  if (page.headers) {
+    params.headers = {
+      ...queryKey[0].headers,
+      ...page.headers,
+    };
+  }
+  if (page.path) {
+    params.path = {
+      ...(queryKey[0].path as any),
+      ...(page.path as any),
+    };
+  }
+  if (page.query) {
+    params.query = {
+      ...(queryKey[0].query as any),
+      ...(page.query as any),
+    };
+  }
+  return params as unknown as typeof page;
+};
+
+export const getApiDynamicQueriesInfiniteQueryKey = (
+  options?: Options<GetApiDynamicQueriesData>
+): QueryKey<Options<GetApiDynamicQueriesData>> =>
+  createQueryKey('getApiDynamicQueries', options, true);
+
+/**
+ * Get Dynamic Queries
+ * Endpoint to retrieve a list of dynamic queries
+ */
+export const getApiDynamicQueriesInfiniteOptions = (
+  options?: Options<GetApiDynamicQueriesData>
+) => {
+  return infiniteQueryOptions<
+    GetApiDynamicQueriesResponse,
+    GetApiDynamicQueriesError,
+    InfiniteData<GetApiDynamicQueriesResponse>,
+    QueryKey<Options<GetApiDynamicQueriesData>>,
+    | number
+    | Pick<
+        QueryKey<Options<GetApiDynamicQueriesData>>[0],
+        'body' | 'headers' | 'path' | 'query'
+      >
+  >(
+    // @ts-ignore
+    {
+      queryFn: async ({ pageParam, queryKey, signal }) => {
+        // @ts-ignore
+        const page: Pick<
+          QueryKey<Options<GetApiDynamicQueriesData>>[0],
+          'body' | 'headers' | 'path' | 'query'
+        > =
+          typeof pageParam === 'object'
+            ? pageParam
+            : {
+                query: {
+                  page: pageParam,
+                },
+              };
+        const params = createInfiniteParams(queryKey, page);
+        const { data } = await getApiDynamicQueries({
+          ...options,
+          ...params,
+          signal,
+          throwOnError: true,
+        });
+        return data;
+      },
+      queryKey: getApiDynamicQueriesInfiniteQueryKey(options),
+    }
+  );
+};
+
+export const postApiDynamicQueriesQueryKey = (
+  options?: Options<PostApiDynamicQueriesData>
+) => createQueryKey('postApiDynamicQueries', options);
+
+/**
+ * Create Dynamic Query
+ * Endpoint to create a new dynamic query
+ */
+export const postApiDynamicQueriesOptions = (
+  options?: Options<PostApiDynamicQueriesData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await postApiDynamicQueries({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: postApiDynamicQueriesQueryKey(options),
+  });
+};
+
+/**
+ * Create Dynamic Query
+ * Endpoint to create a new dynamic query
+ */
+export const postApiDynamicQueriesMutation = (
+  options?: Partial<Options<PostApiDynamicQueriesData>>
+): UseMutationOptions<
+  PostApiDynamicQueriesResponse,
+  PostApiDynamicQueriesError,
+  Options<PostApiDynamicQueriesData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PostApiDynamicQueriesResponse,
+    PostApiDynamicQueriesError,
+    Options<PostApiDynamicQueriesData>
+  > = {
+    mutationFn: async (localOptions) => {
+      const { data } = await postApiDynamicQueries({
+        ...options,
+        ...localOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+/**
+ * Delete Dynamic Query
+ * Endpoint to delete a dynamic query by ID
+ */
+export const deleteApiDynamicQueriesByIdMutation = (
+  options?: Partial<Options<DeleteApiDynamicQueriesByIdData>>
+): UseMutationOptions<
+  DeleteApiDynamicQueriesByIdResponse,
+  DeleteApiDynamicQueriesByIdError,
+  Options<DeleteApiDynamicQueriesByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    DeleteApiDynamicQueriesByIdResponse,
+    DeleteApiDynamicQueriesByIdError,
+    Options<DeleteApiDynamicQueriesByIdData>
+  > = {
+    mutationFn: async (localOptions) => {
+      const { data } = await deleteApiDynamicQueriesById({
+        ...options,
+        ...localOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
+export const getApiDynamicQueriesByIdQueryKey = (
+  options: Options<GetApiDynamicQueriesByIdData>
+) => createQueryKey('getApiDynamicQueriesById', options);
+
+/**
+ * Get Dynamic Query
+ * Endpoint to retrieve a dynamic query by ID
+ */
+export const getApiDynamicQueriesByIdOptions = (
+  options: Options<GetApiDynamicQueriesByIdData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiDynamicQueriesById({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiDynamicQueriesByIdQueryKey(options),
+  });
+};
+
+/**
+ * Update Dynamic Query
+ * Endpoint to update an existing dynamic query
+ */
+export const putApiDynamicQueriesByIdMutation = (
+  options?: Partial<Options<PutApiDynamicQueriesByIdData>>
+): UseMutationOptions<
+  PutApiDynamicQueriesByIdResponse,
+  PutApiDynamicQueriesByIdError,
+  Options<PutApiDynamicQueriesByIdData>
+> => {
+  const mutationOptions: UseMutationOptions<
+    PutApiDynamicQueriesByIdResponse,
+    PutApiDynamicQueriesByIdError,
+    Options<PutApiDynamicQueriesByIdData>
+  > = {
+    mutationFn: async (localOptions) => {
+      const { data } = await putApiDynamicQueriesById({
+        ...options,
+        ...localOptions,
+        throwOnError: true,
+      });
+      return data;
+    },
+  };
+  return mutationOptions;
+};
+
 export const getApiExportsCustomersQueryKey = (
   options?: Options<GetApiExportsCustomersData>
 ) => createQueryKey('getApiExportsCustomers', options);
@@ -717,42 +982,6 @@ export const getApiReportsCustomersOptions = (
     },
     queryKey: getApiReportsCustomersQueryKey(options),
   });
-};
-
-const createInfiniteParams = <
-  K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>,
->(
-  queryKey: QueryKey<Options>,
-  page: K
-) => {
-  const params = {
-    ...queryKey[0],
-  };
-  if (page.body) {
-    params.body = {
-      ...(queryKey[0].body as any),
-      ...(page.body as any),
-    };
-  }
-  if (page.headers) {
-    params.headers = {
-      ...queryKey[0].headers,
-      ...page.headers,
-    };
-  }
-  if (page.path) {
-    params.path = {
-      ...(queryKey[0].path as any),
-      ...(page.path as any),
-    };
-  }
-  if (page.query) {
-    params.query = {
-      ...(queryKey[0].query as any),
-      ...(page.query as any),
-    };
-  }
-  return params as unknown as typeof page;
 };
 
 export const getApiReportsCustomersInfiniteQueryKey = (

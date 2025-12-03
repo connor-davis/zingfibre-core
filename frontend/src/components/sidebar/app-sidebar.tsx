@@ -5,6 +5,7 @@ import {
   RefreshCcwDotIcon,
   RefreshCcwIcon,
   SpeechIcon,
+  StarsIcon,
   UsersIcon,
 } from 'lucide-react';
 
@@ -88,6 +89,14 @@ export default function AppSidebar() {
                   <Link to="/reports/summary">
                     <CircleDotIcon />
                     <span>Summary</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/dynamic-reports">
+                    <StarsIcon />
+                    <span>Dynamic Reports</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

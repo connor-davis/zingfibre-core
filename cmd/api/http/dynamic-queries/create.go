@@ -111,7 +111,7 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 			Tags:        []string{"Dynamic Queries"},
 			Parameters:  nil,
 			RequestBody: &openapi3.RequestBodyRef{
-				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.CreateUserSchema.Value),
+				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.CreateDynamicQuerySchema.Value),
 			},
 			Responses: responses,
 		},

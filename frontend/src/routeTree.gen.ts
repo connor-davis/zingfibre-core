@@ -11,12 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as DynamicReportsIndexRouteImport } from './routes/dynamic-reports/index'
 import { Route as UsersIdRouteImport } from './routes/users/$id'
 import { Route as ReportsSummaryRouteImport } from './routes/reports/summary'
 import { Route as ReportsRechargesSummaryRouteImport } from './routes/reports/recharges-summary'
 import { Route as ReportsRechargesRouteImport } from './routes/reports/recharges'
 import { Route as ReportsExpiringCustomersRouteImport } from './routes/reports/expiring-customers'
 import { Route as ReportsCustomersRouteImport } from './routes/reports/customers'
+import { Route as DynamicReportsIdRouteImport } from './routes/dynamic-reports/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,6 +28,11 @@ const IndexRoute = IndexRouteImport.update({
 const UsersIndexRoute = UsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DynamicReportsIndexRoute = DynamicReportsIndexRouteImport.update({
+  id: '/dynamic-reports/',
+  path: '/dynamic-reports/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsersIdRoute = UsersIdRouteImport.update({
@@ -59,79 +66,98 @@ const ReportsCustomersRoute = ReportsCustomersRouteImport.update({
   path: '/reports/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DynamicReportsIdRoute = DynamicReportsIdRouteImport.update({
+  id: '/dynamic-reports/$id',
+  path: '/dynamic-reports/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dynamic-reports/$id': typeof DynamicReportsIdRoute
   '/reports/customers': typeof ReportsCustomersRoute
   '/reports/expiring-customers': typeof ReportsExpiringCustomersRoute
   '/reports/recharges': typeof ReportsRechargesRoute
   '/reports/recharges-summary': typeof ReportsRechargesSummaryRoute
   '/reports/summary': typeof ReportsSummaryRoute
   '/users/$id': typeof UsersIdRoute
+  '/dynamic-reports': typeof DynamicReportsIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dynamic-reports/$id': typeof DynamicReportsIdRoute
   '/reports/customers': typeof ReportsCustomersRoute
   '/reports/expiring-customers': typeof ReportsExpiringCustomersRoute
   '/reports/recharges': typeof ReportsRechargesRoute
   '/reports/recharges-summary': typeof ReportsRechargesSummaryRoute
   '/reports/summary': typeof ReportsSummaryRoute
   '/users/$id': typeof UsersIdRoute
+  '/dynamic-reports': typeof DynamicReportsIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dynamic-reports/$id': typeof DynamicReportsIdRoute
   '/reports/customers': typeof ReportsCustomersRoute
   '/reports/expiring-customers': typeof ReportsExpiringCustomersRoute
   '/reports/recharges': typeof ReportsRechargesRoute
   '/reports/recharges-summary': typeof ReportsRechargesSummaryRoute
   '/reports/summary': typeof ReportsSummaryRoute
   '/users/$id': typeof UsersIdRoute
+  '/dynamic-reports/': typeof DynamicReportsIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dynamic-reports/$id'
     | '/reports/customers'
     | '/reports/expiring-customers'
     | '/reports/recharges'
     | '/reports/recharges-summary'
     | '/reports/summary'
     | '/users/$id'
+    | '/dynamic-reports'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dynamic-reports/$id'
     | '/reports/customers'
     | '/reports/expiring-customers'
     | '/reports/recharges'
     | '/reports/recharges-summary'
     | '/reports/summary'
     | '/users/$id'
+    | '/dynamic-reports'
     | '/users'
   id:
     | '__root__'
     | '/'
+    | '/dynamic-reports/$id'
     | '/reports/customers'
     | '/reports/expiring-customers'
     | '/reports/recharges'
     | '/reports/recharges-summary'
     | '/reports/summary'
     | '/users/$id'
+    | '/dynamic-reports/'
     | '/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DynamicReportsIdRoute: typeof DynamicReportsIdRoute
   ReportsCustomersRoute: typeof ReportsCustomersRoute
   ReportsExpiringCustomersRoute: typeof ReportsExpiringCustomersRoute
   ReportsRechargesRoute: typeof ReportsRechargesRoute
   ReportsRechargesSummaryRoute: typeof ReportsRechargesSummaryRoute
   ReportsSummaryRoute: typeof ReportsSummaryRoute
   UsersIdRoute: typeof UsersIdRoute
+  DynamicReportsIndexRoute: typeof DynamicReportsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
 
@@ -149,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof UsersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dynamic-reports/': {
+      id: '/dynamic-reports/'
+      path: '/dynamic-reports'
+      fullPath: '/dynamic-reports'
+      preLoaderRoute: typeof DynamicReportsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/users/$id': {
@@ -193,17 +226,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsCustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dynamic-reports/$id': {
+      id: '/dynamic-reports/$id'
+      path: '/dynamic-reports/$id'
+      fullPath: '/dynamic-reports/$id'
+      preLoaderRoute: typeof DynamicReportsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DynamicReportsIdRoute: DynamicReportsIdRoute,
   ReportsCustomersRoute: ReportsCustomersRoute,
   ReportsExpiringCustomersRoute: ReportsExpiringCustomersRoute,
   ReportsRechargesRoute: ReportsRechargesRoute,
   ReportsRechargesSummaryRoute: ReportsRechargesSummaryRoute,
   ReportsSummaryRoute: ReportsSummaryRoute,
   UsersIdRoute: UsersIdRoute,
+  DynamicReportsIndexRoute: DynamicReportsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
