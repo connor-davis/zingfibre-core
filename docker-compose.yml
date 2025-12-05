@@ -4,7 +4,6 @@ services:
   api:
     env_file:
       - .env
-    restart: on-failure
     build:
       context: .
       dockerfile: ./cmd/api/Dockerfile
@@ -34,7 +33,6 @@ services:
   mcp:
     env_file:
       - .env
-    restart: on-failure
     build:
       context: .
       dockerfile: ./cmd/mcp/Dockerfile
