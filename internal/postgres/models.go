@@ -12,6 +12,49 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type DynamicQueryStatus string
+
+const (
+	DynamicQueryStatusComplete   DynamicQueryStatus = "complete"
+	DynamicQueryStatusInProgress DynamicQueryStatus = "in_progress"
+	DynamicQueryStatusError      DynamicQueryStatus = "error"
+)
+
+func (e *DynamicQueryStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = DynamicQueryStatus(s)
+	case string:
+		*e = DynamicQueryStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for DynamicQueryStatus: %T", src)
+	}
+	return nil
+}
+
+type NullDynamicQueryStatus struct {
+	DynamicQueryStatus DynamicQueryStatus
+	Valid              bool // Valid is true if DynamicQueryStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullDynamicQueryStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.DynamicQueryStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.DynamicQueryStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullDynamicQueryStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.DynamicQueryStatus), nil
+}
+
 type RoleType string
 
 const (
@@ -60,6 +103,7 @@ type DynamicQuery struct {
 	Name       string
 	Query      pgtype.Text
 	ResponseID pgtype.Text
+	Status     DynamicQueryStatus
 	CreatedAt  pgtype.Timestamp
 	UpdatedAt  pgtype.Timestamp
 }

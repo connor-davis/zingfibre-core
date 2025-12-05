@@ -1,0 +1,111 @@
+name: zing-portal
+
+services:
+  api:
+    env_file:
+      - .env
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./cmd/api/Dockerfile
+      target: runtime
+      args:
+        POSTGRES_DSN: ${POSTGRES_DSN}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "6173:6173"
+    environment:
+      - TZ=Africa/Johannesburg
+
+  migrations:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./cmd/migrations/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - TZ=Africa/Johannesburg
+
+  mcp:
+    env_file:
+      - .env
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./cmd/mcp/Dockerfile
+      target: runtime
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "6174:6174"
+    environment:
+      - TZ=Africa/Johannesburg
+
+  app:
+    env_file:
+      - frontend/.env.local
+    build:
+      context: frontend
+      target: runtime
+    depends_on:
+      api:
+        condition: service_started
+      mcp:
+        condition: service_started
+    ports:
+      - "3000:80"
+    environment:
+      - TZ=Africa/Johannesburg
+
+  db:
+    env_file:
+      - .env
+    image: postgres
+    restart: on-failure
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      - TZ=Africa/Johannesburg
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      TZ: Africa/Johannesburg
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      db:
+        condition: service_healthy
+
+  trino:
+    env_file:
+      - .env
+    image: trinodb/trino:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./trino-mysql/catalog:/etc/trino/catalog
+
+volumes:
+  db-data:
+  pgadmin-data:

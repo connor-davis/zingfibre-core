@@ -1,7 +1,10 @@
 package dynamicQueries
 
 import (
+	"database/sql"
+
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
+	"github.com/connor-davis/zingfibre-core/internal/ai"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
@@ -15,6 +18,8 @@ type DynamicQueriesRouter struct {
 	Radius     *radius.Queries
 	Middleware *middleware.Middleware
 	Sessions   *session.Store
+	AI         ai.AI
+	Trino      *sql.DB
 }
 
 func NewDynamicQueriesRouter(
@@ -23,6 +28,8 @@ func NewDynamicQueriesRouter(
 	radius *radius.Queries,
 	middleware *middleware.Middleware,
 	sessions *session.Store,
+	ai ai.AI,
+	trino *sql.DB,
 ) *DynamicQueriesRouter {
 	return &DynamicQueriesRouter{
 		Postgres:   postgres,
@@ -30,12 +37,15 @@ func NewDynamicQueriesRouter(
 		Radius:     radius,
 		Middleware: middleware,
 		Sessions:   sessions,
+		AI:         ai,
+		Trino:      trino,
 	}
 }
 
 func (r *DynamicQueriesRouter) RegisterRoutes() []system.Route {
 	return []system.Route{
 		r.GetDynamicQueriesRoute(),
+		r.GetDynamicQueryResultsRoute(),
 		r.GetDynamicQueryRoute(),
 		r.CreateDynamicQueryRoute(),
 		r.UpdateDynamicQueryRoute(),

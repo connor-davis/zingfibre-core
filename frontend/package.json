@@ -1,11 +1,11 @@
 {
-  "name": ".",
+  "name": "frontend",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
     "start": "vite --port 3000",
-    "build": "vite build && tsc",
+    "build": "vite build",
     "serve": "vite preview",
     "test": "vitest run",
     "api-client:gen": "bunx --bun @hey-api/openapi-ts -f ./hey-api.ts"

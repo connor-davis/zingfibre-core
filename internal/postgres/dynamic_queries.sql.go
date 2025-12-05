@@ -17,26 +17,34 @@ INSERT INTO
     dynamic_queries (
         name,
         query,
-        response_id
+        response_id,
+        status
     )
 VALUES
-    ($1, $2, $3) RETURNING id, name, query, response_id, created_at, updated_at
+    ($1, $2, $3, $4) RETURNING id, name, query, response_id, status, created_at, updated_at
 `
 
 type CreateDynamicQueryParams struct {
 	Name       string
 	Query      pgtype.Text
 	ResponseID pgtype.Text
+	Status     DynamicQueryStatus
 }
 
 func (q *Queries) CreateDynamicQuery(ctx context.Context, arg CreateDynamicQueryParams) (DynamicQuery, error) {
-	row := q.db.QueryRow(ctx, createDynamicQuery, arg.Name, arg.Query, arg.ResponseID)
+	row := q.db.QueryRow(ctx, createDynamicQuery,
+		arg.Name,
+		arg.Query,
+		arg.ResponseID,
+		arg.Status,
+	)
 	var i DynamicQuery
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.Query,
 		&i.ResponseID,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -46,7 +54,7 @@ func (q *Queries) CreateDynamicQuery(ctx context.Context, arg CreateDynamicQuery
 const deleteDynamicQuery = `-- name: DeleteDynamicQuery :one
 DELETE FROM dynamic_queries
 WHERE
-    id = $1 RETURNING id, name, query, response_id, created_at, updated_at
+    id = $1 RETURNING id, name, query, response_id, status, created_at, updated_at
 `
 
 func (q *Queries) DeleteDynamicQuery(ctx context.Context, id uuid.UUID) (DynamicQuery, error) {
@@ -57,6 +65,7 @@ func (q *Queries) DeleteDynamicQuery(ctx context.Context, id uuid.UUID) (Dynamic
 		&i.Name,
 		&i.Query,
 		&i.ResponseID,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -65,7 +74,7 @@ func (q *Queries) DeleteDynamicQuery(ctx context.Context, id uuid.UUID) (Dynamic
 
 const getDynamicQueries = `-- name: GetDynamicQueries :many
 SELECT
-    id, name, query, response_id, created_at, updated_at
+    id, name, query, response_id, status, created_at, updated_at
 FROM
     dynamic_queries
 WHERE
@@ -96,6 +105,7 @@ func (q *Queries) GetDynamicQueries(ctx context.Context, arg GetDynamicQueriesPa
 			&i.Name,
 			&i.Query,
 			&i.ResponseID,
+			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -111,7 +121,7 @@ func (q *Queries) GetDynamicQueries(ctx context.Context, arg GetDynamicQueriesPa
 
 const getDynamicQuery = `-- name: GetDynamicQuery :one
 SELECT
-    id, name, query, response_id, created_at, updated_at
+    id, name, query, response_id, status, created_at, updated_at
 FROM
     dynamic_queries
 WHERE
@@ -128,6 +138,7 @@ func (q *Queries) GetDynamicQuery(ctx context.Context, id uuid.UUID) (DynamicQue
 		&i.Name,
 		&i.Query,
 		&i.ResponseID,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -156,15 +167,17 @@ SET
     name = $1,
     query = $2,
     response_id = $3,
+    status = $4,
     updated_at = NOW()
 WHERE
-    id = $4 RETURNING id, name, query, response_id, created_at, updated_at
+    id = $5 RETURNING id, name, query, response_id, status, created_at, updated_at
 `
 
 type UpdateDynamicQueryParams struct {
 	Name       string
 	Query      pgtype.Text
 	ResponseID pgtype.Text
+	Status     DynamicQueryStatus
 	ID         uuid.UUID
 }
 
@@ -173,6 +186,7 @@ func (q *Queries) UpdateDynamicQuery(ctx context.Context, arg UpdateDynamicQuery
 		arg.Name,
 		arg.Query,
 		arg.ResponseID,
+		arg.Status,
 		arg.ID,
 	)
 	var i DynamicQuery
@@ -181,6 +195,7 @@ func (q *Queries) UpdateDynamicQuery(ctx context.Context, arg UpdateDynamicQuery
 		&i.Name,
 		&i.Query,
 		&i.ResponseID,
+		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
