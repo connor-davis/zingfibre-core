@@ -22,6 +22,9 @@ import type {
   GetApiAuthenticationMfaEnableResponses,
   GetApiDynamicQueriesByIdData,
   GetApiDynamicQueriesByIdErrors,
+  GetApiDynamicQueriesByIdExportData,
+  GetApiDynamicQueriesByIdExportErrors,
+  GetApiDynamicQueriesByIdExportResponses,
   GetApiDynamicQueriesByIdGenerateData,
   GetApiDynamicQueriesByIdGenerateErrors,
   GetApiDynamicQueriesByIdGenerateResponses,
@@ -407,9 +410,9 @@ export const getApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
  * Endpoint to update an existing dynamic query
  */
 export const putApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
-  options?: Options<PutApiDynamicQueriesByIdData, ThrowOnError>
+  options: Options<PutApiDynamicQueriesByIdData, ThrowOnError>
 ) => {
-  return (options?.client ?? _heyApiClient).put<
+  return (options.client ?? _heyApiClient).put<
     PutApiDynamicQueriesByIdResponses,
     PutApiDynamicQueriesByIdErrors,
     ThrowOnError
@@ -418,8 +421,27 @@ export const putApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...options.headers,
     },
+  });
+};
+
+/**
+ * Get Dynamic Query Export
+ * Endpoint to retrieve a dynamic query export by ID
+ */
+export const getApiDynamicQueriesByIdExport = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiDynamicQueriesByIdExportData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetApiDynamicQueriesByIdExportResponses,
+    GetApiDynamicQueriesByIdExportErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries/{id}/export',
+    ...options,
   });
 };
 

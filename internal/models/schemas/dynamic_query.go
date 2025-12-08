@@ -6,11 +6,11 @@ var DynamicQuerySchema = openapi3.NewSchema().WithProperties(map[string]*openapi
 	"ID":    openapi3.NewUUIDSchema(),
 	"Name":  openapi3.NewStringSchema(),
 	"Query": openapi3.NewStringSchema(),
-	"Status": openapi3.NewStringSchema().WithEnum([]string{
+	"Status": openapi3.NewStringSchema().WithEnum(
 		"complete",
 		"in_progress",
 		"error",
-	}),
+	).WithDefault("in_progress"),
 	"Prompt": openapi3.NewStringSchema(),
 }).NewRef()
 
@@ -22,11 +22,17 @@ var CreateDynamicQuerySchema = openapi3.NewSchema().WithProperties(map[string]*o
 }).NewRef()
 
 var UpdateDynamicQuerySchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-	"Name": openapi3.NewStringSchema(),
+	"Name":   openapi3.NewStringSchema(),
+	"Prompt": openapi3.NewStringSchema(),
+	"Status": openapi3.NewStringSchema().WithEnum(
+		"complete",
+		"in_progress",
+		"error",
+	).WithDefault("in_progress"),
 }).NewRef()
 
 var DynamicQueryResultsSchema = openapi3.NewSchema().WithProperties(map[string]*openapi3.Schema{
-	"Data": openapi3.NewArraySchema().WithItems(
+	"data": openapi3.NewArraySchema().WithItems(
 		openapi3.NewObjectSchema().
 			WithAdditionalProperties(openapi3.NewAnyOfSchema(
 				openapi3.NewStringSchema(),
@@ -35,7 +41,7 @@ var DynamicQueryResultsSchema = openapi3.NewSchema().WithProperties(map[string]*
 				openapi3.NewDateTimeSchema(),
 			)),
 	),
-	"Columns": openapi3.NewArraySchema().WithItems(
+	"columns": openapi3.NewArraySchema().WithItems(
 		openapi3.NewObjectSchema().WithProperties(map[string]*openapi3.Schema{
 			"name":  openapi3.NewStringSchema(),
 			"type":  openapi3.NewStringSchema(),
@@ -47,6 +53,6 @@ var DynamicQueryResultsSchema = openapi3.NewSchema().WithProperties(map[string]*
 		}),
 	),
 }).WithRequired([]string{
-	"Data",
-	"Columns",
+	"data",
+	"columns",
 }).NewRef()

@@ -16,16 +16,16 @@ export type DynamicQuery = {
   Name?: string;
   Prompt?: string;
   Query?: string;
-  Status?: ['complete', 'in_progress', 'error'];
+  Status?: 'complete' | 'in_progress' | 'error';
 };
 
 export type DynamicQueryResult = {
-  Columns: Array<{
+  columns: Array<{
     label: string;
     name: string;
     type: string;
   }>;
-  Data: Array<{
+  data: Array<{
     [key: string]: string | number | boolean;
   }>;
 };
@@ -312,6 +312,8 @@ export type SuccessResponse = {
 
 export type UpdateDynamicQuery = {
   Name?: string;
+  Prompt?: string;
+  Status?: 'complete' | 'in_progress' | 'error';
 };
 
 export type UpdateUser = {
@@ -2698,8 +2700,12 @@ export type GetApiDynamicQueriesByIdResponse =
 export type PutApiDynamicQueriesByIdData = {
   body?: {
     Name?: string;
+    Prompt?: string;
+    Status?: 'complete' | 'in_progress' | 'error';
   };
-  path?: never;
+  path: {
+    id: string;
+  };
   query?: never;
   url: '/api/dynamic-queries/{id}';
 };
@@ -2882,6 +2888,54 @@ export type PutApiDynamicQueriesByIdResponses = {
 
 export type PutApiDynamicQueriesByIdResponse =
   PutApiDynamicQueriesByIdResponses[keyof PutApiDynamicQueriesByIdResponses];
+
+export type GetApiDynamicQueriesByIdExportData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/dynamic-queries/{id}/export';
+};
+
+export type GetApiDynamicQueriesByIdExportErrors = {
+  /**
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * User not found.
+   */
+  404: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal Server Error.
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiDynamicQueriesByIdExportError =
+  GetApiDynamicQueriesByIdExportErrors[keyof GetApiDynamicQueriesByIdExportErrors];
+
+export type GetApiDynamicQueriesByIdExportResponses = {
+  200: unknown;
+};
 
 export type GetApiDynamicQueriesByIdGenerateData = {
   body?: never;

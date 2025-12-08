@@ -195,21 +195,25 @@ func (r *DynamicQueriesRouter) GenerateDynamicQueryRoute() system.Route {
 
 			encodedInstructions, err := toon.Encode(
 				map[string]any{
-					"role": "You are a professional TrinoDB SQL query developer.",
+					"role":    "You are a professional TrinoDB SQL query developer.",
+					"purpose": "Generate a dynamic SQL query based on the user's prompt. The SQL query must be compatible with TrinoDB and strictly follow the provided `sql_query_template`, replacing the comments and example columns/tables with appropriate, data-driven values.",
 					"expectations": []string{
-						"You are expected to call `list-catalogs` first to view connected databases.",
-						"You are expected to call `list-schemas` second to view connected database schemas.",
-						"You are expected to call `list-tables` third to view connected database schema tables.",
-						"You are expected to call tables like {catalog}.{schema}.{table} when writing your queries.",
-						"You are expected to fulfill the users expectation without error.",
-						"You are expected to use double quotes to quote identifiers.",
-						"Do not quote catalogs, schemas and tables.",
-						"You are expected to only utilise local information stores, table and column definitions that you have found. Do not invent any non-existent columns or tables.",
-						"Only provide the SQL query in the `sql_query` field of the output JSON.",
+						"You are required to use the available tools (`list-catalogs`, `list-schemas`, `list-tables`, `test-query`) to dynamically discover and verify the database structure and the final query results.",
+						"First, call `list-catalogs` to view connected databases.",
+						"Second, call `list-schemas` to view connected database schemas.",
+						"Third, call `list-tables` to view connected database schema tables.",
+						"Fourth, you must call `test-query` and iterate on fixing all errors until a successful query response is returned. You must not stop and must return the successful query result.",
+						"All table references must be fully qualified in the format: `{catalog}.{schema}.{table}`.",
+						"The `data_cte` must select actual columns and data to fulfill the user's request. **Avoid using `NULL AS 'column'` for any data requested by the user.** Use real column names retrieved from the database tools.",
+						"In the SQL query, use **single quotes (`'`) for all literal strings** (e.g., `'Full Name'`, `'varchar'`) and **double quotes (`\"`) for identifiers** (e.g., `\"Full Name\"`) where required by TrinoDB for names with spaces or reserved characters.",
+						"Only provide the final, valid SQL query in the `sql_query` field of the output JSON.",
 					},
-					"sql_template": `WITH data_cte AS (
+					"sql_query_template": `WITH data_cte AS (
   SELECT
     -- Select the columns you need based on the user's prompt
+    -- Example: CONCAT(cst.first_name, ' ', cst.last_name) AS "Full Name"
+    -- Example: cst.street_address AS "Street Address"
+    -- Example: cst.pop AS "POP"
   FROM "catalog"."schema"."table" AS cst -- Replace with actual catalog, schema, and table
   -- Join any necessary tables based on the user's prompt
   -- Joins must also be "catalog"."schema"."table" format - replace with actual catalog, schema, and table
@@ -217,8 +221,8 @@ func (r *DynamicQueriesRouter) GenerateDynamicQueryRoute() system.Route {
 ),
 columns_array AS (
   SELECT ARRAY_AGG(col) AS cols FROM (
-    -- Define the columns metadata based on the user's prompt
-    -- The following is an example structure; modify as needed
+    -- Define the columns metadata based on the columns selected in data_cte
+    -- The 'name' value must exactly match the alias used in data_cte
     SELECT MAP(
       ARRAY['name', 'type', 'label'],
       ARRAY['Full Name', 'varchar', 'Full Name']
@@ -239,7 +243,7 @@ columns_array AS (
 data_array AS (
   SELECT ARRAY_AGG(
     MAP(
-      -- The following is an example structure; modify as needed
+      -- The array keys must exactly match the 'name' values from columns_array
       ARRAY['Full Name', 'Street Address', 'POP'],
       ARRAY[
         CAST("Full Name" AS VARCHAR),
@@ -260,12 +264,6 @@ SELECT CAST(
   ) AS JSON
 ) AS result
 FROM columns_array, data_array;`,
-					"sql_rules": []string{
-						"Only generate SQL queries that are compatible with TrinoDB.",
-						"Ensure that you generate efficient queries.",
-						"Only use tables and columns that exist in the database schema.",
-						"Follow the `sql_template` as it is. But modify selected columns, joins, filters, ordering and limits based on the users prompt.",
-					},
 				},
 				&toon.EncodeOptions{
 					Indent: 1,
@@ -291,8 +289,8 @@ FROM columns_array, data_array;`,
 					return
 				}
 
-				stream := r.OpenAI.Responses.NewStreaming(context.Background(), openaiResponses.ResponseNewParams{
-					Model:        openai.ChatModelGPT5Nano,
+				streamParams := openaiResponses.ResponseNewParams{
+					Model:        openai.ChatModelGPT5_1Codex,
 					Instructions: openai.String(encodedInstructions),
 					Input: openaiResponses.ResponseNewParamsInputUnion{
 						OfString: openai.String(dynamicQuery.Prompt),
@@ -320,6 +318,7 @@ FROM columns_array, data_array;`,
 												"list-catalogs",
 												"list-schemas",
 												"list-tables",
+												"test-query",
 											},
 										},
 									},
@@ -327,7 +326,13 @@ FROM columns_array, data_array;`,
 							},
 						},
 					},
-				})
+				}
+
+				if dynamicQuery.ResponseID.Valid {
+					streamParams.PreviousResponseID = openai.String(dynamicQuery.ResponseID.String)
+				}
+
+				stream := r.OpenAI.Responses.NewStreaming(context.Background(), streamParams)
 
 				for stream.Next() {
 					current := stream.Current()

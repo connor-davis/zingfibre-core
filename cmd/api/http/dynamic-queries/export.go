@@ -1,42 +1,33 @@
 package dynamicQueries
 
 import (
+	"encoding/csv"
+	"fmt"
 	"strings"
+	"time"
 
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 )
 
-type UpdateDynamicQueryRequest struct {
-	Name   string                      `json:"name"`
-	Prompt string                      `json:"prompt"`
-	Status postgres.DynamicQueryStatus `json:"status"`
-}
-
-func (r *DynamicQueriesRouter) UpdateDynamicQueryRoute() system.Route {
+func (r *DynamicQueriesRouter) GetDynamicQueryExportRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("201", &openapi3.ResponseRef{
-		Value: openapi3.NewResponse().
-			WithJSONSchema(
-				schemas.SuccessResponseSchema.Value,
-			).
-			WithDescription("Dynamic Query updated successfully.").
-			WithContent(openapi3.Content{
-				"application/json": &openapi3.MediaType{
-					Example: map[string]any{
-						"message": constants.Success,
-						"details": constants.SuccessDetails,
-					},
-					Schema: schemas.SuccessResponseSchema,
+	responses.Set("200", &openapi3.ResponseRef{
+		Value: &openapi3.Response{
+			Content: map[string]*openapi3.MediaType{
+				"text/csv": {
+					Schema: openapi3.NewSchema().WithFormat("text").NewRef(),
 				},
-			}),
+			},
+		},
 	})
 
 	responses.Set("400", &openapi3.ResponseRef{
@@ -73,17 +64,17 @@ func (r *DynamicQueriesRouter) UpdateDynamicQueryRoute() system.Route {
 			}),
 	})
 
-	responses.Set("409", &openapi3.ResponseRef{
+	responses.Set("404", &openapi3.ResponseRef{
 		Value: openapi3.NewResponse().
 			WithJSONSchema(
 				schemas.ErrorResponseSchema.Value,
 			).
-			WithDescription("Conflict.").
+			WithDescription("User not found.").
 			WithContent(openapi3.Content{
 				"application/json": &openapi3.MediaType{
 					Example: map[string]any{
-						"error":   constants.ConflictError,
-						"details": constants.ConflictErrorDetails,
+						"error":   constants.NotFoundError,
+						"details": constants.NotFoundErrorDetails,
 					},
 					Schema: schemas.ErrorResponseSchema,
 				},
@@ -115,7 +106,9 @@ func (r *DynamicQueriesRouter) UpdateDynamicQueryRoute() system.Route {
 				Required: true,
 				Schema: &openapi3.SchemaRef{
 					Value: &openapi3.Schema{
-						Type: &openapi3.Types{"string"},
+						Type: &openapi3.Types{
+							"string",
+						},
 					},
 				},
 			},
@@ -124,33 +117,20 @@ func (r *DynamicQueriesRouter) UpdateDynamicQueryRoute() system.Route {
 
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
-			Summary:     "Update Dynamic Query",
-			Description: "Endpoint to update an existing dynamic query",
+			Summary:     "Get Dynamic Query Export",
+			Description: "Endpoint to retrieve a dynamic query export by ID",
 			Tags:        []string{"Dynamic Queries"},
 			Parameters:  parameters,
-			RequestBody: &openapi3.RequestBodyRef{
-				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.UpdateDynamicQuerySchema.Value),
-			},
-			Responses: responses,
+			RequestBody: nil,
+			Responses:   responses,
 		},
-		Method: system.PutMethod,
-		Path:   "/dynamic-queries/{id}",
+		Method: system.GetMethod,
+		Path:   "/dynamic-queries/{id}/export",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
-			r.Middleware.HasRole(postgres.RoleTypeAdmin),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
 		},
 		Handler: func(c *fiber.Ctx) error {
-			var updateDynamicQueryRequest UpdateDynamicQueryRequest
-
-			if err := c.BodyParser(&updateDynamicQueryRequest); err != nil {
-				log.Errorf("🔥 Error parsing request body: %s", err.Error())
-
-				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-					"error":   constants.BadRequestError,
-					"details": constants.BadRequestErrorDetails,
-				})
-			}
-
 			id, err := uuid.Parse(c.Params("id"))
 
 			if err != nil {
@@ -182,17 +162,12 @@ func (r *DynamicQueriesRouter) UpdateDynamicQueryRoute() system.Route {
 				})
 			}
 
-			updatedDynamicQuery, err := r.Postgres.UpdateDynamicQuery(c.Context(), postgres.UpdateDynamicQueryParams{
-				ID:         dynamicQuery.ID,
-				Name:       updateDynamicQueryRequest.Name,
-				Prompt:     updateDynamicQueryRequest.Prompt,
-				Status:     updateDynamicQueryRequest.Status,
-				Query:      dynamicQuery.Query,
-				ResponseID: dynamicQuery.ResponseID,
-			})
+			var dynamicQueryResultString string
 
-			if err != nil {
-				log.Errorf("🔥 Error updating dynamic query: %s", err.Error())
+			row := r.Trino.QueryRow(dynamicQuery.Query.String)
+
+			if err := row.Scan(&dynamicQueryResultString); err != nil {
+				log.Errorf("🔥 Error scanning dynamic query results: %s", err.Error())
 
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
@@ -200,11 +175,70 @@ func (r *DynamicQueriesRouter) UpdateDynamicQueryRoute() system.Route {
 				})
 			}
 
-			return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
-				"message": constants.Success,
-				"details": constants.SuccessDetails,
-				"data":    updatedDynamicQuery,
-			})
+			var dynamicQueryResult system.DynamicQueryResult
+
+			if err := json.Unmarshal([]byte(dynamicQueryResultString), &dynamicQueryResult); err != nil {
+				log.Errorf("🔥 Error unmarshaling dynamic query results: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			now := time.Now()
+
+			disposition := fmt.Sprintf(`attachment; filename="%s_report_%s.csv"`, dynamicQuery.Name, now.Format(time.DateOnly))
+
+			c.Set(fiber.HeaderContentType, "text/csv")
+			c.Set(fiber.HeaderContentDisposition, disposition)
+
+			writer := csv.NewWriter(c.Response().BodyWriter())
+
+			header := []string{}
+
+			for _, column := range dynamicQueryResult.Columns {
+				header = append(header, column.Label)
+			}
+
+			if err := writer.Write(header); err != nil {
+				log.Errorf("🔥 Error writing CSV header: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+					"error":   constants.InternalServerError,
+					"details": constants.InternalServerErrorDetails,
+				})
+			}
+
+			for _, row := range dynamicQueryResult.Data {
+				record := []string{}
+
+				for _, column := range dynamicQueryResult.Columns {
+					if row[column.Name] == nil {
+						record = append(record, "")
+
+						continue
+					}
+
+					record = append(record, fmt.Sprintf("%s", row[column.Name]))
+				}
+
+				if err := writer.Write(record); err != nil {
+					log.Errorf("🔥 Error writing CSV record: %s", err.Error())
+
+					continue
+				}
+			}
+
+			defer writer.Flush()
+
+			if err := writer.Error(); err != nil {
+				log.Errorf("🔥 Error flushing CSV writer: %s", err.Error())
+
+				return c.Status(fiber.StatusInternalServerError).SendString("Failed to generate CSV")
+			}
+
+			return nil
 		},
 	}
 }

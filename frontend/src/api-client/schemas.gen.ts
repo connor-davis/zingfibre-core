@@ -45,7 +45,8 @@ export const DynamicQuerySchema = {
       type: 'string',
     },
     Status: {
-      enum: [['complete', 'in_progress', 'error']],
+      default: 'in_progress',
+      enum: ['complete', 'in_progress', 'error'],
       type: 'string',
     },
   },
@@ -53,7 +54,7 @@ export const DynamicQuerySchema = {
 
 export const DynamicQueryResultSchema = {
   properties: {
-    Columns: {
+    columns: {
       items: {
         properties: {
           label: {
@@ -71,7 +72,7 @@ export const DynamicQueryResultSchema = {
       },
       type: 'array',
     },
-    Data: {
+    data: {
       items: {
         additionalProperties: {
           anyOf: [
@@ -95,7 +96,7 @@ export const DynamicQueryResultSchema = {
       type: 'array',
     },
   },
-  required: ['Data', 'Columns'],
+  required: ['data', 'columns'],
 } as const;
 
 export const ErrorResponseSchema = {
@@ -959,6 +960,14 @@ export const SuccessResponseSchema = {
 export const UpdateDynamicQuerySchema = {
   properties: {
     Name: {
+      type: 'string',
+    },
+    Prompt: {
+      type: 'string',
+    },
+    Status: {
+      default: 'in_progress',
+      enum: ['complete', 'in_progress', 'error'],
       type: 'string',
     },
   },

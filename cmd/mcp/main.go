@@ -38,6 +38,7 @@ func main() {
 	mcp.AddTool(server, &mcp.Tool{Name: "list-catalogs", Description: "Get a list of catalogs using TrinoDB."}, trino.ListCatalogs)
 	mcp.AddTool(server, &mcp.Tool{Name: "list-schemas", Description: "Get a list of schemas for a given catalog using TrinoDB."}, trino.ListSchemas)
 	mcp.AddTool(server, &mcp.Tool{Name: "list-tables", Description: "Get a list of tables for a given catalog and schema using TrinoDB."}, trino.ListTables)
+	mcp.AddTool(server, &mcp.Tool{Name: "test-query", Description: "Test a SQL query using TrinoDB."}, trino.TestQuery)
 
 	handler := mcp.NewStreamableHTTPHandler(func(req *http.Request) *mcp.Server {
 		return server

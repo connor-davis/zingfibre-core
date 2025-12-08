@@ -17,6 +17,7 @@ import {
   getApiAuthenticationMfaEnable,
   getApiDynamicQueries,
   getApiDynamicQueriesById,
+  getApiDynamicQueriesByIdExport,
   getApiDynamicQueriesByIdGenerate,
   getApiDynamicQueriesByIdResults,
   getApiExportsCustomers,
@@ -55,6 +56,7 @@ import type {
   GetApiAuthenticationCheckData,
   GetApiAuthenticationMfaEnableData,
   GetApiDynamicQueriesByIdData,
+  GetApiDynamicQueriesByIdExportData,
   GetApiDynamicQueriesByIdGenerateData,
   GetApiDynamicQueriesByIdResultsData,
   GetApiDynamicQueriesData,
@@ -814,6 +816,31 @@ export const putApiDynamicQueriesByIdMutation = (
     },
   };
   return mutationOptions;
+};
+
+export const getApiDynamicQueriesByIdExportQueryKey = (
+  options: Options<GetApiDynamicQueriesByIdExportData>
+) => createQueryKey('getApiDynamicQueriesByIdExport', options);
+
+/**
+ * Get Dynamic Query Export
+ * Endpoint to retrieve a dynamic query export by ID
+ */
+export const getApiDynamicQueriesByIdExportOptions = (
+  options: Options<GetApiDynamicQueriesByIdExportData>
+) => {
+  return queryOptions({
+    queryFn: async ({ queryKey, signal }) => {
+      const { data } = await getApiDynamicQueriesByIdExport({
+        ...options,
+        ...queryKey[0],
+        signal,
+        throwOnError: true,
+      });
+      return data;
+    },
+    queryKey: getApiDynamicQueriesByIdExportQueryKey(options),
+  });
 };
 
 export const getApiDynamicQueriesByIdGenerateQueryKey = (

@@ -49,6 +49,7 @@ func (r *DynamicQueriesRouter) RegisterRoutes() []system.Route {
 	return []system.Route{
 		r.GetDynamicQueriesRoute(),
 		r.GetDynamicQueryResultsRoute(),
+		r.GetDynamicQueryExportRoute(),
 		r.GenerateDynamicQueryRoute(),
 		r.GetDynamicQueryRoute(),
 		r.CreateDynamicQueryRoute(),

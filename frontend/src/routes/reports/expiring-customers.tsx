@@ -624,7 +624,7 @@ function RouteComponent() {
 
           <Button asChild>
             <a
-              href={`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/exports/expiring-customers?poi=${poi}`}
+              href={`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:6173'}/api/exports/expiring-customers?poi=${poi}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -692,7 +692,7 @@ function RouteComponent() {
 
               <Button asChild>
                 <a
-                  href={`${import.meta.env.VITE_API_URL ?? 'http://localhost:4000'}/api/exports/expiring-customers?poi=${poi}`}
+                  href={`${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:6173'}/api/exports/expiring-customers?poi=${poi}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
