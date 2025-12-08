@@ -14,7 +14,6 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/reports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
 	"github.com/connor-davis/zingfibre-core/common"
-	"github.com/connor-davis/zingfibre-core/internal/ai"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
@@ -32,11 +31,10 @@ type HttpRouter struct {
 	Radius     *radius.Queries
 	Middleware *middleware.Middleware
 	Sessions   *session.Store
-	AI         ai.AI
 	Trino      *sql.DB
 }
 
-func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radius.Queries, middleware *middleware.Middleware, sessions *session.Store, ai ai.AI, trino *sql.DB) *HttpRouter {
+func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radius.Queries, middleware *middleware.Middleware, sessions *session.Store, trino *sql.DB) *HttpRouter {
 	authentication := authentication.NewAuthenticationRouter(postgres, middleware, sessions)
 	authenticationRoutes := authentication.RegisterRoutes()
 
@@ -55,7 +53,7 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 	exports := exports.NewExportsRouter(zing, radius, middleware, sessions)
 	exportsRoutes := exports.RegisterRoutes()
 
-	dynamicQueries := dynamicQueries.NewDynamicQueriesRouter(postgres, zing, radius, middleware, sessions, ai, trino)
+	dynamicQueries := dynamicQueries.NewDynamicQueriesRouter(postgres, zing, radius, middleware, sessions, trino)
 	dynamicQueriesRoutes := dynamicQueries.RegisterRoutes()
 
 	routes := []system.Route{}
@@ -73,7 +71,6 @@ func NewHttpRouter(postgres *postgres.Queries, zing *zing.Queries, radius *radiu
 		Postgres:   postgres,
 		Middleware: middleware,
 		Sessions:   sessions,
-		AI:         ai,
 		Trino:      trino,
 	}
 }

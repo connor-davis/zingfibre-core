@@ -10,7 +10,6 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
 	"github.com/connor-davis/zingfibre-core/common"
-	"github.com/connor-davis/zingfibre-core/internal/ai"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
@@ -81,7 +80,7 @@ func main() {
 	log.Info("✅ Connected to PostgreSQL successfully")
 	log.Info("🔃 Connecting to TrinoDB database...")
 
-	trinoDsn := "http://user@localhost:8081"
+	trinoDsn := "http://user@trino:8080"
 	trinoDb, err := sql.Open("trino", trinoDsn)
 
 	if err != nil {
@@ -132,8 +131,6 @@ func main() {
 		log.Infof("✅ Admin user already exists: %s", existingAdmin.Email)
 	}
 
-	ai := ai.New(postgresQueries)
-
 	app := fiber.New(fiber.Config{
 		AppName:      "Zingfibre Reporting API",
 		ServerHeader: "Zingfibre-API",
@@ -153,7 +150,7 @@ func main() {
 
 	middleware := middleware.NewMiddleware(postgresQueries, sessions)
 
-	httpRouter := http.NewHttpRouter(postgresQueries, zingQueries, radiusQueries, middleware, sessions, ai, trinoDb)
+	httpRouter := http.NewHttpRouter(postgresQueries, zingQueries, radiusQueries, middleware, sessions, trinoDb)
 
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 

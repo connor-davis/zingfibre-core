@@ -3,13 +3,14 @@ package ai
 import (
 	"github.com/connor-davis/zingfibre-core/common"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/openai/openai-go/v3"
 	"github.com/openai/openai-go/v3/option"
 )
 
 type AI interface {
-	CreateDynamicQuery(queryId uuid.UUID, prompt string)
+	GenerateDynamicQuery(queryId uuid.UUID, prompt string, ctx *fiber.Ctx) error
 }
 
 type ai struct {
@@ -18,7 +19,7 @@ type ai struct {
 }
 
 func New(postgres *postgres.Queries) AI {
-	openai := openai.NewClient(option.WithAPIKey(common.EnvString("OPENAI_KEY", "")))
+	openai := openai.NewClient(option.WithAPIKey(common.EnvString("OPENAI_API_KEY", "")))
 
 	return &ai{
 		postgres: postgres,

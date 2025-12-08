@@ -11,8 +11,10 @@ import (
 )
 
 func main() {
-	trinoDsn := "http://user@localhost:8081"
+	trinoDsn := "http://user@trino:8080"
 	trinoDb, err := sql.Open("trino", trinoDsn)
+
+	log.Infof("🔌 Connecting to Trino database at %s", trinoDsn)
 
 	if err != nil {
 		log.Fatalf("🔥 Failed to connect to Trino database: %s", err.Error())
@@ -20,7 +22,13 @@ func main() {
 		return
 	}
 
-	defer trinoDb.Close()
+	if err := trinoDb.Ping(); err != nil {
+		log.Fatalf("🔥 Failed to ping Trino database: %s", err.Error())
+
+		return
+	}
+
+	log.Info("✅ Connected to Trino database successfully")
 
 	server := mcp.NewServer(&mcp.Implementation{Name: "zing-mcp", Version: "v1.0.0"}, nil)
 

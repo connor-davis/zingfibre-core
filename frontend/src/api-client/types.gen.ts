@@ -14,7 +14,9 @@ export type CreateUser = {
 export type DynamicQuery = {
   ID?: string;
   Name?: string;
+  Prompt?: string;
   Query?: string;
+  Status?: ['complete', 'in_progress', 'error'];
 };
 
 export type DynamicQueryResult = {
@@ -2880,6 +2882,194 @@ export type PutApiDynamicQueriesByIdResponses = {
 
 export type PutApiDynamicQueriesByIdResponse =
   PutApiDynamicQueriesByIdResponses[keyof PutApiDynamicQueriesByIdResponses];
+
+export type GetApiDynamicQueriesByIdGenerateData = {
+  body?: never;
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/dynamic-queries/{id}/generate';
+};
+
+export type GetApiDynamicQueriesByIdGenerateErrors = {
+  /**
+   * Bad Request.
+   */
+  400: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Unauthorized.
+   */
+  401: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * User not found.
+   */
+  404: {
+    details?: string;
+    error?: string;
+  };
+  /**
+   * Internal Server Error.
+   */
+  500: {
+    details?: string;
+    error?: string;
+  };
+  default: unknown;
+};
+
+export type GetApiDynamicQueriesByIdGenerateError =
+  GetApiDynamicQueriesByIdGenerateErrors[keyof GetApiDynamicQueriesByIdGenerateErrors];
+
+export type GetApiDynamicQueriesByIdGenerateResponses = {
+  /**
+   * Dynamic Query generated successfully.
+   */
+  200: {
+    data?:
+      | {
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }
+      | string
+      | Array<{
+          Email?: string;
+          ID?: string;
+          MfaEnabled?: boolean;
+          MfaVerified?: boolean;
+          Role?: 'admin' | 'staff' | 'user';
+        }>
+      | Array<string>
+      | {
+          Items?: Array<{
+            Period?: string;
+            [key: string]: number | string | undefined;
+          }>;
+          Types?: Array<string>;
+        }
+      | Array<{
+          RechargeCount?: number;
+          RechargeMaxDate?: string;
+          RechargeName?: string;
+          RechargePeriod?: string;
+        }>
+      | {
+          Email?: string;
+          FullName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }
+      | Array<{
+          Email?: string;
+          FullName?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }>
+      | {
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FullName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }
+      | Array<{
+          Address?: string;
+          Email?: string;
+          Expiration?: string;
+          FullName?: string;
+          LastPurchaseDuration?: string;
+          LastPurchaseSpeed?: string;
+          PhoneNumber?: string;
+          RadiusUsername?: string;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }>
+      | {
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }
+      | Array<{
+          Amount?: number;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          Email?: string;
+          FullName?: string;
+          ItemName?: string;
+          Method?: string;
+          ServiceId?: number;
+          Successful?: boolean;
+        }>
+      | {
+          Amount?: string;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          Method?: string;
+          RadiusUsername?: string;
+          ServiceId?: number;
+        }
+      | Array<{
+          Amount?: string;
+          BuildName?: string;
+          BuildType?: string;
+          DateCreated?: string;
+          ItemName?: string;
+          Method?: string;
+          RadiusUsername?: string;
+          ServiceId?: number;
+        }>;
+    details?: string;
+    message?: string;
+    pages?: number;
+  };
+};
+
+export type GetApiDynamicQueriesByIdGenerateResponse =
+  GetApiDynamicQueriesByIdGenerateResponses[keyof GetApiDynamicQueriesByIdGenerateResponses];
 
 export type GetApiDynamicQueriesByIdResultsData = {
   body?: never;

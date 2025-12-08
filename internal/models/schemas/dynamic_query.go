@@ -6,6 +6,12 @@ var DynamicQuerySchema = openapi3.NewSchema().WithProperties(map[string]*openapi
 	"ID":    openapi3.NewUUIDSchema(),
 	"Name":  openapi3.NewStringSchema(),
 	"Query": openapi3.NewStringSchema(),
+	"Status": openapi3.NewStringSchema().WithEnum([]string{
+		"complete",
+		"in_progress",
+		"error",
+	}),
+	"Prompt": openapi3.NewStringSchema(),
 }).NewRef()
 
 var DynamicQueryArraySchema = openapi3.NewArraySchema().WithItems(DynamicQuerySchema.Value).NewRef()

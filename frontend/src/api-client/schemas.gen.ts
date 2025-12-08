@@ -38,7 +38,14 @@ export const DynamicQuerySchema = {
     Name: {
       type: 'string',
     },
+    Prompt: {
+      type: 'string',
+    },
     Query: {
+      type: 'string',
+    },
+    Status: {
+      enum: [['complete', 'in_progress', 'error']],
       type: 'string',
     },
   },

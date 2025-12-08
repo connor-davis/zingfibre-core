@@ -140,6 +140,7 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 					Query:      pgtype.Text{String: "", Valid: false},
 					ResponseID: pgtype.Text{String: "", Valid: false},
 					Status:     postgres.DynamicQueryStatusInProgress,
+					Prompt:     createDynamicQueryRequest.Prompt,
 				},
 			)
 
@@ -151,8 +152,6 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 					"details": constants.InternalServerErrorDetails,
 				})
 			}
-
-			// go r.AI.CreateDynamicQuery(dynamicQuery.ID, createDynamicQueryRequest.Prompt)
 
 			return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
 				"message": constants.Success,

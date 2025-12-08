@@ -22,6 +22,9 @@ import type {
   GetApiAuthenticationMfaEnableResponses,
   GetApiDynamicQueriesByIdData,
   GetApiDynamicQueriesByIdErrors,
+  GetApiDynamicQueriesByIdGenerateData,
+  GetApiDynamicQueriesByIdGenerateErrors,
+  GetApiDynamicQueriesByIdGenerateResponses,
   GetApiDynamicQueriesByIdResponses,
   GetApiDynamicQueriesByIdResultsData,
   GetApiDynamicQueriesByIdResultsErrors,
@@ -417,6 +420,25 @@ export const putApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
       'Content-Type': 'application/json',
       ...options?.headers,
     },
+  });
+};
+
+/**
+ * Generate Dynamic Query
+ * Endpoint to generate a dynamic query by ID
+ */
+export const getApiDynamicQueriesByIdGenerate = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiDynamicQueriesByIdGenerateData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetApiDynamicQueriesByIdGenerateResponses,
+    GetApiDynamicQueriesByIdGenerateErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries/{id}/generate',
+    ...options,
   });
 };
 

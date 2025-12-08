@@ -1,7 +1,15 @@
 name: zing-portal
 
+networks:
+  zing-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+
 services:
   api:
+    networks:
+      - zing-network
     env_file:
       - .env
     build:
@@ -19,6 +27,8 @@ services:
       - TZ=Africa/Johannesburg
 
   migrations:
+    networks:
+      - zing-network
     env_file:
       - .env
     build:
@@ -31,6 +41,8 @@ services:
       - TZ=Africa/Johannesburg
 
   mcp:
+    networks:
+      - zing-network
     env_file:
       - .env
     build:
@@ -40,12 +52,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      trino:
+        condition: service_healthy
     ports:
       - "6174:6174"
     environment:
       - TZ=Africa/Johannesburg
 
   app:
+    networks:
+      - zing-network
     env_file:
       - frontend/.env.local
     build:
@@ -62,6 +78,8 @@ services:
       - TZ=Africa/Johannesburg
 
   db:
+    networks:
+      - zing-network
     env_file:
       - .env
     image: postgres
@@ -82,6 +100,8 @@ services:
       - TZ=Africa/Johannesburg
 
   pgadmin:
+    networks:
+      - zing-network
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -96,6 +116,8 @@ services:
         condition: service_healthy
 
   trino:
+    networks:
+      - zing-network
     env_file:
       - .env
     image: trinodb/trino:latest
