@@ -80,7 +80,8 @@ export default function EnableMfaForm() {
           <img
             className="w-full"
             src={
-              import.meta.env.VITE_API_URL + '/api/authentication/mfa/enable'
+              import.meta.env.VITE_API_BASE_URL +
+              '/api/authentication/mfa/enable'
             }
             alt="QR Code"
           />

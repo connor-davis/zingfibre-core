@@ -44,6 +44,53 @@ export const DynamicQuerySchema = {
   },
 } as const;
 
+export const DynamicQueryResultSchema = {
+  properties: {
+    Columns: {
+      items: {
+        properties: {
+          label: {
+            type: 'string',
+          },
+          name: {
+            type: 'string',
+          },
+          type: {
+            type: 'string',
+          },
+        },
+        required: ['name', 'type', 'label'],
+        type: 'object',
+      },
+      type: 'array',
+    },
+    Data: {
+      items: {
+        additionalProperties: {
+          anyOf: [
+            {
+              type: 'string',
+            },
+            {
+              type: 'integer',
+            },
+            {
+              type: 'boolean',
+            },
+            {
+              format: 'date-time',
+              type: 'string',
+            },
+          ],
+        },
+        type: 'object',
+      },
+      type: 'array',
+    },
+  },
+  required: ['Data', 'Columns'],
+} as const;
+
 export const ErrorResponseSchema = {
   properties: {
     details: {

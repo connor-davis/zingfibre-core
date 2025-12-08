@@ -17,7 +17,7 @@ export const queryClient = new QueryClient();
 
 export const apiClient = createClient(
   createConfig<ClientOptions>({
-    baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:4000',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:6173',
     credentials: 'include',
   })
 );

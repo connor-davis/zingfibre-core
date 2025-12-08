@@ -23,6 +23,9 @@ import type {
   GetApiDynamicQueriesByIdData,
   GetApiDynamicQueriesByIdErrors,
   GetApiDynamicQueriesByIdResponses,
+  GetApiDynamicQueriesByIdResultsData,
+  GetApiDynamicQueriesByIdResultsErrors,
+  GetApiDynamicQueriesByIdResultsResponses,
   GetApiDynamicQueriesData,
   GetApiDynamicQueriesErrors,
   GetApiDynamicQueriesResponses,
@@ -414,6 +417,25 @@ export const putApiDynamicQueriesById = <ThrowOnError extends boolean = false>(
       'Content-Type': 'application/json',
       ...options?.headers,
     },
+  });
+};
+
+/**
+ * Get Dynamic Query Results
+ * Endpoint to retrieve a dynamic query results by ID
+ */
+export const getApiDynamicQueriesByIdResults = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetApiDynamicQueriesByIdResultsData, ThrowOnError>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    GetApiDynamicQueriesByIdResultsResponses,
+    GetApiDynamicQueriesByIdResultsErrors,
+    ThrowOnError
+  >({
+    url: '/api/dynamic-queries/{id}/results',
+    ...options,
   });
 };
 

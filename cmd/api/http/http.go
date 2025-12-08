@@ -13,6 +13,7 @@ import (
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/pops"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/reports"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/users"
+	"github.com/connor-davis/zingfibre-core/common"
 	"github.com/connor-davis/zingfibre-core/internal/ai"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -165,7 +166,7 @@ func (h *HttpRouter) InitializeOpenAPI() *openapi3.T {
 		},
 		Servers: openapi3.Servers{
 			{
-				URL:         "http://localhost:4000",
+				URL:         fmt.Sprintf("http://localhost:%s", common.EnvString("PORT", "6173")),
 				Description: "Development",
 			},
 			{
