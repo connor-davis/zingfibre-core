@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS dynamic_queries (
     query TEXT,
     response_id TEXT,
     status dynamic_query_status NOT NULL DEFAULT 'in_progress',
+    prompt TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 )

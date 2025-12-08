@@ -1,6 +1,8 @@
 package dynamicQueries
 
 import (
+	"strings"
+
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -8,23 +10,18 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
-type CreateDynamicQueryRequest struct {
-	Name   string `json:"name"`
-	Prompt string `json:"prompt"`
-}
-
-func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
+func (r *DynamicQueriesRouter) GenerateDynamicQueryRoute() system.Route {
 	responses := openapi3.NewResponses()
 
-	responses.Set("201", &openapi3.ResponseRef{
+	responses.Set("200", &openapi3.ResponseRef{
 		Value: openapi3.NewResponse().
 			WithJSONSchema(
 				schemas.SuccessResponseSchema.Value,
 			).
-			WithDescription("Dynamic Query created successfully.").
+			WithDescription("Dynamic Query generated successfully.").
 			WithContent(openapi3.Content{
 				"application/json": &openapi3.MediaType{
 					Example: map[string]any{
@@ -70,17 +67,17 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 			}),
 	})
 
-	responses.Set("409", &openapi3.ResponseRef{
+	responses.Set("404", &openapi3.ResponseRef{
 		Value: openapi3.NewResponse().
 			WithJSONSchema(
 				schemas.ErrorResponseSchema.Value,
 			).
-			WithDescription("Conflict.").
+			WithDescription("User not found.").
 			WithContent(openapi3.Content{
 				"application/json": &openapi3.MediaType{
 					Example: map[string]any{
-						"error":   constants.ConflictError,
-						"details": constants.ConflictErrorDetails,
+						"error":   constants.NotFoundError,
+						"details": constants.NotFoundErrorDetails,
 					},
 					Schema: schemas.ErrorResponseSchema,
 				},
@@ -104,28 +101,43 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 			}),
 	})
 
+	parameters := []*openapi3.ParameterRef{
+		{
+			Value: &openapi3.Parameter{
+				Name:     "id",
+				In:       "path",
+				Required: true,
+				Schema: &openapi3.SchemaRef{
+					Value: &openapi3.Schema{
+						Type: &openapi3.Types{
+							"string",
+						},
+					},
+				},
+			},
+		},
+	}
+
 	return system.Route{
 		OpenAPIMetadata: system.OpenAPIMetadata{
-			Summary:     "Create Dynamic Query",
-			Description: "Endpoint to create a new dynamic query",
+			Summary:     "Generate Dynamic Query",
+			Description: "Endpoint to generate a dynamic query by ID",
 			Tags:        []string{"Dynamic Queries"},
-			Parameters:  nil,
-			RequestBody: &openapi3.RequestBodyRef{
-				Value: openapi3.NewRequestBody().WithJSONSchema(schemas.CreateDynamicQuerySchema.Value),
-			},
-			Responses: responses,
+			Parameters:  parameters,
+			RequestBody: nil,
+			Responses:   responses,
 		},
-		Method: system.PostMethod,
-		Path:   "/dynamic-queries",
+		Method: system.GetMethod,
+		Path:   "/dynamic-queries/{id}/generate",
 		Middlewares: []fiber.Handler{
 			r.Middleware.Authorized(),
-			r.Middleware.HasRole(postgres.RoleTypeAdmin),
+			r.Middleware.HasAnyRole(postgres.RoleTypeAdmin, postgres.RoleTypeStaff, postgres.RoleTypeUser),
 		},
 		Handler: func(c *fiber.Ctx) error {
-			var createDynamicQueryRequest CreateDynamicQueryRequest
+			id, err := uuid.Parse(c.Params("id"))
 
-			if err := c.BodyParser(&createDynamicQueryRequest); err != nil {
-				log.Errorf("🔥 Error parsing request body: %s", err.Error())
+			if err != nil {
+				log.Errorf("🔥 Invalid UUID format: %s", err.Error())
 
 				return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 					"error":   constants.BadRequestError,
@@ -133,18 +145,10 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 				})
 			}
 
-			dynamicQuery, err := r.Postgres.CreateDynamicQuery(
-				c.Context(),
-				postgres.CreateDynamicQueryParams{
-					Name:       createDynamicQueryRequest.Name,
-					Query:      pgtype.Text{String: "", Valid: false},
-					ResponseID: pgtype.Text{String: "", Valid: false},
-					Status:     postgres.DynamicQueryStatusInProgress,
-				},
-			)
+			dynamicQuery, err := r.Postgres.GetDynamicQuery(c.Context(), id)
 
-			if err != nil {
-				log.Errorf("🔥 Error creating dynamic query: %s", err.Error())
+			if err != nil && !strings.Contains(err.Error(), "no rows in result set") {
+				log.Errorf("🔥 Error retrieving dynamic query: %s", err.Error())
 
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
@@ -152,12 +156,21 @@ func (r *DynamicQueriesRouter) CreateDynamicQueryRoute() system.Route {
 				})
 			}
 
-			// go r.AI.CreateDynamicQuery(dynamicQuery.ID, createDynamicQueryRequest.Prompt)
+			if err != nil && strings.Contains(err.Error(), "no rows in result set") {
+				log.Warnf("⚠️ Dynamic Query with ID %s not found", id)
 
-			return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
+				return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
+					"error":   constants.NotFoundError,
+					"details": constants.NotFoundErrorDetails,
+				})
+			}
+
+			go r.AI.CreateDynamicQuery(dynamicQuery.ID, dynamicQuery.Prompt)
+
+			return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 				"message": constants.Success,
 				"details": constants.SuccessDetails,
-				"data":    dynamicQuery.ID,
+				"data":    dynamicQuery,
 			})
 		},
 	}

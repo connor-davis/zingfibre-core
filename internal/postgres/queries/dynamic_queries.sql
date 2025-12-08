@@ -34,10 +34,11 @@ INSERT INTO
         name,
         query,
         response_id,
-        status
+        status,
+        prompt
     )
 VALUES
-    ($1, $2, $3, $4) RETURNING *;
+    ($1, $2, $3, $4, $5) RETURNING *;
 
 -- name: UpdateDynamicQuery :one
 UPDATE dynamic_queries
@@ -46,9 +47,10 @@ SET
     query = $2,
     response_id = $3,
     status = $4,
+    prompt = $5,
     updated_at = NOW()
 WHERE
-    id = $5 RETURNING *;
+    id = $6 RETURNING *;
 
 -- name: DeleteDynamicQuery :one
 DELETE FROM dynamic_queries

@@ -6,7 +6,11 @@ import { useForm } from 'react-hook-form';
 
 import { toast } from 'sonner';
 
-import { type CreateDynamicQuery, type ErrorResponse } from '@/api-client';
+import {
+  type CreateDynamicQuery,
+  type ErrorResponse,
+  type SuccessResponse,
+} from '@/api-client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -53,13 +57,18 @@ export default function CreateDynamicQueryDialog({
         duration: 2000,
       });
     },
-    onSuccess: () => {
+    onSuccess: (data: SuccessResponse) => {
       toast.success('Success', {
         description: 'The dynamic query has been created successfully.',
         duration: 2000,
       });
 
-      return router.invalidate();
+      return router.navigate({
+        to: '/dynamic-reports/$id',
+        params: {
+          id: data.data as string,
+        },
+      });
     },
   });
 
