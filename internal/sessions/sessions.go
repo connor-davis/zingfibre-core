@@ -16,7 +16,7 @@ func NewSessions(db *pgxpool.Pool) *session.Store {
 			DB:    db,
 		}),
 		KeyLookup:         "cookie:zingfibre_sessions",
-		CookieDomain:      common.EnvString("COOKIE_DOMAIN", "localhost"),
+		CookieDomain:      common.EnvString("API_COOKIE_DOMAIN", "localhost"),
 		CookiePath:        "/",
 		CookieSecure:      true,
 		CookieSameSite:    "Strict",
