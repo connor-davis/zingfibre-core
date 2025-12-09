@@ -86,10 +86,10 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_CONFIG_ENHANCED_REFERER_CHECK: False
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-      TZ: Africa/Johannesburg
+      - PGADMIN_CONFIG_ENHANCED_REFERER_CHECK=False
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - TZ=Africa/Johannesburg
     ports:
       - "8080:80"
     volumes:
