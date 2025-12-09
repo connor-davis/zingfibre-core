@@ -30,23 +30,6 @@ services:
     environment:
       - TZ=Africa/Johannesburg
 
-  mcp:
-    env_file:
-      - .env
-    build:
-      context: .
-      dockerfile: ./cmd/mcp/Dockerfile
-      target: runtime
-    depends_on:
-      db:
-        condition: service_healthy
-      trino:
-        condition: service_healthy
-    ports:
-      - "6174:6174"
-    environment:
-      - TZ=Africa/Johannesburg
-
   app:
     env_file:
       - frontend/.env.local

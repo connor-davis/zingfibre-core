@@ -4,11 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	netHttp "net/http"
 	"strings"
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http"
 	"github.com/connor-davis/zingfibre-core/cmd/api/http/middleware"
+	"github.com/connor-davis/zingfibre-core/cmd/api/trino"
 	"github.com/connor-davis/zingfibre-core/common"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/radius"
 	"github.com/connor-davis/zingfibre-core/internal/mysql/zing"
@@ -20,6 +22,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"golang.org/x/crypto/bcrypt"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -155,6 +158,22 @@ func main() {
 	openapiSpecification := httpRouter.InitializeOpenAPI()
 
 	api := app.Group("/api")
+
+	server := mcp.NewServer(&mcp.Implementation{Name: "zing-mcp", Version: "v1.0.0"}, nil)
+
+	// Register Trino tool
+	trino := trino.New(trinoDb)
+
+	mcp.AddTool(server, &mcp.Tool{Name: "list-catalogs", Description: "Get a list of catalogs using TrinoDB."}, trino.ListCatalogs)
+	mcp.AddTool(server, &mcp.Tool{Name: "list-schemas", Description: "Get a list of schemas for a given catalog using TrinoDB."}, trino.ListSchemas)
+	mcp.AddTool(server, &mcp.Tool{Name: "list-tables", Description: "Get a list of tables for a given catalog and schema using TrinoDB."}, trino.ListTables)
+	mcp.AddTool(server, &mcp.Tool{Name: "test-query", Description: "Test a SQL query using TrinoDB."}, trino.TestQuery)
+
+	handler := mcp.NewStreamableHTTPHandler(func(req *netHttp.Request) *mcp.Server {
+		return server
+	}, nil)
+
+	api.Use("/mcp", handler)
 
 	api.Get("/api-spec", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(openapiSpecification)
