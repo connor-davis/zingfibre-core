@@ -100,7 +100,7 @@ services:
   trino:
     env_file:
       - .env
-    image: trinodb/trino:477
+    image: trinodb/trino:476
     ports:
       - "8081:8080"
     volumes:
