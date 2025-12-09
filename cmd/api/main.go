@@ -19,6 +19,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -173,7 +174,7 @@ func main() {
 		return server
 	}, nil)
 
-	api.Use("/mcp", handler)
+	api.All("/mcp/*", adaptor.HTTPHandler(handler))
 
 	api.Get("/api-spec", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(openapiSpecification)
