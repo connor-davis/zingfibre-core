@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/connor-davis/zingfibre-core/common"
 	"github.com/connor-davis/zingfibre-core/internal/constants"
 	"github.com/connor-davis/zingfibre-core/internal/models/schemas"
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
@@ -310,7 +311,7 @@ FROM columns_array, data_array;`,
 							OfMcp: &openaiResponses.ToolMcpParam{
 								ServerLabel:       "zingfibre_mcp",
 								ServerDescription: openai.String("The ZingFibre MCP server that allows AI to interact with parts of the ZingFibre Reports Portal system."),
-								ServerURL:         openai.String("https://zing-mcp.connor-davis.dev"),
+								ServerURL:         openai.String(common.EnvString("MCP_BASE_URL", "http://localhost:6173/api/mcp")),
 								RequireApproval: openaiResponses.ToolMcpRequireApprovalUnionParam{
 									OfMcpToolApprovalFilter: &openaiResponses.ToolMcpRequireApprovalMcpToolApprovalFilterParam{
 										Never: openaiResponses.ToolMcpRequireApprovalMcpToolApprovalFilterNeverParam{
