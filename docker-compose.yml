@@ -100,7 +100,7 @@ services:
   trino:
     env_file:
       - .env
-    image: trinodb/trino:latest-arm64
+    image: trinodb/trino:478-arm64
     ports:
       - "8081:8080"
     volumes:
