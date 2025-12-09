@@ -152,8 +152,6 @@ func main() {
 		Format: "${time} ${status} - ${latency} ${method} ${url}\n",
 	}))
 
-	app.Use(sessions)
-
 	middleware := middleware.NewMiddleware(postgresQueries, sessions)
 
 	httpRouter := http.NewHttpRouter(postgresQueries, zingQueries, radiusQueries, middleware, sessions, trinoDb)
