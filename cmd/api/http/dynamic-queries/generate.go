@@ -17,7 +17,6 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/mateuszkardas/toon-go"
 	"github.com/openai/openai-go/v3"
 	openaiResponses "github.com/openai/openai-go/v3/responses"
 	"github.com/valyala/fasthttp"
@@ -194,91 +193,63 @@ func (r *DynamicQueriesRouter) GenerateDynamicQueryRoute() system.Route {
 
 			log.Infof("Generating dynamic query for Query ID: %s with prompt: %s", dynamicQuery.ID, dynamicQuery.Prompt)
 
-			encodedInstructions, err := toon.Encode(
-				map[string]any{
-					"role":    "You are a professional TrinoDB SQL query developer.",
-					"purpose": "Generate a dynamic SQL query based on the user's prompt. The SQL query must be compatible with TrinoDB and strictly follow the provided `sql_query_template`, replacing the comments and example columns/tables with appropriate, data-driven values.",
-					"expectations": []string{
-						"You are required to use the available tools (`list-catalogs`, `list-schemas`, `list-tables`, `test-query`) to dynamically discover and verify the database structure and the final query results.",
-						"First, call `list-catalogs` to view connected databases.",
-						"Second, call `list-schemas` to view connected database schemas.",
-						"Third, call `list-tables` to view connected database schema tables.",
-						"Fourth, you must call `test-query` and iterate on fixing all errors until a successful query response is returned. You must not stop and must return the successful query result.",
-						"All table references must be fully qualified in the format: `{catalog}.{schema}.{table}`.",
-						"The `data_cte` must select actual columns and data to fulfill the user's request. **Avoid using `NULL AS 'column'` for any data requested by the user.** Use real column names retrieved from the database tools.",
-						"In the SQL query, use **single quotes (`'`) for all literal strings** (e.g., `'Full Name'`, `'varchar'`) and **double quotes (`\"`) for identifiers** (e.g., `\"Full Name\"`) where required by TrinoDB for names with spaces or reserved characters.",
-						"Only provide the final, valid SQL query in the `sql_query` field of the output JSON.",
-					},
-					"sql_query_template": `WITH data_cte AS (
+			rawSystemPrompt := `
+# TrinoDB SQL Developer Configuration (CSV Output)
+
+## Role
+**You are a professional TrinoDB SQL query developer.**
+
+## Expectations
+1. **Discovery Phase:**
+   * You are expected to call ~list-catalogs~ **first** to view connected databases.
+   * You are expected to call ~list-schemas~ **second** to view connected database schemas.
+   * You are expected to call ~list-tables~ **third** to view connected database schema tables.
+2. **Syntax & Formatting:**
+   * You are expected to call tables like ~{catalog}.{schema}.{table}~ when writing your queries.
+   * You are expected to use **double quotes** to quote identifiers.
+   * **Do not** quote catalogs, schemas, and tables in the FROM clauses.
+3. **Accuracy & Constraints:**
+   * You are expected to fulfill the user's expectation without error.
+   * You are expected to only utilize **local information stores**, table, and column definitions that you have found. **Do not invent any non-existent columns or tables.**
+   * Only provide the SQL query in the ~sql_query~ field of the output JSON.
+
+## SQL Rules
+* Only generate SQL queries that are compatible with **TrinoDB**.
+* Ensure that you generate **efficient** queries.
+* **Follow the ~sql_template~ exactly**. You must aggregate the result into a single string blob containing the CSV header and data rows separated by newlines.
+
+## SQL Template
+
+~~~sql
+WITH data_cte AS (
   SELECT
     -- Select the columns you need based on the user's prompt
-    -- Example: CONCAT(cst.first_name, ' ', cst.last_name) AS "Full Name"
-    -- Example: cst.street_address AS "Street Address"
-    -- Example: cst.pop AS "POP"
   FROM "catalog"."schema"."table" AS cst -- Replace with actual catalog, schema, and table
   -- Join any necessary tables based on the user's prompt
-  -- Joins must also be "catalog"."schema"."table" format - replace with actual catalog, schema, and table
-  -- Add any necessary WHERE clauses, ORDER BY, LIMIT, etc. based on the user's prompt
+  -- Add any necessary WHERE clauses, ORDER BY, LIMIT, etc.
 ),
-columns_array AS (
-  SELECT ARRAY_AGG(col) AS cols FROM (
-    -- Define the columns metadata based on the columns selected in data_cte
-    -- The 'name' value must exactly match the alias used in data_cte
-    SELECT MAP(
-      ARRAY['name', 'type', 'label'],
-      ARRAY['Full Name', 'varchar', 'Full Name']
-    ) AS col
-    UNION ALL
-    SELECT MAP(
-      ARRAY['name', 'type', 'label'],
-      ARRAY['Street Address', 'varchar', 'Street Address']
-    )
-    UNION ALL
-    SELECT MAP(
-      ARRAY['name', 'type', 'label'],
-      ARRAY['POP', 'varchar', 'POP']
-    )
-  )
-),
--- Build the data array
-data_array AS (
-  SELECT ARRAY_AGG(
-    MAP(
-      -- The array keys must exactly match the 'name' values from columns_array
-      ARRAY['Full Name', 'Street Address', 'POP'],
-      ARRAY[
-        CAST("Full Name" AS VARCHAR),
-        CAST("Street Address" AS VARCHAR),
-        CAST("POP" AS VARCHAR)
-      ]
-    )
-  ) AS data
+csv_rows AS (
+  SELECT
+    -- Format the rows as CSV strings.
+    -- IMPORTANT: Cast all columns to VARCHAR.
+    -- The following is an example structure; modify as needed based on user prompt:
+    format('%s,%s,%s',
+      CAST("Full Name" AS VARCHAR),
+      CAST("Street Address" AS VARCHAR),
+      CAST("POP" AS VARCHAR)
+    ) AS row_line
   FROM data_cte
 )
-SELECT CAST(
-  MAP(
-    ARRAY['columns', 'data'],
-    ARRAY[
-      CAST(cols AS JSON),
-      CAST(data AS JSON)
-    ]
-  ) AS JSON
-) AS result
-FROM columns_array, data_array;`,
-				},
-				&toon.EncodeOptions{
-					Indent: 1,
-				},
-			)
+SELECT
+  -- 1. Manually write the Header string based on selected columns
+  'Full Name,Street Address,POP' || chr(10) ||
+  -- 2. Aggregate the data rows with a newline character
+  ARRAY_JOIN(ARRAY_AGG(row_line), chr(10)) AS csv_output
+FROM csv_rows;
+~~~
+`
 
-			if err != nil {
-				log.Errorf("failed to encode instructions with token oriented object notation: %v", err)
-
-				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-					"error":   constants.InternalServerError,
-					"details": constants.InternalServerErrorDetails,
-				})
-			}
+			systemPrompt := strings.ReplaceAll(rawSystemPrompt, "~", "`")
 
 			c.Set("Content-Type", "text/event-stream")
 			c.Set("Cache-Control", "no-cache")
@@ -292,7 +263,7 @@ FROM columns_array, data_array;`,
 
 				streamParams := openaiResponses.ResponseNewParams{
 					Model:        openai.ChatModelGPT5_1Codex,
-					Instructions: openai.String(encodedInstructions),
+					Instructions: openai.String(systemPrompt),
 					Input: openaiResponses.ResponseNewParamsInputUnion{
 						OfString: openai.String(dynamicQuery.Prompt),
 					},
