@@ -8,7 +8,6 @@ import (
 	"github.com/connor-davis/zingfibre-core/internal/models/system"
 	"github.com/connor-davis/zingfibre-core/internal/postgres"
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
@@ -166,23 +165,12 @@ func (r *DynamicQueriesRouter) GetDynamicQueryResultsRoute() system.Route {
 				})
 			}
 
-			var dynamicQueryResultString string
+			var dynamicQueryResult string
 
 			row := r.Trino.QueryRow(dynamicQuery.Query.String)
 
-			if err := row.Scan(&dynamicQueryResultString); err != nil {
+			if err := row.Scan(&dynamicQueryResult); err != nil {
 				log.Errorf("🔥 Error scanning dynamic query results: %s", err.Error())
-
-				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-					"error":   constants.InternalServerError,
-					"details": constants.InternalServerErrorDetails,
-				})
-			}
-
-			var dynamicQueryResult system.DynamicQueryResult
-
-			if err := json.Unmarshal([]byte(dynamicQueryResultString), &dynamicQueryResult); err != nil {
-				log.Errorf("🔥 Error unmarshaling dynamic query results: %s", err.Error())
 
 				return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 					"error":   constants.InternalServerError,
