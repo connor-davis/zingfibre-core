@@ -23,6 +23,7 @@ import {
 import { ArrowLeftIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { usePapaParse } from 'react-papaparse';
 
 import { toast } from 'sonner';
 
@@ -115,6 +116,7 @@ export const Route = createFileRoute('/dynamic-reports/$id')({
 
 function RouteComponent() {
   const router = useRouter();
+  const { readString } = usePapaParse();
 
   const { id } = Route.useParams();
   const { dynamicQuery } = Route.useLoaderData();
@@ -261,7 +263,16 @@ function RouteComponent() {
 
   useEffect(() => {
     const disposeable = setTimeout(() => {
-      console.log(dynamicQueryResults);
+      const data = ((dynamicQueryResults?.data ?? {}) as { data: string }).data;
+
+      readString(data, {
+        worker: true,
+        complete: (results) => {
+          console.log('---------------------------');
+          console.log(results);
+          console.log('---------------------------');
+        },
+      });
     }, 0);
 
     return () => {
