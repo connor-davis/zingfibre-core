@@ -24,6 +24,7 @@ import {
 import { ArrowLeftIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { CSVReader } from 'react-papaparse';
 
 import { toast } from 'sonner';
 
@@ -260,17 +261,29 @@ function RouteComponent() {
     };
   }, [status]);
 
+  useEffect(() => {
+    const disposeable = setTimeout(() => {
+      console.log(dynamicQueryResults);
+    }, 0);
+
+    return () => {
+      clearTimeout(disposeable);
+    };
+  }, [dynamicQueryResults]);
+
   const table = useReactTable({
-    data: ((dynamicQueryResults?.data ?? {}) as DynamicQueryResult).data,
-    columns: dynamicQueryResults?.data
-      ? (((dynamicQueryResults?.data ?? {}) as DynamicQueryResult).columns.map(
-          (column) => ({
-            accessorKey: column.name,
-            header: () => <Label>{column.label}</Label>,
-            cell: ({ row }) => <Label>{row.getValue(column.name)}</Label>,
-          })
-        ) as ColumnDef<unknown, unknown>[])
-      : [],
+    // data: ((dynamicQueryResults?.data ?? {}) as DynamicQueryResult).data,
+    // columns: dynamicQueryResults?.data
+    //   ? (((dynamicQueryResults?.data ?? {}) as DynamicQueryResult).columns.map(
+    //       (column) => ({
+    //         accessorKey: column.name,
+    //         header: () => <Label>{column.label}</Label>,
+    //         cell: ({ row }) => <Label>{row.getValue(column.name)}</Label>,
+    //       })
+    //     ) as ColumnDef<unknown, unknown>[])
+    //   : [],
+    data: [],
+    columns: [],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
