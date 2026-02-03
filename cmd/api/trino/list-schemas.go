@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -12,6 +13,8 @@ type ListSchemasParams struct {
 }
 
 func (t *trino) ListSchemas(ctx context.Context, request *mcp.CallToolRequest, params ListSchemasParams) (*mcp.CallToolResult, any, error) {
+	log.Infof("Listing schemas...")
+
 	row := t.db.QueryRow(fmt.Sprintf(`SELECT
     ARRAY_JOIN(
         ARRAY_AGG(schema_name),

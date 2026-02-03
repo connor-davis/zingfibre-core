@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
 func (t *trino) ListCatalogs(ctx context.Context, request *mcp.CallToolRequest, params any) (*mcp.CallToolResult, any, error) {
+	log.Infof("Listing catalogs...")
+
 	row := t.db.QueryRow(`SELECT
     ARRAY_JOIN(
         -- 1. Aggregate all catalog_name values into an array

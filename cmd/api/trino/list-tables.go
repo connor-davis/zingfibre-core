@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -13,6 +14,8 @@ type ListTablesParams struct {
 }
 
 func (t *trino) ListTables(ctx context.Context, request *mcp.CallToolRequest, params ListTablesParams) (*mcp.CallToolResult, any, error) {
+	log.Infof("Listing tables...")
+
 	row := t.db.QueryRow(fmt.Sprintf(`WITH params AS (
   SELECT '%s' AS schema_name, '%s' AS catalog_name
 ),

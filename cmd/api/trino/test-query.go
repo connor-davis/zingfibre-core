@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -12,7 +13,11 @@ type TestQueryParams struct {
 }
 
 func (t *trino) TestQuery(context context.Context, request *mcp.CallToolRequest, params TestQueryParams) (*mcp.CallToolResult, any, error) {
+	log.Infof("Testing queryt...")
+
 	row := t.db.QueryRow(params.Query)
+
+	log.Infof("Query being tested:\n%s", params.Query)
 
 	var result string
 
