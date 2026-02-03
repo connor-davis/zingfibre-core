@@ -10,7 +10,6 @@ import {
   useRouter,
 } from '@tanstack/react-router';
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
@@ -24,7 +23,6 @@ import {
 import { ArrowLeftIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { CSVReader } from 'react-papaparse';
 
 import { toast } from 'sonner';
 
