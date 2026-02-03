@@ -262,7 +262,7 @@ FROM csv_rows;
 				}
 
 				streamParams := openaiResponses.ResponseNewParams{
-					Model:        openai.ChatModelGPT5_1Codex,
+					Model:        openai.ChatModelGPT5Nano,
 					Instructions: openai.String(systemPrompt),
 					Input: openaiResponses.ResponseNewParamsInputUnion{
 						OfString: openai.String(dynamicQuery.Prompt),
