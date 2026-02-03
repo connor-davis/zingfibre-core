@@ -363,7 +363,7 @@ function RouteComponent() {
               </div>
             )}
 
-            {status === 'complete' && (
+            {/*{status === 'complete' && (
               <div className="flex flex-col w-full h-full gap-3 overflow-hidden">
                 <div className="flex flex-col w-full h-auto border rounded-md bg-accent overflow-y-auto">
                   <Table>
@@ -423,7 +423,7 @@ function RouteComponent() {
 
                 <DataTablePagination table={table} />
               </div>
-            )}
+            )}*/}
           </div>
         </ResizablePanel>
 
