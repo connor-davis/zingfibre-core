@@ -285,7 +285,7 @@ SELECT
   'String Column,Formatted Date,Is Active,Product ID' || chr(10) ||
   -- 2. Aggregate the data rows with a newline character
   ARRAY_JOIN(ARRAY_AGG(row_line), chr(10)) AS csv_output
-FROM csv_rows;
+FROM csv_rows
 ~~~
 `
 
