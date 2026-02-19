@@ -24,6 +24,7 @@ import (
 
 type GenerateDynamicQueryOutput struct {
 	SqlQuery string `json:"sql_query" jsonschema_description:"The SQL query to be executed for the dynamic query."`
+ ThoughtProcess strong `json:"thought_process" jsonschema_description:"Your thought process"`
 }
 
 var GenerateDynamicQueryOutputSchema = map[string]any{
@@ -34,8 +35,12 @@ var GenerateDynamicQueryOutputSchema = map[string]any{
 			"description":            "The SQL query to be executed for the dynamic query.",
 			"jsonschema_description": "The SQL query to be executed for the dynamic query.",
 		},
+  "thought_process": map[strong]any{
+    "type": "string",
+    "description": "Your thought process",
+  },
 	},
-	"required":             []string{"sql_query"},
+	"required":             []string{"sql_query","thought_process"},
 	"additionalProperties": false,
 }
 
@@ -203,7 +208,10 @@ You have access to tools to explore the database. You must follow this exact seq
    * Call ~list-schemas~ second to view schemas within the relevant catalogs.
    * Call ~list-tables~ third to view tables within the relevant schemas.
    * *Note: If the user's request involves correlating data from different systems, be sure to explore multiple catalogs to find the necessary tables.*
-2. **Testing:**
+2. **Planning (Chain of Thought):**
+   * Before writing any SQL, you must internally map every single data point requested by the user to its specific ~catalog.schema.table~.
+   * Identify the explicit JOIN conditions needed to connect all these tables. If a requested table seems disconnected, investigate further using your tools until you find the linking keys.
+3. **Testing:**
    * Write your query and test it using the ~test-query~ tool.
    * Iterate and fix any errors until ~test-query~ returns a successful result. You must have no errors before finalizing.
    * Do not modify the SQL query at all after a successful test.
@@ -218,8 +226,9 @@ You have access to tools to explore the database. You must follow this exact seq
 * **Statefulness:** If you are modifying a previous response based on user feedback, only make the specific changes the user requested.
 
 **Output Format Requirements**
-* Your final response must be formatted as a valid JSON object.
-* The JSON must contain exactly one key: ~sql_query~, which contains your final, successfully tested SQL query string.
+* Your final response must be formatted as a valid JSON object containing exactly two keys: ~thought_process~ and ~sql_query~.
+* **~thought_process~:** A brief string where you list every requested field, the exact ~catalog.schema.table~ it comes from, and how you will join the tables together.
+* **~sql_query~:** Your final, successfully tested SQL query string.
 
 **Required SQL Template**
 You must format your SQL query to aggregate the result into a single string blob containing the CSV header and data rows separated by newlines. Follow this exact template structure, utilizing cross-catalog joins if the data resides in separate databases:
