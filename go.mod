@@ -12,7 +12,7 @@ require (
 	github.com/gofiber/storage/postgres/v2 v2.0.3
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.5
-	github.com/mateuszkardas/toon-go v0.1.0
+	github.com/joho/godotenv v1.5.1
 	github.com/modelcontextprotocol/go-sdk v1.1.0
 	github.com/openai/openai-go/v3 v3.9.0
 	github.com/pquerna/otp v1.5.0

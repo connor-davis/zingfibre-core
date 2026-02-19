@@ -10,6 +10,7 @@ import {
   useRouter,
 } from '@tanstack/react-router';
 import {
+  type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
@@ -117,6 +118,9 @@ export const Route = createFileRoute('/dynamic-reports/$id')({
 function RouteComponent() {
   const router = useRouter();
   const { readString } = usePapaParse();
+
+  const [columns, setColumns] = useState([]);
+  const [data, setData] = useState([]);
 
   const { id } = Route.useParams();
   const { dynamicQuery } = Route.useLoaderData();
@@ -263,16 +267,15 @@ function RouteComponent() {
 
   useEffect(() => {
     const disposeable = setTimeout(() => {
-      console.log(dynamicQueryResults);
-
       const data = ((dynamicQueryResults?.data ?? {}) as { data: string }).data;
 
       readString(data, {
         worker: true,
+        header: true,
         complete: (results) => {
-          console.log('---------------------------');
           console.log(results);
-          console.log('---------------------------');
+          // setData(results);
+          // setColumns(Object.keys(results[0] ?? {}));
         },
       });
     }, 0);
@@ -283,18 +286,12 @@ function RouteComponent() {
   }, [dynamicQueryResults]);
 
   const table = useReactTable({
-    // data: ((dynamicQueryResults?.data ?? {}) as DynamicQueryResult).data,
-    // columns: dynamicQueryResults?.data
-    //   ? (((dynamicQueryResults?.data ?? {}) as DynamicQueryResult).columns.map(
-    //       (column) => ({
-    //         accessorKey: column.name,
-    //         header: () => <Label>{column.label}</Label>,
-    //         cell: ({ row }) => <Label>{row.getValue(column.name)}</Label>,
-    //       })
-    //     ) as ColumnDef<unknown, unknown>[])
-    //   : [],
-    data: [],
-    columns: [],
+    data: data,
+    columns: columns.map((column) => ({
+      accessorKey: column,
+      header: () => <Label>{column}</Label>,
+      cell: ({ row }) => <Label>{row.getValue(column)}</Label>,
+    })) as ColumnDef<unknown, unknown>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -376,7 +373,7 @@ function RouteComponent() {
               </div>
             )}
 
-            {/*{status === 'complete' && (
+            {status === 'complete' && (
               <div className="flex flex-col w-full h-full gap-3 overflow-hidden">
                 <div className="flex flex-col w-full h-auto border rounded-md bg-accent overflow-y-auto">
                   <Table>
@@ -436,7 +433,7 @@ function RouteComponent() {
 
                 <DataTablePagination table={table} />
               </div>
-            )}*/}
+            )}
           </div>
         </ResizablePanel>
 
