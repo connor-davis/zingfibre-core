@@ -263,6 +263,8 @@ function RouteComponent() {
 
   useEffect(() => {
     const disposeable = setTimeout(() => {
+      console.log(dynamicQueryResults);
+
       const data = ((dynamicQueryResults?.data ?? {}) as { data: string }).data;
 
       readString(data, {
