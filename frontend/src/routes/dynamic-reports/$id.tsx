@@ -26,6 +26,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { usePapaParse } from 'react-papaparse';
 
+import { type ParseResult } from 'papaparse';
 import { toast } from 'sonner';
 
 import {
@@ -119,8 +120,8 @@ function RouteComponent() {
   const router = useRouter();
   const { readString } = usePapaParse();
 
-  const [columns, setColumns] = useState([]);
-  const [data, setData] = useState([]);
+  const [columns, setColumns] = useState<string[]>([]);
+  const [data, setData] = useState<Record<string, string>[]>([]);
 
   const { id } = Route.useParams();
   const { dynamicQuery } = Route.useLoaderData();
@@ -272,10 +273,9 @@ function RouteComponent() {
       readString(data, {
         worker: true,
         header: true,
-        complete: (results) => {
-          console.log(results);
-          // setData(results);
-          // setColumns(Object.keys(results[0] ?? {}));
+        complete: ({ data }: ParseResult<Record<string, string>>) => {
+          setData(data);
+          setColumns(Object.keys(data[0] ?? {}));
         },
       });
     }, 0);
@@ -291,7 +291,7 @@ function RouteComponent() {
       accessorKey: column,
       header: () => <Label>{column}</Label>,
       cell: ({ row }) => <Label>{row.getValue(column)}</Label>,
-    })) as ColumnDef<unknown, unknown>[],
+    })) as ColumnDef<Record<string, string>, string>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
