@@ -246,8 +246,6 @@ function RouteComponent() {
         duration: 2000,
       });
 
-      generateDynamicQuery();
-
       return router.invalidate();
     },
   });
