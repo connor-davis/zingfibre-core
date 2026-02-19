@@ -271,7 +271,12 @@ function RouteComponent() {
       if (dynamicQueryResults === undefined || dynamicQueryResults === null)
         return;
 
+      console.log('We have results');
+
       const data = ((dynamicQueryResults?.data ?? {}) as { data: string }).data;
+
+      console.log(dynamicQueryResults.data);
+      console.log(data);
 
       readString(data, {
         header: true,
