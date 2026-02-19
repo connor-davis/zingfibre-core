@@ -268,7 +268,7 @@ function RouteComponent() {
 
   useEffect(() => {
     const disposeable = setTimeout(() => {
-      console.log(dynamicQueryResults);
+      if (!dynamicQueryResults) return;
 
       const data = ((dynamicQueryResults?.data ?? {}) as { data: string }).data;
 
