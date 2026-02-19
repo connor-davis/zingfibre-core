@@ -24,7 +24,7 @@ import (
 
 type GenerateDynamicQueryOutput struct {
 	SqlQuery string `json:"sql_query" jsonschema_description:"The SQL query to be executed for the dynamic query."`
- ThoughtProcess strong `json:"thought_process" jsonschema_description:"Your thought process"`
+ ThoughtProcess string `json:"thought_process" jsonschema_description:"Your thought process"`
 }
 
 var GenerateDynamicQueryOutputSchema = map[string]any{
