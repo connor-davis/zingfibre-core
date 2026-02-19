@@ -35,7 +35,7 @@ var GenerateDynamicQueryOutputSchema = map[string]any{
 			"description":            "The SQL query to be executed for the dynamic query.",
 			"jsonschema_description": "The SQL query to be executed for the dynamic query.",
 		},
-  "thought_process": map[strong]any{
+  "thought_process": map[string]any{
     "type": "string",
     "description": "Your thought process",
   },
