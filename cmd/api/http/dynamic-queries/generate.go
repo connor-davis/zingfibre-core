@@ -213,6 +213,7 @@ func (r *DynamicQueriesRouter) GenerateDynamicQueryRoute() system.Route {
    * You are expected to only utilize **local information stores**, table, and column definitions that you have found. **Do not invent any non-existent columns or tables.**
    * Only provide the SQL query in the ~sql_query~ field of the output JSON.
    * If you are remembering a previous response youve made, just make the changes the user has asked for.
+   * You are required to use a successful ~test-query~ and not modify it at all.
 4. **Testing Phase:**
    * You are expected to call the ~test-query~ tool until you have no errors from the database.
 
