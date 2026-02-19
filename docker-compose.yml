@@ -64,21 +64,6 @@ services:
     environment:
       - TZ=Africa/Johannesburg
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_CONFIG_ENHANCED_REFERER_CHECK=False
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-      - TZ=Africa/Johannesburg
-    ports:
-      - "8080:80"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    depends_on:
-      db:
-        condition: service_healthy
-
   trino:
     env_file:
       - .env
@@ -90,4 +75,3 @@ services:
 
 volumes:
   db-data:
-  pgadmin-data:
