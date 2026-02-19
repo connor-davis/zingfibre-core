@@ -273,7 +273,6 @@ function RouteComponent() {
       const data = ((dynamicQueryResults?.data ?? {}) as { data: string }).data;
 
       readString(data, {
-        worker: true,
         header: true,
         complete: ({ data }: ParseResult<Record<string, string>>) => {
           setData(data);
