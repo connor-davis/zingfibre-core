@@ -415,12 +415,7 @@ function RouteComponent() {
                       ) : (
                         <TableRow>
                           <TableCell
-                            colSpan={
-                              (
-                                (dynamicQueryResults?.data ??
-                                  {}) as DynamicQueryResult
-                              ).data.length
-                            }
+                            colSpan={columns.length}
                             className="h-24 text-center"
                           >
                             No results.
