@@ -158,28 +158,6 @@ function RouteComponent() {
     },
   });
 
-  const updateDynamicQuery = useMutation({
-    ...putApiDynamicQueriesByIdMutation({
-      client: apiClient,
-      path: {
-        id,
-      },
-    }),
-    onError: (error: ErrorResponse) =>
-      toast.error(error.error, {
-        description: error.details,
-        duration: 2000,
-      }),
-    onSuccess: () => {
-      toast.success('Success', {
-        description: 'The dynamic query has been updated.',
-        duration: 2000,
-      });
-
-      return router.invalidate();
-    },
-  });
-
   const generateDynamicQuery = async () => {
     setStatus('in_progress');
 
@@ -249,6 +227,30 @@ function RouteComponent() {
       abortControllerRef.current = null;
     }
   };
+
+  const updateDynamicQuery = useMutation({
+    ...putApiDynamicQueriesByIdMutation({
+      client: apiClient,
+      path: {
+        id,
+      },
+    }),
+    onError: (error: ErrorResponse) =>
+      toast.error(error.error, {
+        description: error.details,
+        duration: 2000,
+      }),
+    onSuccess: () => {
+      toast.success('Success', {
+        description: 'The dynamic query has been updated.',
+        duration: 2000,
+      });
+
+      generateDynamicQuery();
+
+      return router.invalidate();
+    },
+  });
 
   useEffect(() => {
     const disposeable = setTimeout(() => {
