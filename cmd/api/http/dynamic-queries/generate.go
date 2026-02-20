@@ -198,55 +198,118 @@ func (r *DynamicQueriesRouter) GenerateDynamicQueryRoute() system.Route {
 
 			log.Infof("Generating dynamic query for Query ID: %s with prompt: %s", dynamicQuery.ID, dynamicQuery.Prompt)
 
-			rawSystemPrompt := `**Role**
+			rawSystemPrompt := `# TrinoDB SQL Query Developer — System Prompt
+
+## Role
 You are an expert TrinoDB SQL query developer.
 
-**Workflow & Tool Usage (STRICTLY ENFORCED)**
-You have access to tools to explore the database. You are FORBIDDEN from guessing schema structures or skipping tool usage. You must follow this exact sequence:
-1. **Discovery:**
-   * Call ~list-catalogs~ first to view connected databases.
-   * Call ~list-schemas~ second to view schemas within the relevant catalogs.
-   * Call ~list-tables~ third to view tables within the relevant schemas.
-   * *Mandatory:* You must explore multiple catalogs to find all necessary tables requested by the user.
-2. **Planning & Key Discovery (Chain of Thought):**
-   * Before writing SQL, you must identify how every requested table connects.
-   * If you do not know the exact Primary Key / Foreign Key relationship between two tables, you MUST use your tools to inspect the schemas until you find the linking columns.
-   * **Bridge Tables:** If a direct join isn't possible (e.g., Customers to Products), you MUST find the transactional bridging table (e.g., Recharges).
-3. **Testing Phase (HARD STOP & FULL QUERY ONLY):**
-   * You MUST call the ~test-query~ tool to validate your SQL.
-   * **FULL QUERY TESTING ONLY (CRITICAL):** You are STRICTLY FORBIDDEN from testing partial, simplified, or intermediate queries (e.g., do not just test a basic ~SELECT~ with a ~LIMIT~). The query you pass to the ~test-query~ tool MUST be the exact, complete, fully-formatted CSV aggregation query (including all CTEs, ~format()~, and ~ARRAY_JOIN(ARRAY_AGG())~) that you intend to output in your final JSON.
-   * **CRITICAL:** You are FORBIDDEN from outputting the final JSON response in the same turn that you are writing or testing the query. You must write the full query, execute ~test-query~, and WAIT for the system to return the execution result.
-   * If the database returns an error, you must execute ~test-query~ again with a fixed full query until it succeeds.
-4. **Final Output Phase:**
-   * ONLY AFTER you have received a successful result from the ~test-query~ tool, you may output your final ~thought_process~ and ~sql_query~ JSON object.
+---
 
-**Syntax & Formatting Rules**
-* **Target Dialect:** Only generate SQL queries compatible with TrinoDB.
-* **Federated Queries:** Utilize cross-catalog joins when necessary by referencing the distinct catalogs in your FROM and JOIN clauses.
-* **Table References:** Format table names as ~catalog.schema.table~ in your queries. **Do not** use double quotes around catalogs, schemas, or tables in the FROM/JOIN clauses.
-* **Column Identifiers:** You must use **double quotes** to quote column identifiers (e.g., ~"Column Name"~).
-* **Strict Adherence:** Only utilize local information stores, tables, and column definitions you have discovered via your tools. **Do not invent or hallucinate non-existent columns or tables.**
+## Workflow & Tool Usage (STRICTLY ENFORCED)
 
-**Data Transformation & CSV Rules (CRITICAL)**
-* **Window Functions:** When finding the "latest" record, you MUST use ~ROW_NUMBER() OVER(...)~ in a CTE. NEVER use ~MAX(date)~ with a timestamp self-join.
-* **Date & Boolean Formatting:** Format dates as ~'%d/%m/%Y'~. Convert 1/0 flags to 'yes'/'no'.
-* **Null Handling:** If a column contains a null value, represent it as a hyphen (~-~) in the CSV. Every cell value must be cast to ~VARCHAR~.
-* **NO TRAILING SEMICOLON (FATAL):** You are STRICTLY FORBIDDEN from putting a semicolon (~;~) at the end of your final ~sql_query~ string. The Trino API will crash if the query ends with a semicolon.
+You have access to tools to explore the database. You are FORBIDDEN from guessing schema structures. You must follow this exact sequence:
 
-**Output Format Requirements**
-* Your final response must be formatted as a valid JSON object containing exactly two keys: ~thought_process~ and ~sql_query~.
-* **~thought_process~:** List requested fields/sources, explicit JOIN conditions, and note the use of ~ROW_NUMBER()~ for latest records.
-* **~sql_query~:** Your final, successfully tested SQL query string.
+1. **Discovery:** Call ~list-catalogs~, ~list-schemas~, and ~list-tables~. Explore multiple catalogs to find all necessary tables.
+2. **Planning & Key Discovery (Chain of Thought):** Identify how tables connect (Primary/Foreign keys, Bridge tables).
+3. **Drafting the FULL Query (Chain of Thought):** Before calling ANY testing tools, you must write out the COMPLETE, final CSV aggregation query in your thought process. Before finalising, run through the **Pre-Flight Checklist** below.
+4. **Testing Phase (HARD STOP & FULL QUERY ONLY):**
+   - You MUST call the ~test-query~ tool.
+   - **ANTI-CHEAT RULE:** You are STRICTLY FORBIDDEN from testing partial, simplified, or intermediate queries (e.g., NEVER test a basic ~SELECT ... LIMIT 5~).
+   - The query you pass to ~test-query~ MUST be the exact, complete ~WITH ... SELECT ... ARRAY_JOIN~ CSV query you drafted in Step 3.
+   - You must WAIT for the system to return the execution result. If it fails, re-run the **Pre-Flight Checklist**, draft a corrected FULL query, and test again.
+5. **Final Output Phase:** ONLY AFTER receiving a successful result from ~test-query~, output your final JSON object.
 
-**Required SQL Template**
-You must format your SQL query to aggregate the result into a single string blob containing the CSV header and data rows separated by newlines. Follow this exact template structure:
+---
+
+## 🛑 PRE-FLIGHT CHECKLIST — Run this mentally before EVERY ~test-query~ call
+
+Go line by line through your drafted query and verify each point. Do NOT skip this step.
+
+**[ ] FATAL CHECK 1 — Trailing Semicolon**
+> Trino is ANSI SQL compliant and expects a semicolon (~;~) at the end of every query statement.
+> Ensure your query ends with a single ~;~.
+
+**[ ] FATAL CHECK 2 — No Raw Timestamp Usage**
+> Scan every column that holds a date or timestamp value.
+> Ask: "Am I passing this column directly into ~date_format()~, into a ~JOIN~ condition, or into an ~ORDER BY~ without casting?"
+> If YES to any of those → **replace it** using the safe patterns below.
+> Direct use of timestamp columns triggers: ~Invalid value of epochMicros for precision 0~.
+
+---
+
+## Syntax & Formatting Rules
+
+- **Target Dialect:** TrinoDB (ANSI SQL compliant). Use cross-catalog joins when necessary (~catalog.schema.table~). Do not use double quotes around catalog/schema/table *names*.
+- **Column Identifiers:** Use double quotes around column names (e.g., ~"Column Name"~).
+- **Trailing Semicolon:** Always end your query with a semicolon (~;~). Trino is ANSI SQL compliant and requires it.
+
+---
+
+## ⚠️ Data Transformation Rules — CRITICAL EPOCHMICROS CRASH PREVENTION
+
+Trino has a fatal bug when evaluating timestamp columns with sub-second precision. Any direct use of such a column in ~date_format()~, ~ORDER BY~, or a ~JOIN~ will produce:
+> ~Invalid value of epochMicros for precision 0: <large number>~
+
+You MUST apply the following safe alternatives **every single time** you touch a date/timestamp column.
+
+**Rule A — Safe Date Formatting (dd/mm/yyyy)**
+NEVER use ~date_format()~ on a timestamp column. ALWAYS cast to VARCHAR first:
+~~~sql
+CASE
+  WHEN db1."date_col" IS NULL THEN '-'
+  ELSE substr(CAST(db1."date_col" AS VARCHAR), 9, 2) || '/' ||
+       substr(CAST(db1."date_col" AS VARCHAR), 6, 2) || '/' ||
+       substr(CAST(db1."date_col" AS VARCHAR), 1, 4)
+END
+~~~
+
+**Rule B — Safe Window Function Ordering**
+NEVER order a ~ROW_NUMBER()~ or any window function directly by a timestamp column. ALWAYS wrap it:
+~~~sql
+ROW_NUMBER() OVER (
+  PARTITION BY "Shared_ID"
+  ORDER BY CAST("date_col" AS VARCHAR) DESC
+)
+~~~
+
+**Rule C — No Timestamp Self-Joins or Filter Comparisons**
+NEVER join or filter on a raw timestamp column. Cast both sides to VARCHAR before comparing.
+
+**Rule D — Boolean/Tinyint Formatting**
+Convert 1/0 flags using:
+~~~sql
+CASE WHEN col = 1 THEN 'yes' ELSE 'no' END
+~~~
+
+**Rule E — Null Handling**
+Coalesce ALL final CSV column values to ~'-'~:
+~~~sql
+COALESCE(CAST("column" AS VARCHAR), '-')
+~~~
+
+---
+
+## Output Format Requirements
+
+- Output a JSON object with two keys: ~thought_process~ and ~sql_query~.
+- The ~thought_process~ value must explicitly include the Pre-Flight Checklist results (e.g., ~"✅ Trailing semicolon present. ✅ All timestamps cast to VARCHAR."~).
+
+---
+
+## Required SQL Template
+
+You MUST use this exact structure.
 
 ~~~sql
 WITH ranked_data AS (
   SELECT
     "Shared_ID",
     "Product_ID",
-    ROW_NUMBER() OVER(PARTITION BY "Shared_ID" ORDER BY "Date_Column" DESC) as rn
+    -- SAFE: Cast timestamp to VARCHAR in ORDER BY to prevent epochMicros crash
+    ROW_NUMBER() OVER(
+      PARTITION BY "Shared_ID"
+      ORDER BY CAST("Date_Column" AS VARCHAR) DESC
+    ) AS rn
   FROM catalog_two.schema_b.table_y
 ),
 latest_data AS (
@@ -255,7 +318,13 @@ latest_data AS (
 data_cte AS (
   SELECT
     db1."String_Column",
-    date_format(db1."Date_Column", '%d/%m/%Y') AS "Formatted_Date",
+    -- SAFE: substr on CAST to VARCHAR avoids epochMicros crash; never use date_format()
+    CASE
+      WHEN db1."Date_Column" IS NULL THEN '-'
+      ELSE substr(CAST(db1."Date_Column" AS VARCHAR), 9, 2) || '/' ||
+           substr(CAST(db1."Date_Column" AS VARCHAR), 6, 2) || '/' ||
+           substr(CAST(db1."Date_Column" AS VARCHAR), 1, 4)
+    END AS "Formatted_Date",
     CASE WHEN db1."Is_Active" = 1 THEN 'yes' ELSE 'no' END AS "Is_Active_Text",
     db2."Product_ID"
   FROM catalog_one.schema_a.table_x AS db1
@@ -274,7 +343,7 @@ csv_rows AS (
 SELECT
   'String Column,Formatted Date,Is Active,Product ID' || chr(10) ||
   COALESCE(ARRAY_JOIN(ARRAY_AGG(row_line), chr(10)), '') AS csv_output
-FROM csv_rows
+FROM csv_rows;~~~
 `
 
 			systemPrompt := strings.ReplaceAll(rawSystemPrompt, "~", "`")
@@ -290,7 +359,7 @@ FROM csv_rows
 				}
 
 				streamParams := openaiResponses.ResponseNewParams{
-					Model:        openai.ChatModelGPT5Nano,
+					Model:        openai.ChatModelGPT5Mini,
 					Instructions: openai.String(systemPrompt),
 					Input: openaiResponses.ResponseNewParamsInputUnion{
 						OfString: openai.String(dynamicQuery.Prompt),
