@@ -165,6 +165,8 @@ func (r *DynamicQueriesRouter) GetDynamicQueryResultsRoute() system.Route {
 				})
 			}
 
+			log.Infof("Running query: %s", dynamicQuery.Query.String)
+
 			var dynamicQueryResult string
 
 			row := r.Trino.QueryRow(strings.TrimSuffix(dynamicQuery.Query.String, ";"))
