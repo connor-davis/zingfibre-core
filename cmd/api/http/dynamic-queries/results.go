@@ -165,7 +165,7 @@ func (r *DynamicQueriesRouter) GetDynamicQueryResultsRoute() system.Route {
 				})
 			}
 
-			query := strings.TrimSuffix(dynamicQuery.Query.String, ";")
+			query := strings.TrimSuffix(strings.TrimSuffix(dynamicQuery.Query.String, "\n"), ";")
 
 			log.Infof("Running query: %s", query)
 
