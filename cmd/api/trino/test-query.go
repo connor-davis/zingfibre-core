@@ -13,7 +13,7 @@ type TestQueryParams struct {
 }
 
 func (t *trino) TestQuery(context context.Context, request *mcp.CallToolRequest, params TestQueryParams) (*mcp.CallToolResult, any, error) {
-	log.Infof("Testing queryt...")
+	log.Info("Testing query...")
 
 	row := t.db.QueryRow(params.Query)
 

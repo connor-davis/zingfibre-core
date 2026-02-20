@@ -14,7 +14,7 @@ type ListTablesParams struct {
 }
 
 func (t *trino) ListTables(ctx context.Context, request *mcp.CallToolRequest, params ListTablesParams) (*mcp.CallToolResult, any, error) {
-	log.Infof("Listing tables...")
+	log.Info("Listing tables...")
 
 	row := t.db.QueryRow(fmt.Sprintf(`WITH params AS (
   SELECT '%s' AS schema_name, '%s' AS catalog_name

@@ -13,7 +13,7 @@ type ListSchemasParams struct {
 }
 
 func (t *trino) ListSchemas(ctx context.Context, request *mcp.CallToolRequest, params ListSchemasParams) (*mcp.CallToolResult, any, error) {
-	log.Infof("Listing schemas...")
+	log.Info("Listing schemas...")
 
 	row := t.db.QueryRow(fmt.Sprintf(`SELECT
     ARRAY_JOIN(

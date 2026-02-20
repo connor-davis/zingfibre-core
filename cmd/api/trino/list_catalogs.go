@@ -9,7 +9,7 @@ import (
 )
 
 func (t *trino) ListCatalogs(ctx context.Context, request *mcp.CallToolRequest, params any) (*mcp.CallToolResult, any, error) {
-	log.Infof("Listing catalogs...")
+	log.Info("Listing catalogs...")
 
 	row := t.db.QueryRow(`SELECT
     ARRAY_JOIN(
