@@ -167,7 +167,7 @@ func (r *DynamicQueriesRouter) GetDynamicQueryResultsRoute() system.Route {
 
 			var dynamicQueryResult string
 
-			row := r.Trino.QueryRow(dynamicQuery.Query.String)
+			row := r.Trino.QueryRow(strings.TrimSuffix(dynamicQuery.Query.String, ";"))
 
 			if err := row.Scan(&dynamicQueryResult); err != nil {
 				log.Errorf("🔥 Error scanning dynamic query results: %s", err.Error())
