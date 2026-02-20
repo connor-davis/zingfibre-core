@@ -23,8 +23,8 @@ import (
 )
 
 type GenerateDynamicQueryOutput struct {
-	SqlQuery string `json:"sql_query" jsonschema_description:"The SQL query to be executed for the dynamic query."`
- ThoughtProcess string `json:"thought_process" jsonschema_description:"Your thought process"`
+	SqlQuery       string `json:"sql_query" jsonschema_description:"The SQL query to be executed for the dynamic query."`
+	ThoughtProcess string `json:"thought_process" jsonschema_description:"Your thought process"`
 }
 
 var GenerateDynamicQueryOutputSchema = map[string]any{
@@ -35,12 +35,12 @@ var GenerateDynamicQueryOutputSchema = map[string]any{
 			"description":            "The SQL query to be executed for the dynamic query.",
 			"jsonschema_description": "The SQL query to be executed for the dynamic query.",
 		},
-  "thought_process": map[string]any{
-    "type": "string",
-    "description": "Your thought process",
-  },
+		"thought_process": map[string]any{
+			"type":        "string",
+			"description": "Your thought process",
+		},
 	},
-	"required":             []string{"sql_query","thought_process"},
+	"required":             []string{"sql_query", "thought_process"},
 	"additionalProperties": false,
 }
 
@@ -210,11 +210,11 @@ You have access to tools to explore the database. You are FORBIDDEN from guessin
    * *Mandatory:* You must explore multiple catalogs to find all necessary tables requested by the user.
 2. **Planning & Key Discovery (Chain of Thought):**
    * Before writing SQL, you must identify how every requested table connects.
-   * If you do not know the exact Primary Key / Foreign Key relationship between two tables, you MUST use your tools to inspect the schemas until you find the linking columns. 
+   * If you do not know the exact Primary Key / Foreign Key relationship between two tables, you MUST use your tools to inspect the schemas until you find the linking columns.
    * **Bridge Tables:** If a direct join isn't possible (e.g., Customers to Products), you MUST find the transactional bridging table (e.g., Recharges).
 3. **Testing Phase (HARD STOP):**
-   * You MUST call the ~test-query~ tool to validate your SQL. 
-   * **CRITICAL:** You are FORBIDDEN from outputting the final JSON response in the same turn that you are writing or testing the query. You must write the query, execute ~test-query~, and WAIT for the system to return the execution result. 
+   * You MUST call the ~test-query~ tool to validate your SQL.
+   * **CRITICAL:** You are FORBIDDEN from outputting the final JSON response in the same turn that you are writing or testing the query. You must write the query, execute ~test-query~, and WAIT for the system to return the execution result.
    * If the database returns an error (like a syntax error or mismatched input), you must execute ~test-query~ again with a fixed query until it succeeds.
 4. **Final Output Phase:**
    * ONLY AFTER you have received a successful result from the ~test-query~ tool, you may output your final ~thought_process~ and ~sql_query~ JSON object.
@@ -226,18 +226,15 @@ You have access to tools to explore the database. You are FORBIDDEN from guessin
 * **Column Identifiers:** You must use **double quotes** to quote column identifiers (e.g., ~"Column Name"~).
 * **Strict Adherence:** Only utilize local information stores, tables, and column definitions you have discovered via your tools. **Do not invent or hallucinate non-existent columns or tables.**
 
-**Data Transformation Rules (CRITICAL)**
-* **Window Functions & Timestamp Crashes:** Trino FULLY SUPPORTS Window Functions. When finding the "latest" or "last" record in a one-to-many relationship, you MUST use ~ROW_NUMBER() OVER(PARTITION BY ... ORDER BY ...)~ inside a CTE. **NEVER** use ~MAX(date)~ and perform a self-join on a timestamp column. Self-joining on timestamps causes fatal ~epochMicros~ precision crashes in Trino.
-* **Date Formatting:** All timestamp or date columns must be formatted as strings using ~date_format("Column", '%d/%m/%Y')~ unless the user specifically requests a different format.
-* **Boolean/Tinyint Formatting:** Any boolean or tinyint flag columns (e.g., 1 or 0) must be converted to human-readable text using ~CASE WHEN "Column" = 1 THEN 'yes' ELSE 'no' END~.
-* **Null Handling:** If a column contains a null value, you must represent it as a hyphen (~-~) in the final CSV output. Every final cell value must be cast to ~VARCHAR~.
+**Data Transformation & CSV Rules (CRITICAL)**
+* **Window Functions:** When finding the "latest" record, you MUST use ~ROW_NUMBER() OVER(...)~ in a CTE. NEVER use ~MAX(date)~ with a timestamp self-join.
+* **Date & Boolean Formatting:** Format dates as ~'%d/%m/%Y'~. Convert 1/0 flags to 'yes'/'no'.
+* **Null Handling:** If a column contains a null value, represent it as a hyphen (~-~) in the CSV. Every cell value must be cast to ~VARCHAR~.
+* **NO TRAILING SEMICOLON (FATAL):** You are STRICTLY FORBIDDEN from putting a semicolon (~;~) at the end of your final ~sql_query~ string. The Trino API will crash if the query ends with a semicolon.
 
 **Output Format Requirements**
 * Your final response must be formatted as a valid JSON object containing exactly two keys: ~thought_process~ and ~sql_query~.
-* **~thought_process~:** A string where you MUST list: 
-  1. Every requested field and its source table. 
-  2. The exact JOIN conditions for EVERY table.
-  3. Your strategy for handling any bridging tables or "latest" record filtering (explicitly noting the use of ~ROW_NUMBER()~).
+* **~thought_process~:** List requested fields/sources, explicit JOIN conditions, and note the use of ~ROW_NUMBER()~ for latest records.
 * **~sql_query~:** Your final, successfully tested SQL query string.
 
 **Required SQL Template**
@@ -245,8 +242,7 @@ You must format your SQL query to aggregate the result into a single string blob
 
 ~~~sql
 WITH ranked_data AS (
-  -- Example of safely getting the latest record to avoid epochMicros crashes
-  SELECT 
+  SELECT
     "Shared_ID",
     "Product_ID",
     ROW_NUMBER() OVER(PARTITION BY "Shared_ID" ORDER BY "Date_Column" DESC) as rn
@@ -258,20 +254,14 @@ latest_data AS (
 data_cte AS (
   SELECT
     db1."String_Column",
-    -- Format dates explicitly
     date_format(db1."Date_Column", '%d/%m/%Y') AS "Formatted_Date",
-    -- Format booleans/tinyints explicitly
     CASE WHEN db1."Is_Active" = 1 THEN 'yes' ELSE 'no' END AS "Is_Active_Text",
     db2."Product_ID"
-  FROM catalog_one.schema_a.table_x AS db1 
-  LEFT JOIN latest_data AS db2 
-    ON db1."Shared_ID" = db2."Shared_ID"
-  -- Add any necessary WHERE clauses, etc.
+  FROM catalog_one.schema_a.table_x AS db1
+  LEFT JOIN latest_data AS db2 ON db1."Shared_ID" = db2."Shared_ID"
 ),
 csv_rows AS (
   SELECT
-    -- Format the rows as CSV strings.
-    -- IMPORTANT: Cast all columns to VARCHAR and coalesce nulls to '-'.
     format('%s,%s,%s,%s',
       COALESCE(CAST("String_Column" AS VARCHAR), '-'),
       COALESCE(CAST("Formatted_Date" AS VARCHAR), '-'),
@@ -281,12 +271,9 @@ csv_rows AS (
   FROM data_cte
 )
 SELECT
-  -- 1. Manually write the Header string based on selected columns
   'String Column,Formatted Date,Is Active,Product ID' || chr(10) ||
-  -- 2. Aggregate the data rows with a newline character
-  ARRAY_JOIN(ARRAY_AGG(row_line), chr(10)) AS csv_output
+  COALESCE(ARRAY_JOIN(ARRAY_AGG(row_line), chr(10)), '') AS csv_output
 FROM csv_rows
-~~~
 `
 
 			systemPrompt := strings.ReplaceAll(rawSystemPrompt, "~", "`")
