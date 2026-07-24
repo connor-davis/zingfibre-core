@@ -29,6 +29,8 @@ var ReportExpiringCustomerSchema = openapi3.NewSchema().WithProperties(map[strin
 	"LastPurchaseSpeed":    openapi3.NewStringSchema(),
 	"Expiration":           openapi3.NewStringSchema(),
 	"Address":              openapi3.NewStringSchema(),
+	"MDUBlock":             openapi3.NewStringSchema(),
+	"MDUUnitNumber":        openapi3.NewStringSchema(),
 }).NewRef()
 
 var ReportExpiringCustomersSchema = openapi3.NewArraySchema().WithItems(ReportExpiringCustomerSchema.Value).NewRef()

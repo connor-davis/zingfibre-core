@@ -435,6 +435,107 @@ export const columns = [
     cell: ({ row }) => <div>{row.getValue('Address')}</div>,
   },
   {
+    id: 'MDUBlock',
+    accessorKey: 'MDUBlock',
+    header: () => {
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('mdublock')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc') ? 'mdublock_asc' : 'mdublock_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+                sort:
+                  sort === 'mdublock_asc' ? 'mdublock_desc' : 'mdublock_asc',
+              }),
+            });
+          }}
+        >
+          MDU Block
+          {sort.startsWith('mdublock') ? (
+            sort === 'mdublock_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue('MDUBlock')}</div>,
+  },
+  {
+    id: 'MDUUnitNumber',
+    accessorKey: 'MDUUnitNumber',
+    header: () => {
+      const routerState = useRouterState();
+      const router = useRouter();
+
+      const { sort } = Route.useLoaderDeps();
+
+      return (
+        <Button
+          variant={'ghost'}
+          onClick={() => {
+            if (!sort.startsWith('mduunitnumber')) {
+              return router.navigate({
+                to: routerState.location.pathname,
+                search: (previous) => ({
+                  ...previous,
+                  sort: sort.endsWith('asc')
+                    ? 'mduunitnumber_asc'
+                    : 'mduunitnumber_desc',
+                }),
+              });
+            }
+
+            router.navigate({
+              to: routerState.location.pathname,
+              search: (previous) => ({
+                ...previous,
+
+                sort:
+                  sort === 'mduunitnumber_asc'
+                    ? 'mduunitnumber_desc'
+                    : 'mduunitnumber_asc',
+              }),
+            });
+          }}
+        >
+          MDU Unit Number
+          {sort.startsWith('mduunitnumber') ? (
+            sort === 'mduunitnumber_asc' ? (
+              <ChevronUpIcon className="size-4" />
+            ) : (
+              <ChevronDownIcon className="size-4" />
+            )
+          ) : (
+            ''
+          )}
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue('MDUUnitNumber')}</div>,
+  },
+  {
     id: 'Last Duration',
     accessorKey: 'LastPurchaseDuration',
     header: () => {

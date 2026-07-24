@@ -254,6 +254,12 @@ export const ReportExpiringCustomerSchema = {
     LastPurchaseSpeed: {
       type: 'string',
     },
+    MDUBlock: {
+      type: 'string',
+    },
+    MDUUnitNumber: {
+      type: 'string',
+    },
     PhoneNumber: {
       type: 'string',
     },
@@ -283,6 +289,12 @@ export const ReportExpiringCustomersSchema = {
         type: 'string',
       },
       LastPurchaseSpeed: {
+        type: 'string',
+      },
+      MDUBlock: {
+        type: 'string',
+      },
+      MDUUnitNumber: {
         type: 'string',
       },
       PhoneNumber: {
@@ -683,6 +695,12 @@ export const SuccessResponseSchema = {
             LastPurchaseSpeed: {
               type: 'string',
             },
+            MDUBlock: {
+              type: 'string',
+            },
+            MDUUnitNumber: {
+              type: 'string',
+            },
             PhoneNumber: {
               type: 'string',
             },
@@ -711,6 +729,12 @@ export const SuccessResponseSchema = {
                 type: 'string',
               },
               LastPurchaseSpeed: {
+                type: 'string',
+              },
+              MDUBlock: {
+                type: 'string',
+              },
+              MDUUnitNumber: {
                 type: 'string',
               },
               PhoneNumber: {

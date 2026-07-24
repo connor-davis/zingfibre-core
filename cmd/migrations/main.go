@@ -6,6 +6,7 @@ import (
 
 	"github.com/connor-davis/zingfibre-core/common"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/pressly/goose/v3"
 )
 

@@ -85,6 +85,8 @@ export type ReportExpiringCustomer = {
   FullName?: string;
   LastPurchaseDuration?: string;
   LastPurchaseSpeed?: string;
+  MDUBlock?: string;
+  MDUUnitNumber?: string;
   PhoneNumber?: string;
   RadiusUsername?: string;
 };
@@ -96,6 +98,8 @@ export type ReportExpiringCustomers = Array<{
   FullName?: string;
   LastPurchaseDuration?: string;
   LastPurchaseSpeed?: string;
+  MDUBlock?: string;
+  MDUUnitNumber?: string;
   PhoneNumber?: string;
   RadiusUsername?: string;
 }>;
@@ -224,6 +228,8 @@ export type SuccessResponse = {
         FullName?: string;
         LastPurchaseDuration?: string;
         LastPurchaseSpeed?: string;
+        MDUBlock?: string;
+        MDUUnitNumber?: string;
         PhoneNumber?: string;
         RadiusUsername?: string;
       }
@@ -234,6 +240,8 @@ export type SuccessResponse = {
         FullName?: string;
         LastPurchaseDuration?: string;
         LastPurchaseSpeed?: string;
+        MDUBlock?: string;
+        MDUUnitNumber?: string;
         PhoneNumber?: string;
         RadiusUsername?: string;
       }>
@@ -413,6 +421,8 @@ export type GetApiAnalyticsMonthlyStatisticsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -423,6 +433,8 @@ export type GetApiAnalyticsMonthlyStatisticsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -589,6 +601,8 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -599,6 +613,8 @@ export type GetApiAnalyticsRechargeTypeCountsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -754,6 +770,8 @@ export type GetApiAuthenticationCheckResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -764,6 +782,8 @@ export type GetApiAuthenticationCheckResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -936,6 +956,8 @@ export type PostApiAuthenticationLoginResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -946,6 +968,8 @@ export type PostApiAuthenticationLoginResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -1108,6 +1132,8 @@ export type PostApiAuthenticationLogoutResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -1118,6 +1144,8 @@ export type PostApiAuthenticationLogoutResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -1289,6 +1317,8 @@ export type PostApiAuthenticationMfaDisableResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -1299,6 +1329,8 @@ export type PostApiAuthenticationMfaDisableResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -1502,6 +1534,8 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -1512,6 +1546,8 @@ export type PostApiAuthenticationMfaVerifyResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -1684,6 +1720,8 @@ export type PostApiAuthenticationPasswordResetResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -1694,6 +1732,8 @@ export type PostApiAuthenticationPasswordResetResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -1867,6 +1907,8 @@ export type PostApiAuthenticationRegisterResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -1877,6 +1919,8 @@ export type PostApiAuthenticationRegisterResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -2049,6 +2093,8 @@ export type GetApiDynamicQueriesResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -2059,6 +2105,8 @@ export type GetApiDynamicQueriesResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -2238,6 +2286,8 @@ export type PostApiDynamicQueriesResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -2248,6 +2298,8 @@ export type PostApiDynamicQueriesResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -2419,6 +2471,8 @@ export type DeleteApiDynamicQueriesByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -2429,6 +2483,8 @@ export type DeleteApiDynamicQueriesByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -2607,6 +2663,8 @@ export type GetApiDynamicQueriesByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -2617,6 +2675,8 @@ export type GetApiDynamicQueriesByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -2799,6 +2859,8 @@ export type PutApiDynamicQueriesByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -2809,6 +2871,8 @@ export type PutApiDynamicQueriesByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -3035,6 +3099,8 @@ export type GetApiDynamicQueriesByIdGenerateResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -3045,6 +3111,8 @@ export type GetApiDynamicQueriesByIdGenerateResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -3223,6 +3291,8 @@ export type GetApiDynamicQueriesByIdResultsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -3233,6 +3303,8 @@ export type GetApiDynamicQueriesByIdResultsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -3566,6 +3638,8 @@ export type GetApiPopsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -3576,6 +3650,8 @@ export type GetApiPopsResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -3742,6 +3818,8 @@ export type GetApiReportsCustomersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -3752,6 +3830,8 @@ export type GetApiReportsCustomersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -3920,6 +4000,8 @@ export type GetApiReportsExpiringCustomersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -3930,6 +4012,8 @@ export type GetApiReportsExpiringCustomersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -4099,6 +4183,8 @@ export type GetApiReportsRechargesResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -4109,6 +4195,8 @@ export type GetApiReportsRechargesResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -4276,6 +4364,8 @@ export type GetApiReportsRechargesSummaryResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -4286,6 +4376,8 @@ export type GetApiReportsRechargesSummaryResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -4454,6 +4546,8 @@ export type GetApiReportsSummaryResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -4464,6 +4558,8 @@ export type GetApiReportsSummaryResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -4635,6 +4731,8 @@ export type GetApiUsersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -4645,6 +4743,8 @@ export type GetApiUsersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -4824,6 +4924,8 @@ export type PostApiUsersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -4834,6 +4936,8 @@ export type PostApiUsersResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -5005,6 +5109,8 @@ export type DeleteApiUsersByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -5015,6 +5121,8 @@ export type DeleteApiUsersByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -5193,6 +5301,8 @@ export type GetApiUsersByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -5203,6 +5313,8 @@ export type GetApiUsersByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
@@ -5384,6 +5496,8 @@ export type PutApiUsersByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }
@@ -5394,6 +5508,8 @@ export type PutApiUsersByIdResponses = {
           FullName?: string;
           LastPurchaseDuration?: string;
           LastPurchaseSpeed?: string;
+          MDUBlock?: string;
+          MDUUnitNumber?: string;
           PhoneNumber?: string;
           RadiusUsername?: string;
         }>
