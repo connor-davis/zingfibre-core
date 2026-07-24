@@ -24,6 +24,8 @@ type ReportExpiringCustomer struct {
 	Expiration           string `json:"Expiration,omitempty"`
 	Address              string `json:"Address,omitempty"`
 	POP                  string `json:"POP,omitempty"`
+	MDUBlock             string `json:"MDUBlock,omitempty"`
+	MDUUnitNumber        string `json:"MDUUnitNumber,omitempty"`
 }
 
 type ReportRecharge struct {

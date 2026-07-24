@@ -101,7 +101,9 @@ SELECT
     t3.Name AS last_purchase_duration,
     t3.Category AS last_purchase_speed,
     t4.StreetAddress AS Address,
-    t4.POP AS POP
+    t4.POP AS POP,
+    t4.MDUBlock AS MDUBlock,
+    t4.MDUUnitNumber AS MDUUnitNumber
 FROM
     Customers t1
 LEFT JOIN (
