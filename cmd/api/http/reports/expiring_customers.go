@@ -237,8 +237,8 @@ func (r *ReportsRouter) ExpiringCustomersRoute() system.Route {
 							Expiration:           o.(radius.GetReportsExpiringCustomersRow).Expiration.Time.Format(time.RFC3339),
 							Address:              i.(zing.GetReportsExpiringCustomersRow).Address.String,
 							POP:                  i.(zing.GetReportsExpiringCustomersRow).Pop.String,
-							MDUBlock:             i.(zing.GetReportExportsExpiringCustomersRow).Mdublock.String,
-							MDUUnitNumber:        i.(zing.GetReportExportsExpiringCustomersRow).Mduunitnumber.String,
+							MDUBlock:             i.(zing.GetReportsExpiringCustomersRow).Mdublock.String,
+							MDUUnitNumber:        i.(zing.GetReportsExpiringCustomersRow).Mduunitnumber.String,
 						}
 					},
 				).
